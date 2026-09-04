@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Prononce</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- Welcome Screen -->
+
+    <main class="container">
+
+        <h1>PRONONCE</h1>
+
+        <h2>Speak French with confidence.</h2>
+
+        <p>
+            Hear. Repeat. Refine.
+        </p>
+
+        <button id="signup-button">
+            Get Started
+        </button>
+
+        <p class="login-text">
+
+            Already have an account?
+
+            <a href="#" id="login-link">
+                Log in
+            </a>
+
+        </p>
+
+    </main>
+
+
+    <!-- Authentication Modal -->
+
+    <div class="overlay" id="overlay">
+
+        <div class="modal">
+
+            <button
+                class="close-modal"
+                id="close-modal"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+
+            <!-- Sign Up Form -->
+
+            <div id="signup-form">
+
+                <h2>Create Account</h2>
+
+               <input
+    type="text"
+    id="signup-name"
+    placeholder="Full Name"
+>
+
+<input
+    type="email"
+    id="signup-email"
+    placeholder="Email"
+>
+
+<input
+    type="password"
+    id="signup-password"
+    placeholder="Password"
+>
+
+<input
+    type="password"
+    id="signup-confirm-password"
+    placeholder="Confirm Password"
+>
+
+<button id="create-account-button">
+    Create Account
+</button>
+
+                <p class="switch-form">
+
+                    Already have an account?
+
+                    <a href="#" id="show-login">
+                        Log In
+                    </a>
+
+                </p>
+
+            </div>
+
+
+            <!-- Login Form -->
+
+            <div id="login-form">
+
+                <h2>Log In</h2>
+
+                <input
+    type="email"
+    id="login-email"
+    placeholder="Email"
+>
+
+<input
+    type="password"
+    id="login-password"
+    placeholder="Password"
+>
+
+<button id="login-button">
+    Log In
+</button>
+                <p class="switch-form">
+
+                    Need an account?
+
+                    <a href="#" id="show-signup">
+                        Create Account
+                    </a>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- JavaScript -->
+
+<script type="module" src="script.js"></script>
+
+</body>
+
+</html>
