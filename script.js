@@ -8,7 +8,8 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     onAuthStateChanged,
-    signOut
+    signOut,
+    updateProfile
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
@@ -254,6 +255,9 @@ if (overlay) {
 const createAccountButton =
     document.getElementById("create-account-button");
 
+const signupName =
+    document.getElementById("signup-name");
+
 const signupEmail =
     document.getElementById("signup-email");
 
@@ -270,6 +274,9 @@ if (createAccountButton) {
         "click",
         async function () {
 
+            const fullName =
+                signupName.value.trim();
+
             const email =
                 signupEmail.value.trim();
 
@@ -280,7 +287,7 @@ if (createAccountButton) {
                 signupConfirmPassword.value;
 
 
-            if (!email || !password || !confirmPassword) {
+            if (!fullName || !email || !password || !confirmPassword) {
 
                 alert("Please complete all fields.");
 
@@ -306,6 +313,12 @@ if (createAccountButton) {
                         email,
                         password
                     );
+
+
+                await updateProfile(
+                    userCredential.user,
+                    { displayName: fullName }
+                );
 
 
                 console.log(
