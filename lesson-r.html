@@ -243,106 +243,62 @@
 
     <div class="mouth-animation">
 
-        <svg viewBox="150 100 620 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mouth-svg-title mouth-svg-desc">
-        <title id="mouth-svg-title">Side view of the mouth and throat for the French R</title>
-        <desc id="mouth-svg-desc">An anatomical side-view illustration of a head in profile, cut away to show the tongue, teeth, hard and soft palate, uvula and throat as the tongue moves through the four articulation steps.</desc>
-        <defs>
-        <linearGradient id="tongueGrad" x1="10%" y1="0%" x2="90%" y2="100%">
-        <stop offset="0%" stop-color="#e5ab9c"/><stop offset="55%" stop-color="#d18b7b"/><stop offset="100%" stop-color="#b96b5c"/>
-        </linearGradient>
-        <linearGradient id="throatGrad" x1="0%" y1="0%" x2="60%" y2="100%">
-        <stop offset="0%" stop-color="#7a4038"/><stop offset="100%" stop-color="#3a1d1e"/>
-        </linearGradient>
-        </defs>
+        <svg viewBox="35 35 420 545" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mouth-svg-title mouth-svg-desc">
+        <title id="mouth-svg-title">Side view of a head, cut away to show the mouth and throat for the French R</title>
+        <desc id="mouth-svg-desc">A cartoon side-view illustration of a head in profile, cut away to show the tongue, teeth, palate, uvula and throat as the tongue moves through the four articulation steps.</desc>
 
-        <!-- Head profile (context) -->
-        <path class="mouth-face" d="M 320.00 600.00 C 320.00 600.00, 345.87 544.35, 360.00 520.00 C 372.69 498.13, 403.68 475.91, 400.00 460.00 C 396.39 444.39, 357.25 438.30, 340.00 425.00 C 324.43 413.00, 311.13 399.00, 300.00 385.00 C 289.83 372.22, 282.09 358.62, 275.00 345.00 C 268.19 331.93, 259.20 318.78, 258.00 305.00 C 256.79 291.12, 272.71 273.10, 268.00 262.00 C 263.16 250.59, 230.59 248.81, 228.00 238.00 C 225.30 226.72, 243.92 208.89, 255.00 195.00 C 267.40 179.45, 282.79 162.40, 300.00 150.00 C 317.67 137.26, 338.94 128.99, 360.00 120.00 C 382.16 110.54, 406.44 101.70, 430.00 95.00 C 453.12 88.43, 476.97 82.08, 500.00 80.00 C 521.95 78.02, 544.62 77.58, 565.00 82.00 C 584.51 86.23, 605.05 92.96, 620.00 105.00 C 635.13 117.19, 646.72 135.99, 655.00 155.00 C 663.97 175.59, 669.06 201.18, 670.00 225.00 C 670.96 249.49, 666.28 274.95, 660.00 300.00 C 653.33 326.61, 640.00 353.33, 630.00 380.00 C 620.00 406.67, 610.00 433.33, 600.00 460.00 C 590.00 486.67, 578.79 515.17, 570.00 540.00 C 562.44 561.36, 550.00 600.00, 550.00 600.00" />
-        <path class="ear" d="M 630 260 C 645 256, 658 266, 659 282 C 660 298, 648 310, 633 307 C 624 305, 619 296, 622 287 C 624 280, 620 266, 630 260 Z" />
+        <!-- Head silhouette (bald profile, in the round Prononce line-art style) -->
+        <path class="head-shell" d="
+          M 300 560
+          C 302 530, 308 495, 315 470
+          C 320 450, 325 420, 330 405
+          C 372 382.5, 372 352.5, 338 330
+          C 362 310.5, 362 284.5, 335 265
+          C 402 238, 402 202, 342 175
+          C 345 163, 347 150, 348 140
+          C 350 128, 340 108, 320 95
+          C 300 82, 278 68, 255 65
+          C 220 60, 195 60, 165 68
+          C 140 75, 112 88, 95 105
+          C 80 122, 66 150, 65 180
+          C 64 205, 66 235, 72 260
+          C 78 280, 90 308, 100 330
+          C 108 352, 120 388, 128 420
+          C 134 452, 142 510, 145 560" />
 
-        <!-- Pharynx: open airway behind the tongue root, down into the throat -->
-        <path class="pharynx" d="M 405 248
-          C 432 250, 452 266, 458 290
-          C 461 303, 460 316, 454 328
-          C 470 348, 480 375, 482 405
-          C 484 438, 476 473, 458 501
-          C 446 519, 430 533, 412 543
-          L 398 521
-          C 414 511, 427 498, 436 481
-          C 448 458, 454 431, 451 405
-          C 449 383, 440 363, 426 348
-          C 414 358, 400 366, 385 371
-          L 378 344
-          C 392 339, 405 330, 414 318
-          C 406 306, 402 292, 404 278
-          C 388 283, 372 284, 356 281
-          L 360 254
-          C 376 257, 391 255, 405 248 Z" />
+        <!-- Throat: open airway below the tongue root, down into the neck -->
+        <path class="throat" d="
+          M 172 345
+          C 170 373, 176 402, 190 425
+          C 200 440, 210 448, 218 452
+          L 236 452
+          C 224 437, 200 405, 190 372
+          C 186 362, 183 353, 181 345 Z" />
 
-        <!-- Hard + soft palate (roof of mouth) -->
-        <path class="hard-palate" d="M 296 272 C 325 256, 362 242, 398 236 C 408 234, 416 234, 424 236" />
-        <path class="soft-palate" d="M 424 236 C 434 240, 443 248, 448 259 C 451 266, 452 273, 452 280" />
+        <!-- Palate: hard palate curving back into the soft palate -->
+        <path class="palate" d="M 326 254 C 302 244, 276 238, 250 236 C 230 235, 211 239, 196 248" />
 
         <!-- Uvula -->
-        <path class="uvula" id="animated-uvula" d="M 442 278 C 454 282, 461 295, 457 308 C 455 317, 448 324, 440 325 C 432 316, 427 302, 431 289 C 433 282, 437 279, 442 278 Z" />
+        <path class="uvula" id="animated-uvula" d="M 196 248 C 190 258, 189 271, 196 282 C 201 288, 209 288, 213 280 C 217 271, 213 258, 196 248 Z" />
+
+        <!-- Pharynx back wall, down into the throat -->
+        <path class="pharynx-wall" d="M 196 248 C 175 268, 166 300, 170 335 C 174 372, 190 405, 214 428 C 224 437, 232 444, 236 452" />
 
         <!-- Tongue (its outline changes per articulation step; see script.js tongueShapes) -->
-        <path class="tongue" id="animated-tongue" d="M 258 305 C 260 296, 270 289, 284 285 C 305 280, 330 278, 355 279 C 380 280, 402 285, 415 295 C 421 300, 422 306, 417 312 C 405 322, 380 328, 350 330 C 315 332, 280 330, 258 322 C 248 318, 244 312, 246 306 C 248 305, 252 305, 258 305 Z" />
-        <path class="tongue-groove" d="M 288 282 C 325 276, 368 275, 405 281 C 418 283, 430 288, 440 294" />
+        <path class="tongue" id="animated-tongue" d="M 320 318 C 315.7 309.7, 282.7 302.0, 262 300 C 241.3 298.0, 210.3 300.0, 196 306 C 181.7 312.0, 171.7 326.7, 176 336 C 180.3 345.3, 203.3 359.7, 222 362 C 240.7 364.3, 271.7 357.3, 288 350 C 304.3 342.7, 324.3 326.3, 320 318 Z" />
 
-        <!-- Gums (unify the teeth row) -->
-        <path class="gum" d="M 254 276 C 275 262, 300 253, 328 249 L 330 262 C 305 266, 282 274, 262 288 Z" />
-        <path class="gum" d="M 250 306 C 272 320, 296 328, 322 330 L 320 343 C 292 341, 267 332, 246 318 Z" />
-
-        <!-- Teeth -->
+        <!-- Teeth, tucked just inside the lip corner -->
         <g class="tooth">
-        <path d="M 262 285 q -2 -10 6 -12 q 8 -2 10 8 q 1 8 -6 10 q -8 2 -10 -6 Z" />
-        <path d="M 279 276 q -1 -10 7 -12 q 8 -2 9 8 q 1 8 -6 9 q -8 2 -10 -5 Z" />
-        <path d="M 297 270 q 0 -10 8 -11 q 8 -1 9 8 q 1 8 -7 9 q -8 1 -10 -6 Z" />
-        <path d="M 316 267 q 1 -10 9 -10 q 8 0 8 9 q 0 8 -8 8 q -8 0 -9 -7 Z" />
-        </g>
-        <g class="tooth">
-        <path d="M 257 313 q -2 10 6 13 q 7 3 10 -6 q 2 -8 -5 -11 q -7 -3 -11 4 Z" />
-        <path d="M 275 322 q -1 10 7 13 q 7 3 9 -6 q 2 -8 -5 -10 q -7 -3 -11 3 Z" />
-        <path d="M 294 328 q 0 10 8 12 q 7 2 9 -7 q 1 -8 -6 -10 q -7 -2 -11 5 Z" />
+        <rect x="305" y="256" width="16" height="10" rx="3" />
+        <rect x="305" y="307" width="16" height="10" rx="3" />
         </g>
 
-        <!-- Lips -->
-        <path class="mouth-gap" d="M 246 297 C 254 294, 264 294, 270 298 C 264 304, 254 304, 246 300 Z" />
-        <path class="lip-upper" d="M 274 276 C 259 271, 244 275, 237 286 C 233 293, 237 299, 248 299 C 259 299, 270 291, 274 276 Z" />
-        <path class="lip-lower" d="M 271 326 C 256 330, 241 326, 235 314 C 231 307, 237 302, 248 303 C 259 304, 268 313, 271 326 Z" />
-
-        <path class="narrow-passage" id="narrow-passage" d="M 398 270 C 409 259, 422 251, 435 247" />
+        <path class="narrow-passage" id="narrow-passage" d="M 210 260 C 217 253, 224 246, 231 240" />
 
         <g class="airflow" id="airflow">
-        <path d="M 392 288 C 330 302, 270 310, 225 305" />
-        <path d="M 392 300 C 330 313, 274 319, 230 313" />
-        <path class="airflow-arrow" d="M 178 300 L 208 309 L 178 322 Z" />
-        </g>
-
-        <g class="anatomy-labels">
-        <line x1="325" y1="322" x2="300" y2="440" />
-        <circle cx="325" cy="322" r="4" />
-        <text x="255" y="460">Tongue</text>
-
-        <line x1="355" y1="243" x2="325" y2="165" />
-        <circle cx="355" cy="243" r="4" />
-        <text x="265" y="152">Hard palate</text>
-
-        <line x1="435" y1="248" x2="505" y2="200" />
-        <circle cx="435" cy="248" r="4" />
-        <text x="498" y="188">Soft palate</text>
-
-        <line x1="449" y1="292" x2="525" y2="315" />
-        <circle cx="449" cy="292" r="4" />
-        <text x="529" y="320">Uvula</text>
-
-        <line x1="465" y1="350" x2="545" y2="380" />
-        <circle cx="465" cy="350" r="4" />
-        <text x="549" y="385">Throat</text>
-        </g>
-
-        <g class="airflow-label" id="airflow-label">
-        <text x="185" y="268">Airflow</text>
+        <path d="M 216 250 C 245 258, 275 264, 300 268 C 312 270, 320 272, 326 274" />
+        <path d="M 218 262 C 246 270, 274 276, 298 280 C 309 282, 317 283, 323 285" />
+        <path class="airflow-arrow" d="M 320 268 L 340 277 L 318 288 Z" />
         </g>
         </svg>
 
