@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Manage Accounts | Prononce</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="admin-page">
+
+    <!-- Full-screen loader, removed once Firebase has resolved
+         sign-in state and confirmed this account is the owner. -->
+    <div class="page-loader" id="page-loader">
+
+        <img src="favicon.svg" alt="" class="page-loader-mark">
+
+        <div class="page-loader-spinner"></div>
+
+    </div>
+
+
+    <header class="site-header">
+
+        <a href="dashboard.html" class="logo">Prononce</a>
+
+        <span class="collect-header-note">Manage Accounts &middot; Owner Only</span>
+
+        <button class="logout-button" id="logout-button">Log Out</button>
+
+    </header>
+
+
+    <main class="admin-container">
+
+        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+
+        <p class="eyebrow">Owner Tools</p>
+        <h1>Manage accounts.</h1>
+        <p class="admin-intro">
+            Look up any Prononce account by email to grant or revoke
+            testing access, send a password reset email, adjust their
+            lesson and practice progress, or clear their recording
+            consent. Everything below still goes through the same
+            Firestore rules as the dashboard — this page just gives
+            you more room to work than the dashboard's owner panel.
+        </p>
+
+
+        <!-- ===========================
+             LOOK UP AN ACCOUNT
+        =========================== -->
+
+        <section class="admin-lookup-card">
+
+            <h2>Find an account</h2>
+
+            <div class="admin-grant-row">
+
+                <input
+                    type="email"
+                    id="lookup-email"
+                    placeholder="person@example.com"
+                    autocomplete="off"
+                >
+
+                <button id="lookup-button" type="button">
+                    Look Up
+                </button>
+
+            </div>
+
+            <p class="admin-error" id="lookup-error" hidden></p>
+
+        </section>
+
+
+        <!-- ===========================
+             SELECTED ACCOUNT DETAIL
+        =========================== -->
+
+        <section class="admin-detail-card hidden" id="account-detail">
+
+            <div class="admin-detail-header">
+
+                <div>
+                    <p class="eyebrow" id="account-email">—</p>
+                    <div class="admin-badge-row" id="account-badges"></div>
+                </div>
+
+            </div>
+
+
+            <div class="admin-detail-section">
+
+                <h3>Access</h3>
+
+                <div class="admin-action-row">
+                    <p>Voice-recording (tester) access</p>
+                    <button id="toggle-tester-button" type="button">—</button>
+                </div>
+
+            </div>
+
+
+            <div class="admin-detail-section">
+
+                <h3>Account recovery</h3>
+
+                <div class="admin-action-row">
+                    <p>
+                        Sends this account the standard Firebase
+                        "reset your password" email — the owner can't
+                        set a password directly, only trigger this.
+                    </p>
+                    <button id="reset-password-button" type="button">
+                        Send Reset Email
+                    </button>
+                </div>
+
+                <p class="admin-inline-status" id="reset-password-status" hidden></p>
+
+            </div>
+
+
+            <div class="admin-detail-section">
+
+                <h3>Lesson progress</h3>
+
+                <div class="admin-lesson-grid" id="lesson-progress-grid"></div>
+
+            </div>
+
+
+            <div class="admin-detail-section">
+
+                <h3>R Sound practice</h3>
+
+                <div class="admin-action-row">
+                    <p id="practice-level-status">—</p>
+                    <div class="admin-level-picker">
+                        <select id="practice-level-select">
+                            <option value="1">Level 1</option>
+                            <option value="2">Level 2</option>
+                            <option value="3">Level 3</option>
+                            <option value="4">Level 4</option>
+                            <option value="5">Level 5</option>
+                            <option value="6">Level 6</option>
+                            <option value="7">Level 7</option>
+                            <option value="8">Level 8</option>
+                            <option value="9">Level 9</option>
+                            <option value="10">Level 10</option>
+                        </select>
+                        <button id="practice-level-set-button" type="button">
+                            Set Level
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="admin-detail-section">
+
+                <h3>Recording consent</h3>
+
+                <div class="admin-action-row">
+                    <p id="consent-status">—</p>
+                    <button id="clear-consent-button" type="button">
+                        Clear Consent
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="admin-detail-section admin-danger-section">
+
+                <h3>Reset everything</h3>
+
+                <div class="admin-action-row">
+                    <p>
+                        Clears every lesson completion, practice
+                        level, and recording consent for this account.
+                        Does not change their tester/owner access or
+                        their password.
+                    </p>
+                    <button id="reset-all-button" type="button" class="admin-danger-button">
+                        Reset All Progress
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===========================
+             ALL ACCOUNTS
+        =========================== -->
+
+        <section class="admin-all-accounts">
+
+            <h2>All accounts</h2>
+
+            <div class="admin-account-list" id="all-accounts-list">
+                <p class="admin-empty">Loading…</p>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script type="module" src="admin.js"></script>
+
+</body>
+
+</html>
