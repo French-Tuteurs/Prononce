@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Voice Recording | Prononce</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="collect-page">
+
+    <!-- ===========================
+         This page is not in the main nav — reached only from the
+         dashboard's tester-access card. It requires being signed in
+         and flagged as a tester (or the owner) in Firestore;
+         collect.js checks that itself and redirects otherwise.
+    =========================== -->
+
+    <header class="site-header">
+
+        <a href="dashboard.html" class="logo">
+            Prononce
+        </a>
+
+        <span class="collect-header-note">
+            Voice Recording &middot; Internal
+        </span>
+
+        <button class="logout-button" id="logout-button">
+            Log Out
+        </button>
+
+    </header>
+
+
+    <main class="collect-container">
+
+
+        <!-- ===========================
+             ACCESS CHECK
+             This page requires being signed in AND flagged as a
+             tester (or the owner) in Firestore. Shown briefly while
+             that check runs, then swapped for whichever step below
+             actually applies.
+        =========================== -->
+
+        <section class="collect-step" id="access-check-step">
+
+            <p class="eyebrow">
+                Checking access&hellip;
+            </p>
+
+            <h1>
+                One moment.
+            </h1>
+
+        </section>
+
+
+        <!-- ===========================
+             STEP 1: CONSENT
+        =========================== -->
+
+        <section class="collect-step hidden" id="consent-step">
+
+            <p class="eyebrow">
+                Before we start
+            </p>
+
+            <h1>
+                Help build Prononce's
+                pronunciation feedback.
+            </h1>
+
+            <p>
+                We're collecting short voice recordings of
+                native and fluent French speakers saying the
+                French R in different words and sentences.
+                These recordings may be used to build and test
+                a pronunciation-feedback feature in Prononce,
+                including training a machine learning model.
+            </p>
+
+            <p>
+                It takes about five minutes. Nothing is uploaded
+                automatically &mdash; each recording downloads to
+                your own device, and you send the files back to
+                us yourself (however works best for you).
+            </p>
+
+
+            <div class="collect-card">
+
+                <label class="collect-field">
+
+                    <span>Your name or a nickname</span>
+
+                    <input
+                        type="text"
+                        id="speaker-name"
+                        placeholder="e.g. Camille"
+                        autocomplete="off"
+                    >
+
+                </label>
+
+                <label class="collect-field">
+
+                    <span>Region or accent (optional)</span>
+
+                    <input
+                        type="text"
+                        id="speaker-region"
+                        placeholder="e.g. Paris, Qu&eacute;bec, Dakar&hellip;"
+                        autocomplete="off"
+                    >
+
+                </label>
+
+                <label class="consent-checkbox">
+
+                    <input type="checkbox" id="consent-checkbox">
+
+                    <span>
+                        I agree that Prononce may keep and use
+                        these recordings to help build and
+                        improve pronunciation-related features,
+                        including training a machine learning
+                        model. I can ask for my recordings to
+                        be deleted at any time.
+                    </span>
+
+                </label>
+
+                <p class="collect-error" id="consent-error" hidden>
+                    Please enter a name and check the consent box
+                    to continue.
+                </p>
+
+                <button id="begin-recording-button">
+                    Begin Recording
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===========================
+             STEP 2: RECORDING
+        =========================== -->
+
+        <section class="collect-step hidden" id="recording-step">
+
+            <p class="eyebrow">
+                Recording as <span id="recording-as-name"></span>
+            </p>
+
+            <h1>
+                Say each one naturally,
+                at a normal pace.
+            </h1>
+
+            <p>
+                Everything is grouped by lesson topic below &mdash;
+                tap a topic to open it. Press Record, say the
+                prompt, then press Stop. Listen back if you like,
+                then Save. You can re-record as many times as you
+                want &mdash; every take you save is kept in your
+                browser (not uploaded) until you download your zip
+                file below.
+            </p>
+
+            <p class="collect-progress" id="collect-progress">
+                0 of 75 saved
+            </p>
+
+
+            <div class="collect-items" id="collect-items"></div>
+
+
+            <div class="collect-finish-row">
+
+                <button
+                    id="download-zip-button"
+                    class="collect-zip-button"
+                    type="button"
+                    disabled
+                >
+                    &#11015; Download All Recordings (.zip)
+                </button>
+
+                <p class="collect-zip-status" id="zip-status" hidden></p>
+
+                <a href="dashboard.html" class="collect-done-link">
+                    I'm done &mdash; back to Prononce
+                </a>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <script type="module" src="collect.js"></script>
+
+</body>
+
+</html>
