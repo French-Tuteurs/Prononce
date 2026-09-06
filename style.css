@@ -3672,3 +3672,83 @@ button:hover {
     margin-bottom: 20px;
 
 }
+
+
+/* ===========================
+   PAGE LOADER
+=========================== */
+/* Full-screen cover shown while Firebase resolves whether someone is
+   signed in (and, on the dashboard, whether they're owner/tester) so
+   the page never flashes half-ready content. script.js removes it as
+   soon as that check finishes; collect.js reuses the same visual
+   treatment for its own access check. */
+
+.page-loader {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 18px;
+
+    background-color: var(--cream);
+
+    transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+
+}
+
+
+.page-loader-mark {
+
+    width: 56px;
+
+    height: 56px;
+
+}
+
+
+.page-loader-spinner {
+
+    width: 30px;
+
+    height: 30px;
+
+    border-radius: 50%;
+
+    border: 3px solid rgba(20, 33, 61, 0.15);
+
+    border-top-color: var(--gold);
+
+    animation: page-loader-spin 0.8s linear infinite;
+
+}
+
+
+@keyframes page-loader-spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+.page-loader-hidden {
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+}
