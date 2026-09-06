@@ -32,7 +32,7 @@
 </head>
 
 
-<body class="lesson-page">
+<body class="lesson-page" data-lesson-id="r">
 
 
     <!-- Header -->
@@ -75,6 +75,11 @@
     <!-- Lesson Header -->
 
     <main class="lesson-container">
+
+
+        <a href="dashboard.html" class="back-link">
+            ← Back to Dashboard
+        </a>
 
 
         <section class="lesson-intro">
@@ -243,106 +248,145 @@
 
     <div class="mouth-animation">
 
-        <svg viewBox="150 100 620 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mouth-svg-title mouth-svg-desc">
-        <title id="mouth-svg-title">Side view of the mouth and throat for the French R</title>
-        <desc id="mouth-svg-desc">An anatomical side-view illustration of a head in profile, cut away to show the tongue, teeth, hard and soft palate, uvula and throat as the tongue moves through the four articulation steps.</desc>
-        <defs>
-        <linearGradient id="tongueGrad" x1="10%" y1="0%" x2="90%" y2="100%">
-        <stop offset="0%" stop-color="#e5ab9c"/><stop offset="55%" stop-color="#d18b7b"/><stop offset="100%" stop-color="#b96b5c"/>
-        </linearGradient>
-        <linearGradient id="throatGrad" x1="0%" y1="0%" x2="60%" y2="100%">
-        <stop offset="0%" stop-color="#7a4038"/><stop offset="100%" stop-color="#3a1d1e"/>
-        </linearGradient>
-        </defs>
+        <svg viewBox="0 0 800 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mouth-svg-title mouth-svg-desc">
+        <title id="mouth-svg-title">Side view of a head, cut away to show the mouth and throat for the French R</title>
+        <desc id="mouth-svg-desc">A labeled cartoon side-view illustration of a head in profile, cut away to show the nose, lips, teeth, alveolar ridge, hard and soft palate, uvula, tongue, pharynx and larynx as the tongue moves through the four articulation steps.</desc>
 
-        <!-- Head profile (context) -->
-        <path class="mouth-face" d="M 320.00 600.00 C 320.00 600.00, 345.87 544.35, 360.00 520.00 C 372.69 498.13, 403.68 475.91, 400.00 460.00 C 396.39 444.39, 357.25 438.30, 340.00 425.00 C 324.43 413.00, 311.13 399.00, 300.00 385.00 C 289.83 372.22, 282.09 358.62, 275.00 345.00 C 268.19 331.93, 259.20 318.78, 258.00 305.00 C 256.79 291.12, 272.71 273.10, 268.00 262.00 C 263.16 250.59, 230.59 248.81, 228.00 238.00 C 225.30 226.72, 243.92 208.89, 255.00 195.00 C 267.40 179.45, 282.79 162.40, 300.00 150.00 C 317.67 137.26, 338.94 128.99, 360.00 120.00 C 382.16 110.54, 406.44 101.70, 430.00 95.00 C 453.12 88.43, 476.97 82.08, 500.00 80.00 C 521.95 78.02, 544.62 77.58, 565.00 82.00 C 584.51 86.23, 605.05 92.96, 620.00 105.00 C 635.13 117.19, 646.72 135.99, 655.00 155.00 C 663.97 175.59, 669.06 201.18, 670.00 225.00 C 670.96 249.49, 666.28 274.95, 660.00 300.00 C 653.33 326.61, 640.00 353.33, 630.00 380.00 C 620.00 406.67, 610.00 433.33, 600.00 460.00 C 590.00 486.67, 578.79 515.17, 570.00 540.00 C 562.44 561.36, 550.00 600.00, 550.00 600.00" />
-        <path class="ear" d="M 630 260 C 645 256, 658 266, 659 282 C 660 298, 648 310, 633 307 C 624 305, 619 296, 622 287 C 624 280, 620 266, 630 260 Z" />
+        <g transform="translate(140,60)">
 
-        <!-- Pharynx: open airway behind the tongue root, down into the throat -->
-        <path class="pharynx" d="M 405 248
-          C 432 250, 452 266, 458 290
-          C 461 303, 460 316, 454 328
-          C 470 348, 480 375, 482 405
-          C 484 438, 476 473, 458 501
-          C 446 519, 430 533, 412 543
-          L 398 521
-          C 414 511, 427 498, 436 481
-          C 448 458, 454 431, 451 405
-          C 449 383, 440 363, 426 348
-          C 414 358, 400 366, 385 371
-          L 378 344
-          C 392 339, 405 330, 414 318
-          C 406 306, 402 292, 404 278
-          C 388 283, 372 284, 356 281
-          L 360 254
-          C 376 257, 391 255, 405 248 Z" />
+        <!-- Head silhouette (bald profile, in the round Prononce line-art style) -->
+        <path class="head-shell" d="
+          M 72.5 560
+          C 74.4 550.7, 80.4 522.7, 84.3 504
+          C 88.3 485.3, 92.2 466.7, 96.2 448
+          C 100.1 429.3, 104.2 410.0, 108 392
+          C 111.8 374.0, 117.2 354.3, 119 340
+          C 120.8 325.7, 120.0 315.5, 119 306
+          C 118.0 296.5, 119.0 295.7, 113 283
+          C 107.0 270.3, 89.5 243.5, 83 230
+          C 76.5 216.5, 76.5 212.7, 74 202
+          C 71.5 191.3, 69.0 176.3, 68 166
+          C 67.0 155.7, 67.2 148.5, 68 140
+          C 68.8 131.5, 69.3 124.7, 73 115
+          C 76.7 105.3, 82.2 91.8, 90 82
+          C 97.8 72.2, 112.7 61.5, 120 56
+          C 127.3 50.5, 126.0 51.7, 134 49
+          C 142.0 46.3, 153.5 41.8, 168 40
+          C 182.5 38.2, 207.2 37.3, 221 38
+          C 234.8 38.7, 240.0 40.5, 251 44
+          C 262.0 47.5, 277.5 54.0, 287 59
+          C 296.5 64.0, 300.7 67.5, 308 74
+          C 315.3 80.5, 324.8 90.0, 331 98
+          C 337.2 106.0, 341.7 114.7, 345 122
+          C 348.3 129.3, 349.3 135.3, 351 142
+          C 352.7 148.7, 354.7 153.3, 355 162
+          C 355.3 170.7, 348.3 180.7, 353 194
+          C 357.7 207.3, 378.3 232.7, 383 242
+          C 387.7 251.3, 384.5 246.8, 381 250
+          C 377.5 253.2, 364.7 255.3, 362 261
+          C 359.3 266.7, 365.3 279.2, 365 284
+          C 364.7 288.8, 360.3 287.0, 360 290
+          C 359.7 293.0, 363.7 297.8, 363 302
+          C 362.3 306.2, 356.8 308.2, 356 315
+          C 355.2 321.8, 358.2 337.2, 358 343
+          C 357.8 348.8, 357.8 347.5, 355 350
+          C 352.2 352.5, 352.3 357.3, 341 358
+          C 329.7 358.7, 297.0 352.8, 287 354
+          C 277.0 355.2, 283.2 358.3, 281 365
+          C 278.8 371.7, 277.4 379.9, 274 394
+          C 270.6 408.1, 265.1 430.9, 260.6 449.3
+          C 256.2 467.8, 251.7 486.2, 247.3 504.7
+          C 242.8 523.1, 236.2 550.8, 233.9 560" />
 
-        <!-- Hard + soft palate (roof of mouth) -->
-        <path class="hard-palate" d="M 296 272 C 325 256, 362 242, 398 236 C 408 234, 416 234, 424 236" />
-        <path class="soft-palate" d="M 424 236 C 434 240, 443 248, 448 259 C 451 266, 452 273, 452 280" />
+        <!-- Lips: two filled lobes with a seam, distinct from the profile line -->
+        <path class="lip lip-upper" d="M 351 264 C 359 266, 366 272, 365 279 C 364 283, 360 285, 356 284 C 351 283, 349 278, 350 272 C 350 269, 350 266, 351 264 Z" />
+        <path class="lip lip-lower" d="M 350 287 C 351 284, 354 285, 358 285 C 362 285, 365 284, 364 288 C 363 295, 359 300, 353 302 C 349 298, 349 292, 350 287 Z" />
+
+        <!-- Throat: open airway below the tongue root, down into the neck -->
+        <path class="throat" d="
+          M 172 345
+          C 170 373, 176 402, 190 425
+          C 200 440, 210 448, 218 452
+          L 236 452
+          C 224 437, 200 405, 190 372
+          C 186 362, 183 353, 181 345 Z" />
+
+        <!-- Palate: alveolar ridge -> hard palate -> soft palate (velum) -->
+        <path class="palate" d="M 338 262 C 328 267, 322 270, 315 268 C 300 265, 250 250, 196 248" />
 
         <!-- Uvula -->
-        <path class="uvula" id="animated-uvula" d="M 442 278 C 454 282, 461 295, 457 308 C 455 317, 448 324, 440 325 C 432 316, 427 302, 431 289 C 433 282, 437 279, 442 278 Z" />
+        <path class="uvula" id="animated-uvula" d="M 196 248 C 190 258, 189 271, 196 282 C 201 288, 209 288, 213 280 C 217 271, 213 258, 196 248 Z" />
+
+        <!-- Pharynx back wall, down into the throat and larynx -->
+        <path class="pharynx-wall" d="M 196 248 C 175 268, 166 300, 170 335 C 174 372, 190 405, 214 428 C 224 437, 232 444, 236 452" />
 
         <!-- Tongue (its outline changes per articulation step; see script.js tongueShapes) -->
-        <path class="tongue" id="animated-tongue" d="M 258 305 C 260 296, 270 289, 284 285 C 305 280, 330 278, 355 279 C 380 280, 402 285, 415 295 C 421 300, 422 306, 417 312 C 405 322, 380 328, 350 330 C 315 332, 280 330, 258 322 C 248 318, 244 312, 246 306 C 248 305, 252 305, 258 305 Z" />
-        <path class="tongue-groove" d="M 288 282 C 325 276, 368 275, 405 281 C 418 283, 430 288, 440 294" />
+        <path class="tongue" id="animated-tongue" d="M 333 297 C 330.8 285.7, 297.8 280.5, 275 282 C 252.2 283.5, 212.5 297.0, 196 306 C 179.5 315.0, 171.7 326.7, 176 336 C 180.3 345.3, 203.3 359.7, 222 362 C 240.7 364.3, 269.5 360.8, 288 350 C 306.5 339.2, 335.2 308.3, 333 297 Z" />
 
-        <!-- Gums (unify the teeth row) -->
-        <path class="gum" d="M 254 276 C 275 262, 300 253, 328 249 L 330 262 C 305 266, 282 274, 262 288 Z" />
-        <path class="gum" d="M 250 306 C 272 320, 296 328, 322 330 L 320 343 C 292 341, 267 332, 246 318 Z" />
-
-        <!-- Teeth -->
+        <!-- Teeth, tucked just inside the lip corner -->
         <g class="tooth">
-        <path d="M 262 285 q -2 -10 6 -12 q 8 -2 10 8 q 1 8 -6 10 q -8 2 -10 -6 Z" />
-        <path d="M 279 276 q -1 -10 7 -12 q 8 -2 9 8 q 1 8 -6 9 q -8 2 -10 -5 Z" />
-        <path d="M 297 270 q 0 -10 8 -11 q 8 -1 9 8 q 1 8 -7 9 q -8 1 -10 -6 Z" />
-        <path d="M 316 267 q 1 -10 9 -10 q 8 0 8 9 q 0 8 -8 8 q -8 0 -9 -7 Z" />
-        </g>
-        <g class="tooth">
-        <path d="M 257 313 q -2 10 6 13 q 7 3 10 -6 q 2 -8 -5 -11 q -7 -3 -11 4 Z" />
-        <path d="M 275 322 q -1 10 7 13 q 7 3 9 -6 q 2 -8 -5 -10 q -7 -3 -11 3 Z" />
-        <path d="M 294 328 q 0 10 8 12 q 7 2 9 -7 q 1 -8 -6 -10 q -7 -2 -11 5 Z" />
+        <rect x="328" y="256" width="15" height="9" rx="3" />
+        <rect x="322" y="289" width="15" height="9" rx="3" />
         </g>
 
-        <!-- Lips -->
-        <path class="mouth-gap" d="M 246 297 C 254 294, 264 294, 270 298 C 264 304, 254 304, 246 300 Z" />
-        <path class="lip-upper" d="M 274 276 C 259 271, 244 275, 237 286 C 233 293, 237 299, 248 299 C 259 299, 270 291, 274 276 Z" />
-        <path class="lip-lower" d="M 271 326 C 256 330, 241 326, 235 314 C 231 307, 237 302, 248 303 C 259 304, 268 313, 271 326 Z" />
-
-        <path class="narrow-passage" id="narrow-passage" d="M 398 270 C 409 259, 422 251, 435 247" />
+        <path class="narrow-passage" id="narrow-passage" d="M 210 260 C 217 253, 224 246, 231 240" />
 
         <g class="airflow" id="airflow">
-        <path d="M 392 288 C 330 302, 270 310, 225 305" />
-        <path d="M 392 300 C 330 313, 274 319, 230 313" />
-        <path class="airflow-arrow" d="M 178 300 L 208 309 L 178 322 Z" />
+        <path d="M 216 250 C 245 258, 275 264, 300 268 C 312 270, 320 272, 326 274" />
+        <path d="M 218 262 C 246 270, 274 276, 298 280 C 309 282, 317 283, 323 285" />
+        <path class="airflow-arrow" d="M 320 268 L 340 277 L 318 288 Z" />
         </g>
 
-        <g class="anatomy-labels">
-        <line x1="325" y1="322" x2="300" y2="440" />
-        <circle cx="325" cy="322" r="4" />
-        <text x="255" y="460">Tongue</text>
+        <!-- Anatomy labels -->
+        <g class="mouth-labels">
 
-        <line x1="355" y1="243" x2="325" y2="165" />
-        <circle cx="355" cy="243" r="4" />
-        <text x="265" y="152">Hard palate</text>
+          <g class="mouth-labels-lines">
+            <line x1="383" y1="242" x2="430" y2="170" />
+            <line x1="357" y1="272" x2="440" y2="208" />
+            <line x1="335" y1="260" x2="450" y2="246" />
+            <line x1="318" y1="267" x2="450" y2="284" />
+            <line x1="270" y1="258" x2="450" y2="322" />
+            <line x1="330" y1="293" x2="450" y2="360" />
+            <line x1="357" y1="295" x2="440" y2="398" />
+            <line x1="215" y1="238" x2="30" y2="200" />
+            <line x1="200" y1="265" x2="20" y2="240" />
+            <line x1="230" y1="330" x2="20" y2="330" />
+            <line x1="178" y1="360" x2="20" y2="400" />
+            <line x1="215" y1="440" x2="20" y2="460" />
+          </g>
 
-        <line x1="435" y1="248" x2="505" y2="200" />
-        <circle cx="435" cy="248" r="4" />
-        <text x="498" y="188">Soft palate</text>
+          <g class="mouth-labels-dots">
+            <circle cx="383" cy="242" />
+            <circle cx="357" cy="272" />
+            <circle cx="335" cy="260" />
+            <circle cx="318" cy="267" />
+            <circle cx="270" cy="258" />
+            <circle cx="330" cy="293" />
+            <circle cx="357" cy="295" />
+            <circle cx="215" cy="238" />
+            <circle cx="200" cy="265" />
+            <circle cx="230" cy="330" />
+            <circle cx="178" cy="360" />
+            <circle cx="215" cy="440" />
+          </g>
 
-        <line x1="449" y1="292" x2="525" y2="315" />
-        <circle cx="449" cy="292" r="4" />
-        <text x="529" y="320">Uvula</text>
+          <g class="mouth-labels-text">
+            <text x="434" y="166">Nose</text>
+            <text x="444" y="204">Upper lip</text>
+            <text x="454" y="242">Upper teeth</text>
+            <text x="454" y="288">Alveolar ridge</text>
+            <text x="454" y="326">Hard palate</text>
+            <text x="454" y="364">Lower teeth</text>
+            <text x="444" y="402">Lower lip</text>
+            <text x="28" y="204" text-anchor="end">Soft palate (velum)</text>
+            <text x="18" y="244" text-anchor="end">Uvula</text>
+            <text x="18" y="334" text-anchor="end">Tongue</text>
+            <text x="18" y="404" text-anchor="end">Pharynx</text>
+            <text x="18" y="464" text-anchor="end">Larynx</text>
+          </g>
 
-        <line x1="465" y1="350" x2="545" y2="380" />
-        <circle cx="465" cy="350" r="4" />
-        <text x="549" y="385">Throat</text>
         </g>
 
-        <g class="airflow-label" id="airflow-label">
-        <text x="185" y="268">Airflow</text>
         </g>
         </svg>
 
@@ -433,12 +477,23 @@
 </div>
 
 
-            <button
-                class="lesson-next"
-                data-next="3"
-            >
-                I understand
-            </button>
+            <div class="lesson-nav-buttons">
+
+                <button
+                    class="lesson-back"
+                    data-back="1"
+                >
+                    ← Back
+                </button>
+
+                <button
+                    class="lesson-next"
+                    data-next="3"
+                >
+                    I understand
+                </button>
+
+            </div>
 
         </section>
 
@@ -464,95 +519,250 @@
                 then repeat it.
             </p>
 
+            <p class="practice-note">
+                Listen uses your browser's built-in French
+                voice. Record gives you basic feedback on
+                volume, length, and whether we picked up a
+                clear sound &mdash; it doesn't judge whether
+                your R is correct.
+            </p>
 
             <div class="practice-list">
 
                 <div class="practice-item">
 
-                    <span>
-                        R
-                    </span>
+                    <div class="practice-item-top">
 
-                    <button class="audio-button">
-                        ▶
-                    </button>
+                        <span>
+                            R
+                        </span>
 
-                </div>
+                        <div class="practice-buttons">
 
+                            <button
+                                class="audio-button listen-button"
+                                data-audio-src="audio/french-r.mp3"
+                                aria-label="Listen: R"
+                            >
+                                ▶
+                            </button>
 
-                <div class="practice-item">
+                            <button
+                                class="record-button"
+                                data-target="R"
+                                aria-label="Record yourself saying R"
+                            >
+                                ●
+                            </button>
 
-                    <span>
-                        ra
-                    </span>
+                        </div>
 
-                    <button class="audio-button">
-                        ▶
-                    </button>
+                    </div>
 
-                </div>
-
-
-                <div class="practice-item">
-
-                    <span>
-                        re
-                    </span>
-
-                    <button class="audio-button">
-                        ▶
-                    </button>
+                    <p class="practice-feedback" hidden></p>
 
                 </div>
 
 
                 <div class="practice-item">
 
-                    <span>
-                        ri
-                    </span>
+                    <div class="practice-item-top">
 
-                    <button class="audio-button">
-                        ▶
-                    </button>
+                        <span>
+                            ra
+                        </span>
+
+                        <div class="practice-buttons">
+
+                            <button
+                                class="audio-button listen-button"
+                                data-audio-src="audio/french-ra.mp3"
+                                data-say="ra"
+                                aria-label="Listen: ra"
+                            >
+                                ▶
+                            </button>
+
+                            <button
+                                class="record-button"
+                                data-target="ra"
+                                aria-label="Record yourself saying ra"
+                            >
+                                ●
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <p class="practice-feedback" hidden></p>
 
                 </div>
 
 
                 <div class="practice-item">
 
-                    <span>
-                        ro
-                    </span>
+                    <div class="practice-item-top">
 
-                    <button class="audio-button">
-                        ▶
-                    </button>
+                        <span>
+                            re
+                        </span>
+
+                        <div class="practice-buttons">
+
+                            <button
+                                class="audio-button listen-button"
+                                data-audio-src="audio/french-re.mp3"
+                                data-say="re"
+                                aria-label="Listen: re"
+                            >
+                                ▶
+                            </button>
+
+                            <button
+                                class="record-button"
+                                data-target="re"
+                                aria-label="Record yourself saying re"
+                            >
+                                ●
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <p class="practice-feedback" hidden></p>
 
                 </div>
 
 
                 <div class="practice-item">
 
-                    <span>
-                        ru
-                    </span>
+                    <div class="practice-item-top">
 
-                    <button class="audio-button">
-                        ▶
-                    </button>
+                        <span>
+                            ri
+                        </span>
+
+                        <div class="practice-buttons">
+
+                            <button
+                                class="audio-button listen-button"
+                                data-audio-src="audio/french-ri.mp3"
+                                data-say="ri"
+                                aria-label="Listen: ri"
+                            >
+                                ▶
+                            </button>
+
+                            <button
+                                class="record-button"
+                                data-target="ri"
+                                aria-label="Record yourself saying ri"
+                            >
+                                ●
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <p class="practice-feedback" hidden></p>
+
+                </div>
+
+
+                <div class="practice-item">
+
+                    <div class="practice-item-top">
+
+                        <span>
+                            ro
+                        </span>
+
+                        <div class="practice-buttons">
+
+                            <button
+                                class="audio-button listen-button"
+                                data-audio-src="audio/french-ro.mp3"
+                                data-say="ro"
+                                aria-label="Listen: ro"
+                            >
+                                ▶
+                            </button>
+
+                            <button
+                                class="record-button"
+                                data-target="ro"
+                                aria-label="Record yourself saying ro"
+                            >
+                                ●
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <p class="practice-feedback" hidden></p>
+
+                </div>
+
+
+                <div class="practice-item">
+
+                    <div class="practice-item-top">
+
+                        <span>
+                            ru
+                        </span>
+
+                        <div class="practice-buttons">
+
+                            <button
+                                class="audio-button listen-button"
+                                data-audio-src="audio/french-ru.mp3"
+                                data-say="ru"
+                                aria-label="Listen: ru"
+                            >
+                                ▶
+                            </button>
+
+                            <button
+                                class="record-button"
+                                data-target="ru"
+                                aria-label="Record yourself saying ru"
+                            >
+                                ●
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <p class="practice-feedback" hidden></p>
 
                 </div>
 
             </div>
 
 
-            <button
-                class="lesson-next"
-                data-next="4"
-            >
-                Continue
-            </button>
+            <div class="lesson-nav-buttons">
+
+                <button
+                    class="lesson-back"
+                    data-back="2"
+                >
+                    ← Back
+                </button>
+
+                <button
+                    class="lesson-next"
+                    data-next="4"
+                >
+                    Continue
+                </button>
+
+            </div>
 
         </section>
 
@@ -582,64 +792,167 @@
 
                 <div class="word-card">
 
-                    <span>
-                        rue
-                    </span>
+                    <div class="word-card-top">
 
-                    <button class="audio-button">
-                        ▶
-                    </button>
+                        <span>
+                            rue
+                        </span>
 
-                </div>
+                        <div class="practice-buttons">
 
+                            <button
+                                class="audio-button listen-button"
+                                data-audio-src="audio/word-rue.mp3"
+                                data-say="rue"
+                                aria-label="Listen: rue"
+                            >
+                                ▶
+                            </button>
 
-                <div class="word-card">
+                            <button
+                                class="record-button"
+                                data-target="rue"
+                                aria-label="Record yourself saying rue"
+                            >
+                                ●
+                            </button>
 
-                    <span>
-                        rouge
-                    </span>
+                        </div>
 
-                    <button class="audio-button">
-                        ▶
-                    </button>
+                    </div>
 
-                </div>
-
-
-                <div class="word-card">
-
-                    <span>
-                        Paris
-                    </span>
-
-                    <button class="audio-button">
-                        ▶
-                    </button>
+                    <p class="practice-feedback" hidden></p>
 
                 </div>
 
 
                 <div class="word-card">
 
-                    <span>
-                        regarder
-                    </span>
+                    <div class="word-card-top">
 
-                    <button class="audio-button">
-                        ▶
-                    </button>
+                        <span>
+                            rouge
+                        </span>
+
+                        <div class="practice-buttons">
+
+                            <button
+                                class="audio-button listen-button"
+                                data-audio-src="audio/word-rouge.mp3"
+                                data-say="rouge"
+                                aria-label="Listen: rouge"
+                            >
+                                ▶
+                            </button>
+
+                            <button
+                                class="record-button"
+                                data-target="rouge"
+                                aria-label="Record yourself saying rouge"
+                            >
+                                ●
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <p class="practice-feedback" hidden></p>
+
+                </div>
+
+
+                <div class="word-card">
+
+                    <div class="word-card-top">
+
+                        <span>
+                            Paris
+                        </span>
+
+                        <div class="practice-buttons">
+
+                            <button
+                                class="audio-button listen-button"
+                                data-audio-src="audio/word-paris.mp3"
+                                data-say="Paris"
+                                aria-label="Listen: Paris"
+                            >
+                                ▶
+                            </button>
+
+                            <button
+                                class="record-button"
+                                data-target="Paris"
+                                aria-label="Record yourself saying Paris"
+                            >
+                                ●
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <p class="practice-feedback" hidden></p>
+
+                </div>
+
+
+                <div class="word-card">
+
+                    <div class="word-card-top">
+
+                        <span>
+                            regarder
+                        </span>
+
+                        <div class="practice-buttons">
+
+                            <button
+                                class="audio-button listen-button"
+                                data-audio-src="audio/word-regarder.mp3"
+                                data-say="regarder"
+                                aria-label="Listen: regarder"
+                            >
+                                ▶
+                            </button>
+
+                            <button
+                                class="record-button"
+                                data-target="regarder"
+                                aria-label="Record yourself saying regarder"
+                            >
+                                ●
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <p class="practice-feedback" hidden></p>
 
                 </div>
 
             </div>
 
 
-            <button
-                class="lesson-next"
-                data-next="5"
-            >
-                Continue
-            </button>
+            <div class="lesson-nav-buttons">
+
+                <button
+                    class="lesson-back"
+                    data-back="3"
+                >
+                    ← Back
+                </button>
+
+                <button
+                    class="lesson-next"
+                    data-next="5"
+                >
+                    Continue
+                </button>
+
+            </div>
 
         </section>
 
@@ -672,9 +985,28 @@
                     Je regarde la rue.
                 </p>
 
-                <button class="audio-button">
-                    ▶ Play
-                </button>
+                <div class="practice-buttons sentence-buttons">
+
+                    <button
+                        class="audio-button listen-button"
+                        data-audio-src="audio/sentence-je-regarde-la-rue.mp3"
+                                data-say="Je regarde la rue."
+                        aria-label="Listen: Je regarde la rue."
+                    >
+                        ▶ Play
+                    </button>
+
+                    <button
+                        class="record-button"
+                        data-target="Je regarde la rue."
+                        aria-label="Record yourself saying the sentence"
+                    >
+                        ●
+                    </button>
+
+                </div>
+
+                <p class="practice-feedback" hidden></p>
 
             </div>
 
@@ -694,12 +1026,23 @@
             </div>
 
 
-            <button
-                class="lesson-next"
-                data-next="6"
-            >
-                Continue
-            </button>
+            <div class="lesson-nav-buttons">
+
+                <button
+                    class="lesson-back"
+                    data-back="4"
+                >
+                    ← Back
+                </button>
+
+                <button
+                    class="lesson-next"
+                    data-next="6"
+                >
+                    Continue
+                </button>
+
+            </div>
 
         </section>
 
@@ -735,7 +1078,7 @@
                         At the front of the mouth
                     </button>
 
-                    <button class="answer-option">
+                    <button class="answer-option" data-correct="true">
                         Toward the back of the mouth
                     </button>
 
@@ -748,12 +1091,106 @@
             </div>
 
 
-            <button
-                class="lesson-next"
-                data-next="7"
-            >
-                Finish Lesson
-            </button>
+            <div class="question-card">
+
+                <h3>
+                    What should the tip of your tongue do
+                    while you make the French R?
+                </h3>
+
+
+                <div class="answer-options">
+
+                    <button class="answer-option">
+                        Curl upward and back
+                    </button>
+
+                    <button class="answer-option" data-correct="true">
+                        Stay relaxed, low, near the lower teeth
+                    </button>
+
+                    <button class="answer-option">
+                        Press against the upper teeth
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="question-card">
+
+                <h3>
+                    According to this lesson, what makes
+                    the French R sound most natural?
+                </h3>
+
+
+                <div class="answer-options">
+
+                    <button class="answer-option">
+                        Making it as strong and forceful as possible
+                    </button>
+
+                    <button class="answer-option" data-correct="true">
+                        Keeping it relaxed rather than forced
+                    </button>
+
+                    <button class="answer-option">
+                        Holding it silently
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="question-card">
+
+                <h3>
+                    Which word contains the French R
+                    sound practiced in this lesson?
+                </h3>
+
+
+                <div class="answer-options">
+
+                    <button class="answer-option" data-correct="true">
+                        rouge
+                    </button>
+
+                    <button class="answer-option">
+                        cat
+                    </button>
+
+                    <button class="answer-option">
+                        sing
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+
+            <div class="lesson-nav-buttons">
+
+                <button
+                    class="lesson-back"
+                    data-back="5"
+                >
+                    ← Back
+                </button>
+
+                <button
+                    class="lesson-next"
+                    data-next="7"
+                >
+                    Finish Lesson
+                </button>
+
+            </div>
 
         </section>
 
@@ -784,15 +1221,31 @@
             </p>
 
 
-            <div class="completion-score">
+            <div class="completion-stats">
 
-                <span>
-                    Lesson Progress
-                </span>
+                <div class="completion-score">
 
-                <strong>
-                    100%
-                </strong>
+                    <span>
+                        Lesson Progress
+                    </span>
+
+                    <strong>
+                        100%
+                    </strong>
+
+                </div>
+
+                <div class="completion-score">
+
+                    <span>
+                        Quick Check Score
+                    </span>
+
+                    <strong id="completion-quiz-score">
+                        —
+                    </strong>
+
+                </div>
 
             </div>
 

@@ -1,0 +1,68 @@
+rules_version = '2';
+
+// ===========================
+// PRONONCE — FIRESTORE SECURITY RULES
+// ===========================
+//
+// One document per signed-in user at users/{uid}, holding:
+//   - email            (string)
+//   - isOwner          (bool)  — the single admin account. NEVER
+//                                settable from the app; set by hand
+//                                once, in the Firebase console, for
+//                                exactly one account.
+//   - isTester         (bool)  — grants access to the voice
+//                                recording page. Only an isOwner
+//                                account can change this, and only
+//                                on OTHER users' documents.
+//   - progress         (map)   — { lessonId: true, ... }
+//   - consent          (map or null) — voice-recording consent,
+//                                recorded once per account.
+//
+// The core guarantee: a signed-in user can freely read and update
+// their OWN document (progress, consent, email) but can never touch
+// isOwner or isTester on it. Only a document already flagged
+// isOwner may write isOwner/isTester on ANY document — including
+// listing/querying the whole users collection, needed so the owner
+// can look someone up by email or list current testers.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwnerAccount() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isOwner == true;
+    }
+
+    match /users/{userId} {
+
+      allow get: if isSignedIn() && (request.auth.uid == userId || isOwnerAccount());
+
+      allow list: if isOwnerAccount();
+
+      allow create: if isSignedIn()
+        && request.auth.uid == userId
+        && request.resource.data.isOwner == false
+        && request.resource.data.isTester == false;
+
+      // A user may update their own document as long as isOwner and
+      // isTester come out unchanged.
+      allow update: if isSignedIn()
+        && request.auth.uid == userId
+        && request.resource.data.isOwner == resource.data.isOwner
+        && request.resource.data.isTester == resource.data.isTester;
+
+      // The owner may update any document (this is how tester
+      // access is granted/revoked).
+      allow update: if isOwnerAccount();
+
+      allow delete: if false;
+
+    }
+
+  }
+}

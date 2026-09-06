@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Nasal Sounds | Prononce</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="lesson-page" data-lesson-id="nasal">
+
+
+    <!-- Header -->
+
+    <header class="site-header">
+
+        <a href="dashboard.html" class="logo">
+            Prononce
+        </a>
+
+
+        <nav class="main-nav">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="#" class="active">
+                Practice
+            </a>
+
+            <a href="#">
+                Progress
+            </a>
+
+        </nav>
+
+
+        <button
+            class="logout-button"
+            id="logout-button"
+        >
+            Log Out
+        </button>
+
+    </header>
+
+
+
+    <!-- Lesson Header -->
+
+    <main class="lesson-container">
+
+
+        <a href="dashboard.html" class="back-link">
+            ← Back to Dashboard
+        </a>
+
+
+        <section class="lesson-intro">
+
+            <p class="eyebrow">
+                Lesson 03
+            </p>
+
+            <h1>
+                Nasal Sounds
+            </h1>
+
+            <p>
+                French has four nasal vowels &mdash; sounds like
+                <em>an</em>, <em>in</em>, <em>on</em>, and
+                <em>un</em> &mdash; where air escapes through the
+                nose as well as the mouth.
+            </p>
+
+        </section>
+
+
+
+        <!-- Lesson Progress -->
+
+        <div class="lesson-progress">
+
+            <div class="lesson-progress-top">
+                <span>Lesson Progress</span>
+                <span id="lesson-progress-text">0%</span>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="lesson-progress-fill" style="width: 0%;"></div>
+            </div>
+
+        </div>
+
+
+
+        <!-- SECTION 1 -->
+
+        <section
+            class="lesson-section"
+            data-section="1"
+        >
+
+            <p class="eyebrow">
+                01 · Learn
+            </p>
+
+            <h2>
+                It's about where the air goes.
+            </h2>
+
+            <p>
+                For a nasal vowel, the soft palate at the back of
+                the mouth (the velum) drops down, opening a path
+                for air into the nose. The tongue position barely
+                changes from the vowel's non-nasal cousin &mdash;
+                the airflow is what's different.
+            </p>
+
+
+            <div class="sound-card">
+
+                <span class="sound-symbol">
+                    on
+                </span>
+
+                <div>
+
+                    <h3>
+                        Listen for the difference
+                    </h3>
+
+                    <p>
+                        <em>bon</em> (good) ends in a nasal vowel
+                        &mdash; the "n" isn't fully pronounced,
+                        the air just goes through the nose.
+                        <em>bonne</em> (good, feminine) pronounces
+                        the "n" fully instead, which blocks the
+                        nasal sound.
+                    </p>
+
+                    <div class="practice-buttons">
+
+                        <button
+                            class="audio-button listen-button"
+                            data-audio-src="audio/word-bon.m4a"
+                            data-say="bon"
+                            aria-label="Listen: bon"
+                        >
+                            ▶ bon
+                        </button>
+
+                        <button
+                            class="audio-button listen-button"
+                            data-audio-src="audio/word-bonne.m4a"
+                            data-say="bonne"
+                            aria-label="Listen: bonne"
+                        >
+                            ▶ bonne
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button class="lesson-next" data-next="2">
+                Continue
+            </button>
+
+        </section>
+
+
+
+        <!-- SECTION 2 -->
+
+        <section
+            class="lesson-section hidden"
+            data-section="2"
+        >
+
+            <p class="eyebrow">
+                02 · Position
+            </p>
+
+            <h2>
+                See how the air escapes.
+            </h2>
+
+            <p>
+                Tap a sound below. Watch the soft palate drop and
+                air move up through the nose &mdash; that's the
+                nasal part. The tongue position is just for
+                reference, close to the sound's non-nasal cousin.
+            </p>
+
+
+            <div class="mouth-animation-card">
+
+                <div class="animation-header">
+                    <div>
+                        <span class="animation-label">INTERACTIVE GUIDE</span>
+                        <h3>Four nasal vowels, one diagram</h3>
+                    </div>
+                </div>
+
+
+                <div class="mouth-animation">
+
+                    <svg viewBox="0 0 800 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="nasal-svg-title nasal-svg-desc">
+                    <title id="nasal-svg-title">Side view of a head, cut away to show the mouth, nose, and throat, for French nasal vowels</title>
+                    <desc id="nasal-svg-desc">A labeled cartoon side-view illustration of a head in profile, cut away to show the nose, lips, teeth, palate, uvula, tongue, pharynx and larynx, with the uvula dropping and air moving up through the nose to show nasalization.</desc>
+
+                    <g transform="translate(140,60)">
+
+                    <path class="head-shell" d="
+                      M 72.5 560
+                      C 74.4 550.7, 80.4 522.7, 84.3 504
+                      C 88.3 485.3, 92.2 466.7, 96.2 448
+                      C 100.1 429.3, 104.2 410.0, 108 392
+                      C 111.8 374.0, 117.2 354.3, 119 340
+                      C 120.8 325.7, 120.0 315.5, 119 306
+                      C 118.0 296.5, 119.0 295.7, 113 283
+                      C 107.0 270.3, 89.5 243.5, 83 230
+                      C 76.5 216.5, 76.5 212.7, 74 202
+                      C 71.5 191.3, 69.0 176.3, 68 166
+                      C 67.0 155.7, 67.2 148.5, 68 140
+                      C 68.8 131.5, 69.3 124.7, 73 115
+                      C 76.7 105.3, 82.2 91.8, 90 82
+                      C 97.8 72.2, 112.7 61.5, 120 56
+                      C 127.3 50.5, 126.0 51.7, 134 49
+                      C 142.0 46.3, 153.5 41.8, 168 40
+                      C 182.5 38.2, 207.2 37.3, 221 38
+                      C 234.8 38.7, 240.0 40.5, 251 44
+                      C 262.0 47.5, 277.5 54.0, 287 59
+                      C 296.5 64.0, 300.7 67.5, 308 74
+                      C 315.3 80.5, 324.8 90.0, 331 98
+                      C 337.2 106.0, 341.7 114.7, 345 122
+                      C 348.3 129.3, 349.3 135.3, 351 142
+                      C 352.7 148.7, 354.7 153.3, 355 162
+                      C 355.3 170.7, 348.3 180.7, 353 194
+                      C 357.7 207.3, 378.3 232.7, 383 242
+                      C 387.7 251.3, 384.5 246.8, 381 250
+                      C 377.5 253.2, 364.7 255.3, 362 261
+                      C 359.3 266.7, 365.3 279.2, 365 284
+                      C 364.7 288.8, 360.3 287.0, 360 290
+                      C 359.7 293.0, 363.7 297.8, 363 302
+                      C 362.3 306.2, 356.8 308.2, 356 315
+                      C 355.2 321.8, 358.2 337.2, 358 343
+                      C 357.8 348.8, 357.8 347.5, 355 350
+                      C 352.2 352.5, 352.3 357.3, 341 358
+                      C 329.7 358.7, 297.0 352.8, 287 354
+                      C 277.0 355.2, 283.2 358.3, 281 365
+                      C 278.8 371.7, 277.4 379.9, 274 394
+                      C 270.6 408.1, 265.1 430.9, 260.6 449.3
+                      C 256.2 467.8, 251.7 486.2, 247.3 504.7
+                      C 242.8 523.1, 236.2 550.8, 233.9 560" />
+
+                    <path class="lip lip-upper" d="M 351 264 C 359 266, 366 272, 365 279 C 364 283, 360 285, 356 284 C 351 283, 349 278, 350 272 C 350 269, 350 266, 351 264 Z" />
+                    <path class="lip lip-lower" d="M 350 287 C 351 284, 354 285, 358 285 C 362 285, 365 284, 364 288 C 363 295, 359 300, 353 302 C 349 298, 349 292, 350 287 Z" />
+
+                    <path class="throat" d="
+                      M 172 345
+                      C 170 373, 176 402, 190 425
+                      C 200 440, 210 448, 218 452
+                      L 236 452
+                      C 224 437, 200 405, 190 372
+                      C 186 362, 183 353, 181 345 Z" />
+
+                    <path class="palate" d="M 338 262 C 328 267, 322 270, 315 268 C 300 265, 250 250, 196 248" />
+
+                    <path class="uvula" id="nasal-uvula" d="M 196 248 C 190 258, 189 271, 196 282 C 201 288, 209 288, 213 280 C 217 271, 213 258, 196 248 Z" />
+
+                    <path class="pharynx-wall" d="M 196 248 C 175 268, 166 300, 170 335 C 174 372, 190 405, 214 428 C 224 437, 232 444, 236 452" />
+
+                    <path class="tongue" id="nasal-tongue" d="M 333 297 C 306.5 339.2, 335.2 308.3, 333 297 Z" />
+
+                    <g class="tooth">
+                    <rect x="328" y="256" width="15" height="9" rx="3" />
+                    <rect x="322" y="289" width="15" height="9" rx="3" />
+                    </g>
+
+                    <g class="airflow" id="nasal-airflow">
+                        <path d="M 205 235 C 230 205, 270 185, 310 182 C 330 181, 348 188, 360 200" />
+                        <path d="M 215 245 C 238 218, 275 198, 312 195 C 330 194, 345 200, 355 212" />
+                        <path class="airflow-arrow" d="M 356 196 L 378 202 L 362 218 Z" />
+                    </g>
+
+                    <!-- Anatomy labels -->
+                    <g class="mouth-labels">
+
+                      <g class="mouth-labels-lines">
+                        <line x1="383" y1="242" x2="430" y2="170" />
+                        <line x1="357" y1="272" x2="440" y2="208" />
+                        <line x1="335" y1="260" x2="450" y2="246" />
+                        <line x1="318" y1="267" x2="450" y2="284" />
+                        <line x1="270" y1="258" x2="450" y2="322" />
+                        <line x1="330" y1="293" x2="450" y2="360" />
+                        <line x1="357" y1="295" x2="440" y2="398" />
+                        <line x1="215" y1="238" x2="30" y2="200" />
+                        <line x1="200" y1="265" x2="20" y2="240" />
+                        <line x1="230" y1="330" x2="20" y2="330" />
+                        <line x1="178" y1="360" x2="20" y2="400" />
+                        <line x1="215" y1="440" x2="20" y2="460" />
+                      </g>
+
+                      <g class="mouth-labels-dots">
+                        <circle cx="383" cy="242" />
+                        <circle cx="357" cy="272" />
+                        <circle cx="335" cy="260" />
+                        <circle cx="318" cy="267" />
+                        <circle cx="270" cy="258" />
+                        <circle cx="330" cy="293" />
+                        <circle cx="357" cy="295" />
+                        <circle cx="215" cy="238" />
+                        <circle cx="200" cy="265" />
+                        <circle cx="230" cy="330" />
+                        <circle cx="178" cy="360" />
+                        <circle cx="215" cy="440" />
+                      </g>
+
+                      <g class="mouth-labels-text">
+                        <text x="434" y="166">Nose</text>
+                        <text x="444" y="204">Upper lip</text>
+                        <text x="454" y="242">Upper teeth</text>
+                        <text x="454" y="288">Alveolar ridge</text>
+                        <text x="454" y="326">Hard palate</text>
+                        <text x="454" y="364">Lower teeth</text>
+                        <text x="444" y="402">Lower lip</text>
+                        <text x="28" y="204" text-anchor="end">Soft palate (velum)</text>
+                        <text x="18" y="244" text-anchor="end">Uvula</text>
+                        <text x="18" y="334" text-anchor="end">Tongue</text>
+                        <text x="18" y="404" text-anchor="end">Pharynx</text>
+                        <text x="18" y="464" text-anchor="end">Larynx</text>
+                      </g>
+
+                    </g>
+
+                    </g>
+                    </svg>
+
+                </div>
+
+
+                <div class="animation-instruction" id="nasal-instruction"></div>
+
+                <div class="animation-controls" id="nasal-steps"></div>
+
+                <div class="animation-controls">
+                    <button class="animation-play" id="nasal-play-all" type="button">
+                        ▶ Play All Sounds
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="lesson-nav-buttons">
+                <button class="lesson-back" data-back="1">← Back</button>
+                <button class="lesson-next" data-next="3">Continue</button>
+            </div>
+
+        </section>
+
+
+
+        <!-- SECTION 3 -->
+
+        <section
+            class="lesson-section hidden"
+            data-section="3"
+        >
+
+            <p class="eyebrow">
+                03 · Practice
+            </p>
+
+            <h2>
+                Practice each nasal sound.
+            </h2>
+
+            <p>
+                Listen first, then repeat it.
+            </p>
+
+            <p class="practice-note">
+                Listen uses your browser's built-in French
+                voice. Record gives you basic feedback on
+                volume and length &mdash; it doesn't judge
+                whether the nasal sound is exactly right.
+            </p>
+
+            <div class="practice-list">
+
+                <div class="practice-item">
+                    <div class="practice-item-top">
+                        <span>[ɑ̃] &mdash; an / en</span>
+                        <div class="practice-buttons">
+                            <button class="audio-button listen-button" data-audio-src="audio/nasal-an.m4a" data-say="an" aria-label="Listen: an">▶</button>
+                            <button class="record-button" data-target="an" aria-label="Record yourself saying an">●</button>
+                        </div>
+                    </div>
+                    <p class="practice-feedback" hidden></p>
+                </div>
+
+                <div class="practice-item">
+                    <div class="practice-item-top">
+                        <span>[ɛ̃] &mdash; in / ain</span>
+                        <div class="practice-buttons">
+                            <button class="audio-button listen-button" data-audio-src="audio/nasal-in.m4a" data-say="in" aria-label="Listen: in">▶</button>
+                            <button class="record-button" data-target="in" aria-label="Record yourself saying in">●</button>
+                        </div>
+                    </div>
+                    <p class="practice-feedback" hidden></p>
+                </div>
+
+                <div class="practice-item">
+                    <div class="practice-item-top">
+                        <span>[ɔ̃] &mdash; on</span>
+                        <div class="practice-buttons">
+                            <button class="audio-button listen-button" data-audio-src="audio/nasal-on.m4a" data-say="on" aria-label="Listen: on">▶</button>
+                            <button class="record-button" data-target="on" aria-label="Record yourself saying on">●</button>
+                        </div>
+                    </div>
+                    <p class="practice-feedback" hidden></p>
+                </div>
+
+                <div class="practice-item">
+                    <div class="practice-item-top">
+                        <span>[œ̃] &mdash; un</span>
+                        <div class="practice-buttons">
+                            <button class="audio-button listen-button" data-audio-src="audio/nasal-un.m4a" data-say="un" aria-label="Listen: un">▶</button>
+                            <button class="record-button" data-target="un" aria-label="Record yourself saying un">●</button>
+                        </div>
+                    </div>
+                    <p class="practice-feedback" hidden></p>
+                </div>
+
+            </div>
+
+
+            <div class="lesson-nav-buttons">
+                <button class="lesson-back" data-back="2">← Back</button>
+                <button class="lesson-next" data-next="4">Continue</button>
+            </div>
+
+        </section>
+
+
+
+        <!-- SECTION 4 -->
+
+        <section
+            class="lesson-section hidden"
+            data-section="4"
+        >
+
+            <p class="eyebrow">
+                04 · Words
+            </p>
+
+            <h2>
+                Put each sound into a word.
+            </h2>
+
+            <p>
+                One common word per nasal vowel.
+            </p>
+
+            <div class="word-grid">
+
+                <div class="word-card">
+                    <div class="word-card-top">
+                        <span>dans</span>
+                        <div class="practice-buttons">
+                            <button class="audio-button listen-button" data-audio-src="audio/word-dans.m4a" data-say="dans" aria-label="Listen: dans">▶</button>
+                            <button class="record-button" data-target="dans" aria-label="Record yourself saying dans">●</button>
+                        </div>
+                    </div>
+                    <p class="practice-feedback" hidden></p>
+                </div>
+
+                <div class="word-card">
+                    <div class="word-card-top">
+                        <span>vin</span>
+                        <div class="practice-buttons">
+                            <button class="audio-button listen-button" data-audio-src="audio/word-vin.m4a" data-say="vin" aria-label="Listen: vin">▶</button>
+                            <button class="record-button" data-target="vin" aria-label="Record yourself saying vin">●</button>
+                        </div>
+                    </div>
+                    <p class="practice-feedback" hidden></p>
+                </div>
+
+                <div class="word-card">
+                    <div class="word-card-top">
+                        <span>bon</span>
+                        <div class="practice-buttons">
+                            <button class="audio-button listen-button" data-audio-src="audio/word-bon.m4a" data-say="bon" aria-label="Listen: bon">▶</button>
+                            <button class="record-button" data-target="bon" aria-label="Record yourself saying bon">●</button>
+                        </div>
+                    </div>
+                    <p class="practice-feedback" hidden></p>
+                </div>
+
+                <div class="word-card">
+                    <div class="word-card-top">
+                        <span>un</span>
+                        <div class="practice-buttons">
+                            <button class="audio-button listen-button" data-audio-src="audio/word-un.m4a" data-say="un" aria-label="Listen: un">▶</button>
+                            <button class="record-button" data-target="un" aria-label="Record yourself saying un">●</button>
+                        </div>
+                    </div>
+                    <p class="practice-feedback" hidden></p>
+                </div>
+
+            </div>
+
+
+            <div class="lesson-nav-buttons">
+                <button class="lesson-back" data-back="3">← Back</button>
+                <button class="lesson-next" data-next="5">Continue</button>
+            </div>
+
+        </section>
+
+
+
+        <!-- SECTION 5 -->
+
+        <section
+            class="lesson-section hidden"
+            data-section="5"
+        >
+
+            <p class="eyebrow">
+                05 · Sentence
+            </p>
+
+            <h2>
+                Now use it naturally.
+            </h2>
+
+            <p>
+                This sentence uses all four nasal vowels. Read
+                it slowly, then try it at a natural pace.
+            </p>
+
+
+            <div class="sentence-card">
+
+                <p class="french-sentence">
+                    Le bon vin est dans un coin.
+                </p>
+
+                <div class="practice-buttons sentence-buttons">
+
+                    <button
+                        class="audio-button listen-button"
+                        data-audio-src="audio/sentence-le-bon-vin-est-dans-un-coin.m4a"
+                        data-say="Le bon vin est dans un coin."
+                        aria-label="Listen: Le bon vin est dans un coin."
+                    >
+                        ▶ Play
+                    </button>
+
+                    <button
+                        class="record-button"
+                        data-target="Le bon vin est dans un coin."
+                        aria-label="Record yourself saying the sentence"
+                    >
+                        ●
+                    </button>
+
+                </div>
+
+                <p class="practice-feedback" hidden></p>
+
+            </div>
+
+
+            <div class="tip-box">
+                <strong>Pronunciation Tip</strong>
+                <p>
+                    Don't pronounce the "n" itself in these
+                    words &mdash; it's just there to signal that
+                    the vowel before it is nasal.
+                </p>
+            </div>
+
+
+            <div class="lesson-nav-buttons">
+                <button class="lesson-back" data-back="4">← Back</button>
+                <button class="lesson-next" data-next="6">Continue</button>
+            </div>
+
+        </section>
+
+
+
+        <!-- SECTION 6 -->
+
+        <section
+            class="lesson-section hidden"
+            data-section="6"
+        >
+
+            <p class="eyebrow">
+                06 · Quick Check
+            </p>
+
+            <h2>
+                What did you learn?
+            </h2>
+
+
+            <div class="question-card">
+
+                <h3>
+                    What causes a vowel to become nasal in
+                    French?
+                </h3>
+
+                <div class="answer-options">
+                    <button class="answer-option" data-correct="true">
+                        The soft palate (velum) lowers, letting air escape through the nose
+                    </button>
+                    <button class="answer-option">
+                        The lips press tightly together
+                    </button>
+                    <button class="answer-option">
+                        The tongue touches the roof of the mouth
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="question-card">
+
+                <h3>
+                    Which of these is a nasal vowel sound?
+                </h3>
+
+                <div class="answer-options">
+                    <button class="answer-option" data-correct="true">
+                        on, as in <em>bon</em>
+                    </button>
+                    <button class="answer-option">
+                        ou, as in <em>loup</em>
+                    </button>
+                    <button class="answer-option">
+                        oi, as in <em>moi</em>
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="question-card">
+
+                <h3>
+                    Compared to its non-nasal cousin, a French
+                    nasal vowel's tongue position is&hellip;
+                </h3>
+
+                <div class="answer-options">
+                    <button class="answer-option" data-correct="true">
+                        Roughly similar &mdash; the main difference is airflow through the nose
+                    </button>
+                    <button class="answer-option">
+                        Completely different, at the very front of the mouth
+                    </button>
+                    <button class="answer-option">
+                        Not involved &mdash; only the lips matter
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="question-card">
+
+                <h3>
+                    Which word contains a nasal vowel?
+                </h3>
+
+                <div class="answer-options">
+                    <button class="answer-option" data-correct="true">
+                        vin
+                    </button>
+                    <button class="answer-option">
+                        vie
+                    </button>
+                    <button class="answer-option">
+                        amie
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="lesson-nav-buttons">
+                <button class="lesson-back" data-back="5">← Back</button>
+                <button class="lesson-next" data-next="7">Finish Lesson</button>
+            </div>
+
+        </section>
+
+
+
+        <!-- COMPLETION -->
+
+        <section
+            class="lesson-section completion-section hidden"
+            data-section="7"
+        >
+
+            <p class="eyebrow">Lesson Complete</p>
+
+            <div class="completion-icon">✓</div>
+
+            <h2>Très bien!</h2>
+
+            <p>
+                You've completed your introduction to French
+                nasal sounds.
+            </p>
+
+
+            <div class="completion-stats">
+
+                <div class="completion-score">
+                    <span>Lesson Progress</span>
+                    <strong>100%</strong>
+                </div>
+
+                <div class="completion-score">
+                    <span>Quick Check Score</span>
+                    <strong id="completion-quiz-score">—</strong>
+                </div>
+
+            </div>
+
+
+            <a href="dashboard.html" class="dashboard-link">
+                Return to Dashboard
+            </a>
+
+        </section>
+
+
+    </main>
+
+
+    <script type="module" src="script.js"></script>
+    <script type="module" src="lesson-nasal.js"></script>
+
+</body>
+
+</html>
