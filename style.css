@@ -633,11 +633,44 @@ button:hover {
 }
 
 
-.dashboard-welcome > p:last-child {
+.dashboard-welcome .welcome-intro {
 
     margin: 0;
 
     font-size: 18px;
+
+}
+
+
+.welcome-identity {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.welcome-avatar {
+
+    font-size: 22px;
+
+    line-height: 1;
+
+}
+
+
+.welcome-motto {
+
+    margin: 10px 0 0;
+
+    font-size: 15px;
+
+    font-style: italic;
+
+    color: var(--text-muted);
 
 }
 
@@ -5081,6 +5114,8 @@ button:hover {
 
 .settings-field input {
 
+    box-sizing: border-box;
+
     width: 100%;
 
     padding: 14px 16px;
@@ -5128,6 +5163,106 @@ button:hover {
 .settings-status-error {
 
     color: #a8574a;
+
+}
+
+
+.avatar-picker {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+}
+
+
+.avatar-option {
+
+    box-sizing: border-box;
+
+    width: 46px;
+
+    height: 46px;
+
+    padding: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 20px;
+
+    background: var(--cream);
+
+    border: 2px solid transparent;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+}
+
+
+.avatar-option:hover {
+
+    border-color: rgba(0, 0, 0, 0.12);
+
+}
+
+
+.avatar-option.avatar-option-selected {
+
+    border-color: var(--gold);
+
+    background: var(--white);
+
+}
+
+
+.accent-picker {
+
+    display: flex;
+
+    gap: 12px;
+
+}
+
+
+.accent-option {
+
+    box-sizing: border-box;
+
+    width: 34px;
+
+    height: 34px;
+
+    padding: 0;
+
+    border-radius: 50%;
+
+    border: 3px solid transparent;
+
+    background-color: var(--swatch);
+
+    cursor: pointer;
+
+}
+
+
+.accent-option:hover {
+
+    transform: scale(1.08);
+
+}
+
+
+.accent-option.accent-option-selected {
+
+    border-color: var(--navy);
 
 }
 
