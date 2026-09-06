@@ -1457,6 +1457,10 @@ button:hover {
 
 .audio-button {
 
+    display: inline-block;
+
+    margin-bottom: 20px;
+
     padding: 10px 16px;
 
     font-size: 14px;
@@ -1906,7 +1910,7 @@ button:hover {
 }
 
 
-.practice-question-stage .answer-option {
+.practice-question-stage .answer-option:not(.selected-correct):not(.selected-incorrect) {
 
     background-color: var(--white);
 
@@ -4177,6 +4181,138 @@ button:hover {
 }
 
 
+.admin-badge-disabled {
+
+    background-color: #a8574a;
+
+    color: var(--white);
+
+    border-color: #a8574a;
+
+}
+
+
+.admin-joined-date {
+
+    margin: 6px 0 0;
+
+    font-size: 12px;
+
+    color: var(--text-muted);
+
+}
+
+
+.admin-stats-row {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.admin-stat-tile {
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    padding: 18px;
+
+    background-color: var(--white);
+
+    border-top: 4px solid var(--gold);
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--soft-shadow);
+
+    text-align: center;
+
+}
+
+
+.admin-stat-tile strong {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 26px;
+
+    color: var(--navy);
+
+}
+
+
+.admin-stat-tile span {
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+    color: var(--text-muted);
+
+}
+
+
+.admin-all-accounts-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.admin-all-accounts-header h2 {
+
+    margin: 0;
+
+}
+
+
+.admin-all-accounts-header button {
+
+    flex-shrink: 0;
+
+    padding: 8px 18px;
+
+    font-size: 13px;
+
+}
+
+
+@media (max-width: 700px) {
+
+    .admin-stats-row {
+
+        flex-wrap: wrap;
+
+    }
+
+    .admin-stat-tile {
+
+        min-width: calc(50% - 6px);
+
+    }
+
+}
+
+
 .admin-detail-section {
 
     padding: 22px 0;
@@ -4530,6 +4666,491 @@ button:hover {
         flex-direction: column;
 
         align-items: flex-start;
+
+    }
+
+}
+
+
+/* ===========================
+   PROGRESS PAGE
+=========================== */
+
+.progress-container {
+
+    max-width: 800px;
+
+    margin: 0 auto;
+
+    padding: 70px 40px 100px;
+
+}
+
+
+.progress-container h1 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 40px;
+
+    color: var(--navy);
+
+    margin: 6px 0 16px;
+
+}
+
+
+.progress-intro {
+
+    max-width: 560px;
+
+    color: var(--text-muted);
+
+    line-height: 1.6;
+
+    margin-bottom: 40px;
+
+}
+
+
+.progress-summary {
+
+    display: flex;
+
+    gap: 16px;
+
+    margin-bottom: 45px;
+
+}
+
+
+.progress-summary-stat {
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    padding: 25px;
+
+    background-color: var(--white);
+
+    border-top: 4px solid var(--gold);
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--soft-shadow);
+
+    text-align: center;
+
+}
+
+
+.progress-summary-stat strong {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 34px;
+
+    color: var(--navy);
+
+}
+
+
+.progress-summary-stat span {
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+    color: var(--text-muted);
+
+}
+
+
+.progress-section {
+
+    margin-bottom: 40px;
+
+}
+
+
+.progress-section h2 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 24px;
+
+    color: var(--navy);
+
+    margin-bottom: 18px;
+
+}
+
+
+.progress-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+}
+
+
+.progress-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 16px 20px;
+
+    background-color: var(--white);
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--soft-shadow);
+
+}
+
+
+.progress-row-name {
+
+    flex: 1;
+
+    min-width: 120px;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: var(--navy);
+
+}
+
+
+.progress-row-bar {
+
+    flex: 2;
+
+    height: 8px;
+
+    border-radius: 6px;
+
+    background-color: var(--cream);
+
+    overflow: hidden;
+
+}
+
+
+.progress-row-bar .progress-fill {
+
+    height: 100%;
+
+}
+
+
+.progress-row-status {
+
+    flex-shrink: 0;
+
+    font-size: 13px;
+
+    color: var(--text-muted);
+
+    min-width: 130px;
+
+    text-align: right;
+
+}
+
+
+.progress-row-status-done {
+
+    color: var(--gold);
+
+    font-weight: 700;
+
+}
+
+
+.progress-row-link {
+
+    flex-shrink: 0;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: var(--navy);
+
+    text-decoration: none;
+
+    padding: 8px 18px;
+
+    border: 2px solid var(--navy);
+
+    border-radius: var(--radius-pill);
+
+    transition: all 0.3s ease;
+
+}
+
+
+.progress-row-link:hover {
+
+    background-color: var(--navy);
+
+    color: var(--white);
+
+}
+
+
+@media (max-width: 700px) {
+
+    .progress-container {
+
+        padding: 45px 20px 70px;
+
+    }
+
+    .progress-summary {
+
+        flex-direction: column;
+
+    }
+
+    .progress-row {
+
+        flex-wrap: wrap;
+
+    }
+
+    .progress-row-name {
+
+        flex-basis: 100%;
+
+    }
+
+    .progress-row-bar {
+
+        flex-basis: 100%;
+
+        order: 3;
+
+    }
+
+    .progress-row-status {
+
+        text-align: left;
+
+    }
+
+}
+
+
+/* ===========================
+   ACCOUNT SETTINGS PAGE
+=========================== */
+
+.settings-container {
+
+    max-width: 640px;
+
+    margin: 0 auto;
+
+    padding: 70px 40px 100px;
+
+}
+
+
+.settings-container h1 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 40px;
+
+    color: var(--navy);
+
+    margin: 6px 0 16px;
+
+}
+
+
+.settings-intro {
+
+    color: var(--text-muted);
+
+    line-height: 1.6;
+
+    margin-bottom: 40px;
+
+}
+
+
+.settings-card {
+
+    padding: 30px;
+
+    margin-bottom: 24px;
+
+    background-color: var(--white);
+
+    border-top: 4px solid var(--gold);
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--soft-shadow);
+
+}
+
+
+.settings-card h2 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 20px;
+
+    color: var(--navy);
+
+    margin: 0 0 18px;
+
+}
+
+
+.settings-card > p {
+
+    margin: 0 0 18px;
+
+    font-size: 14px;
+
+    color: var(--text-muted);
+
+    line-height: 1.6;
+
+}
+
+
+.settings-current-value {
+
+    font-size: 14px;
+
+    color: var(--text-muted);
+
+}
+
+
+.settings-current-value strong {
+
+    color: var(--navy);
+
+}
+
+
+.settings-field {
+
+    margin-bottom: 16px;
+
+}
+
+
+.settings-field label {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: var(--navy);
+
+}
+
+
+.settings-field input {
+
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border: 1px solid rgba(0, 0, 0, 0.12);
+
+    border-radius: 12px;
+
+    background: var(--cream);
+
+    font-size: 15px;
+
+    font-family: "Lato", sans-serif;
+
+    outline: none;
+
+}
+
+
+.settings-field input:focus {
+
+    border-color: var(--gold);
+
+}
+
+
+.settings-field input:disabled {
+
+    opacity: 0.5;
+
+}
+
+
+.settings-status {
+
+    margin: 14px 0 0;
+
+    font-size: 13px;
+
+    color: #4d7c5f;
+
+}
+
+
+.settings-status-error {
+
+    color: #a8574a;
+
+}
+
+
+.settings-danger-card {
+
+    border-top-color: #a8574a;
+
+}
+
+
+.settings-danger-card h2 {
+
+    color: #a8574a;
+
+}
+
+
+@media (max-width: 700px) {
+
+    .settings-container {
+
+        padding: 45px 20px 70px;
 
     }
 

@@ -112,6 +112,7 @@
                 <div>
                     <p class="eyebrow" id="account-email">—</p>
                     <div class="admin-badge-row" id="account-badges"></div>
+                    <p class="admin-joined-date" id="account-joined">—</p>
                 </div>
 
             </div>
@@ -124,6 +125,15 @@
                 <div class="admin-action-row">
                     <p>Voice-recording (tester) access</p>
                     <button id="toggle-tester-button" type="button">—</button>
+                </div>
+
+                <div class="admin-action-row">
+                    <p>
+                        Signing in at all &mdash; disabling an account
+                        signs it out immediately and blocks it from
+                        logging back in.
+                    </p>
+                    <button id="toggle-disabled-button" type="button">—</button>
                 </div>
 
             </div>
@@ -206,9 +216,17 @@
              ALL ACCOUNTS
         =========================== -->
 
+        <section class="admin-stats-row" id="admin-stats-row"></section>
+
+
         <section class="admin-all-accounts">
 
-            <h2>All accounts</h2>
+            <div class="admin-all-accounts-header">
+                <h2>All accounts</h2>
+                <button id="export-accounts-button" type="button">
+                    Export CSV
+                </button>
+            </div>
 
             <div class="admin-account-list" id="all-accounts-list">
                 <p class="admin-empty">Loading…</p>

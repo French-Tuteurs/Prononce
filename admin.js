@@ -205,6 +205,16 @@ function renderAccountDetail() {
         badgesEl.innerHTML += '<span class="admin-badge">No special access</span>';
     }
 
+    if (selectedData.disabled === true) {
+        badgesEl.innerHTML += '<span class="admin-badge admin-badge-disabled">Disabled</span>';
+    }
+
+    const joinedEl = document.getElementById("account-joined");
+
+    joinedEl.textContent = selectedData.createdAt
+        ? "Joined " + new Date(selectedData.createdAt).toLocaleDateString()
+        : "Joined date unknown";
+
 
     // Tester toggle
 
@@ -236,6 +246,65 @@ function renderAccountDetail() {
         }
 
     };
+
+
+    // Disable / enable — an owner account can't be disabled here,
+    // since there's normally only one and locking it out would need
+    // a trip to the Firebase console to undo.
+
+    const disabledButton = document.getElementById("toggle-disabled-button");
+
+    if (selectedData.isOwner === true) {
+
+        disabledButton.textContent = "Owner accounts can't be disabled";
+        disabledButton.disabled = true;
+        disabledButton.classList.remove("admin-danger-button");
+
+    } else {
+
+        const isDisabled = selectedData.disabled === true;
+
+        disabledButton.textContent = isDisabled ? "Enable Account" : "Disable Account";
+        disabledButton.disabled = false;
+        disabledButton.classList.toggle("admin-danger-button", !isDisabled);
+
+        disabledButton.onclick = async function () {
+
+            const nextValue = !isDisabled;
+
+            if (nextValue) {
+
+                const confirmed = window.confirm(
+                    "Disable " + (selectedData.email || selectedUid) +
+                    "? They'll be signed out immediately and can't log back in until re-enabled."
+                );
+
+                if (!confirmed) {
+                    return;
+                }
+
+            }
+
+            disabledButton.disabled = true;
+
+            try {
+
+                await updateDoc(doc(db, "users", selectedUid), { disabled: nextValue });
+                selectedData.disabled = nextValue;
+                renderAccountDetail();
+                loadAllAccounts();
+
+            } catch (error) {
+
+                console.error(error);
+                alert("Couldn't update the account's status.");
+                disabledButton.disabled = false;
+
+            }
+
+        };
+
+    }
 
 
     // Password reset
@@ -288,28 +357,28 @@ function renderAccountDetail() {
         status.className = "admin-lesson-status" + (completed ? " admin-lesson-status-done" : "");
         status.textContent = completed ? "Completed" : "Not started";
 
-        const resetButton = document.createElement("button");
-        resetButton.type = "button";
-        resetButton.textContent = "Reset";
-        resetButton.disabled = !completed;
-        resetButton.addEventListener("click", async function () {
+        const toggleButton = document.createElement("button");
+        toggleButton.type = "button";
+        toggleButton.textContent = completed ? "Reset" : "Mark Complete";
+        toggleButton.addEventListener("click", async function () {
 
-            resetButton.disabled = true;
+            const nextValue = !completed;
+            toggleButton.disabled = true;
 
             try {
 
                 await updateDoc(doc(db, "users", selectedUid), {
-                    ["progress." + lesson.id]: false
+                    ["progress." + lesson.id]: nextValue
                 });
 
-                progress[lesson.id] = false;
+                progress[lesson.id] = nextValue;
                 renderAccountDetail();
 
             } catch (error) {
 
                 console.error(error);
-                alert("Couldn't reset that lesson.");
-                resetButton.disabled = false;
+                alert("Couldn't update that lesson.");
+                toggleButton.disabled = false;
 
             }
 
@@ -317,7 +386,7 @@ function renderAccountDetail() {
 
         row.appendChild(label);
         row.appendChild(status);
-        row.appendChild(resetButton);
+        row.appendChild(toggleButton);
         lessonGrid.appendChild(row);
 
     });
@@ -359,7 +428,12 @@ function renderAccountDetail() {
             select.appendChild(option);
         }
 
-        select.value = String(currentLevel || 1);
+        const completeOption = document.createElement("option");
+        completeOption.value = "complete";
+        completeOption.textContent = "Complete (all 10)";
+        select.appendChild(completeOption);
+
+        select.value = completed ? "complete" : String(currentLevel || 1);
 
         const setButton = document.createElement("button");
         setButton.type = "button";
@@ -367,17 +441,18 @@ function renderAccountDetail() {
 
         setButton.addEventListener("click", async function () {
 
-            const level = Number(select.value);
+            const markComplete = select.value === "complete";
+            const level = markComplete ? PRACTICE_TOTAL_LEVELS : Number(select.value);
             setButton.disabled = true;
 
             try {
 
                 await updateDoc(doc(db, "users", selectedUid), {
-                    ["progress." + practice.id]: false,
+                    ["progress." + practice.id]: markComplete,
                     ["progress.practiceLevels." + practice.id]: level
                 });
 
-                progress[practice.id] = false;
+                progress[practice.id] = markComplete;
                 practiceLevels[practice.id] = level;
                 renderAccountDetail();
 
@@ -497,6 +572,41 @@ function renderAccountDetail() {
 // ALL ACCOUNTS
 // ===========================
 
+let allAccountsCache = [];
+
+
+function renderStatsRow() {
+
+    const statsRow = document.getElementById("admin-stats-row");
+
+    const total = allAccountsCache.length;
+    const owners = allAccountsCache.filter(function (a) { return a.isOwner === true; }).length;
+    const testers = allAccountsCache.filter(function (a) { return a.isTester === true; }).length;
+    const disabled = allAccountsCache.filter(function (a) { return a.disabled === true; }).length;
+
+    const stats = [
+        { label: "Total Accounts", value: total },
+        { label: "Owners", value: owners },
+        { label: "Testers", value: testers },
+        { label: "Disabled", value: disabled }
+    ];
+
+    statsRow.innerHTML = "";
+
+    stats.forEach(function (stat) {
+
+        const tile = document.createElement("div");
+        tile.className = "admin-stat-tile";
+        tile.innerHTML =
+            "<strong>" + stat.value + "</strong><span>" + stat.label + "</span>";
+
+        statsRow.appendChild(tile);
+
+    });
+
+}
+
+
 async function loadAllAccounts() {
 
     const listEl = document.getElementById("all-accounts-list");
@@ -506,9 +616,12 @@ async function loadAllAccounts() {
 
         const snapshot = await getDocs(collection(db, "users"));
 
+        allAccountsCache = [];
+
         if (snapshot.empty) {
 
             listEl.innerHTML = '<p class="admin-empty">No accounts yet.</p>';
+            renderStatsRow();
             return;
 
         }
@@ -516,6 +629,7 @@ async function loadAllAccounts() {
         snapshot.forEach(function (docSnap) {
 
             const data = docSnap.data();
+            allAccountsCache.push(data);
 
             const row = document.createElement("button");
             row.type = "button";
@@ -535,6 +649,10 @@ async function loadAllAccounts() {
                 badges.innerHTML += '<span class="admin-badge admin-badge-tester">Tester</span>';
             }
 
+            if (data.disabled === true) {
+                badges.innerHTML += '<span class="admin-badge admin-badge-disabled">Disabled</span>';
+            }
+
             row.appendChild(emailSpan);
             row.appendChild(badges);
 
@@ -547,11 +665,55 @@ async function loadAllAccounts() {
 
         });
 
+        renderStatsRow();
+
     } catch (error) {
 
         console.error(error);
         listEl.innerHTML = '<p class="admin-empty">Couldn\'t load accounts.</p>';
 
     }
+
+}
+
+
+const exportAccountsButton = document.getElementById("export-accounts-button");
+
+if (exportAccountsButton) {
+
+    exportAccountsButton.addEventListener("click", function () {
+
+        if (!allAccountsCache.length) {
+            return;
+        }
+
+        const columns = ["email", "isOwner", "isTester", "disabled", "createdAt"];
+        const rows = [columns.join(",")];
+
+        allAccountsCache.forEach(function (account) {
+
+            const row = columns.map(function (col) {
+                const value = account[col];
+                const text = value === undefined || value === null ? "" : String(value);
+                return '"' + text.replace(/"/g, '""') + '"';
+            });
+
+            rows.push(row.join(","));
+
+        });
+
+        const blob = new Blob([rows.join("\n")], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "prononce-accounts.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+
+    });
 
 }
