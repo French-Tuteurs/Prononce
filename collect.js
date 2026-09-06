@@ -560,6 +560,59 @@ const collectItemsEl = document.getElementById("collect-items");
 const collectProgressEl = document.getElementById("collect-progress");
 const zipButton = document.getElementById("download-zip-button");
 const zipStatus = document.getElementById("zip-status");
+const emailReminder = document.getElementById("email-reminder");
+const emailReminderFilename = document.getElementById("email-reminder-filename");
+const emailReminderMailto = document.getElementById("email-reminder-mailto");
+const emailReminderCopyButton = document.getElementById("email-reminder-copy");
+
+const RECORDINGS_EMAIL = "raushan.athwal.10@gmail.com";
+
+// The browser can't attach a file to an email on its own — mailto:
+// links have no way to include one — so this just gets the tester's
+// email client open with the right address/subject already filled
+// in. They still have to manually attach the zip from their
+// downloads before hitting send.
+
+function showEmailReminder(filename) {
+
+    emailReminderFilename.textContent = filename;
+
+    const subject = encodeURIComponent("Prononce recordings — " + speakerSlug);
+    const body = encodeURIComponent(
+        "Attaching " + filename + " from my downloads.\n\n" +
+        "(Reminder: attach the file before sending — your email app won't do it automatically.)"
+    );
+
+    emailReminderMailto.href =
+        "mailto:" + RECORDINGS_EMAIL + "?subject=" + subject + "&body=" + body;
+
+    emailReminder.classList.remove("hidden");
+
+}
+
+
+if (emailReminderCopyButton) {
+
+    emailReminderCopyButton.addEventListener("click", async function () {
+
+        try {
+
+            await navigator.clipboard.writeText(RECORDINGS_EMAIL);
+            emailReminderCopyButton.textContent = "Copied!";
+
+        } catch (error) {
+
+            emailReminderCopyButton.textContent = RECORDINGS_EMAIL;
+
+        }
+
+        setTimeout(function () {
+            emailReminderCopyButton.textContent = "Copy Address";
+        }, 2000);
+
+    });
+
+}
 
 let sharedStream = null;
 let savedCount = 0;
@@ -589,12 +642,15 @@ zipButton.addEventListener("click", function () {
     createZipBlob(entries)
         .then(function (zipBlob) {
 
-            downloadBlob(zipBlob, speakerSlug + "_prononce-recordings.zip");
+            const zipFilename = speakerSlug + "_prononce-recordings.zip";
+
+            downloadBlob(zipBlob, zipFilename);
 
             zipStatus.textContent =
-                "Downloaded " + speakerSlug + "_prononce-recordings.zip — " +
-                "send us that one file. You can keep recording and download " +
-                "again any time to include more.";
+                "Downloaded " + zipFilename + ". You can keep recording " +
+                "and download again any time to include more.";
+
+            showEmailReminder(zipFilename);
 
             zipButton.disabled = false;
 

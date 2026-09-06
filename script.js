@@ -104,10 +104,13 @@ onAuthStateChanged(auth, async function (user) {
         if (isDashboardPage) {
 
             renderDashboardLessonProgress();
+            renderPracticeProgress();
             renderTesterAccessCard();
             renderOwnerAdminPanel();
 
         }
+
+        resumeSavedPracticeLevel();
 
         hidePageLoader();
 
@@ -201,6 +204,35 @@ async function markLessonComplete(lessonId) {
 }
 
 
+// A "practice" page (like practice-r.html) is a lesson-shaped page
+// with several 10-question levels instead of one Quick Check.
+// Alongside the normal lessonId completion flag above, it also saves
+// which level the visitor last reached, so leaving mid-practice and
+// coming back resumes there instead of restarting at Level 1.
+
+async function markPracticeLevel(practiceId, level) {
+
+    if (!currentUserId) {
+        return;
+    }
+
+    const userRef = doc(db, "users", currentUserId);
+
+    await updateDoc(userRef, {
+        ["progress.practiceLevels." + practiceId]: level
+    });
+
+    if (currentUserProfile) {
+
+        currentUserProfile.progress = currentUserProfile.progress || {};
+        currentUserProfile.progress.practiceLevels = currentUserProfile.progress.practiceLevels || {};
+        currentUserProfile.progress.practiceLevels[practiceId] = level;
+
+    }
+
+}
+
+
 function renderDashboardLessonProgress() {
 
     if (!currentUserProfile) {
@@ -229,6 +261,66 @@ function renderDashboardLessonProgress() {
         }
 
     });
+
+}
+
+
+function renderPracticeProgress() {
+
+    if (!currentUserProfile) {
+        return;
+    }
+
+    const progress = currentUserProfile.progress || {};
+    const practiceLevels = progress.practiceLevels || {};
+
+    document.querySelectorAll(".practice-button-link[data-practice-id]").forEach(function (link) {
+
+        const practiceId = link.dataset.practiceId;
+        const totalLevels = Number(link.dataset.totalLevels) || 10;
+        const currentLevel = practiceLevels[practiceId];
+
+        if (progress[practiceId] === true) {
+
+            link.textContent = "Practice Again (" + totalLevels + " Levels)";
+
+        } else if (currentLevel && currentLevel > 1) {
+
+            link.textContent = "Continue at Level " + currentLevel;
+
+        } else {
+
+            link.textContent = "Begin Level 1";
+
+        }
+
+    });
+
+}
+
+
+// On a practice page itself (not the dashboard), jump straight to
+// whatever level the visitor last reached instead of always
+// restarting at Level 1 — unless they've already finished every
+// level, in which case starting over is the point.
+
+function resumeSavedPracticeLevel() {
+
+    const totalLevels = document.body.dataset.practiceLevels;
+
+    if (!totalLevels || !currentUserProfile) {
+        return;
+    }
+
+    const practiceId = document.body.dataset.lessonId;
+    const progress = currentUserProfile.progress || {};
+    const practiceLevels = progress.practiceLevels || {};
+    const savedLevel = practiceLevels[practiceId];
+    const alreadyCompleted = progress[practiceId] === true;
+
+    if (savedLevel && savedLevel > 1 && !alreadyCompleted) {
+        showLessonSection(savedLevel);
+    }
 
 }
 
@@ -936,6 +1028,14 @@ function showLessonSection(sectionNumber) {
 
             if (lessonId) {
                 markLessonComplete(lessonId);
+            }
+
+        } else if (document.body.dataset.practiceLevels) {
+
+            const practiceId = document.body.dataset.lessonId;
+
+            if (practiceId) {
+                markPracticeLevel(practiceId, sectionNumber);
             }
 
         }
