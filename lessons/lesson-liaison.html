@@ -10,10 +10,10 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Rhythm &amp; Intonation | Prononce</title>
+    <title>Liaison | Prononce</title>
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 
     <!-- Google Fonts -->
 
@@ -33,14 +33,14 @@
 </head>
 
 
-<body class="lesson-page" data-lesson-id="rhythm">
+<body class="lesson-page" data-lesson-id="liaison">
 
     <!-- Full-screen loader, removed by script.js once Firebase has
          resolved sign-in state (and, on the dashboard, owner/tester
          status) so the page never flashes half-ready content. -->
     <div class="page-loader" id="page-loader">
 
-        <img src="favicon.svg" alt="" class="page-loader-mark">
+        <img src="../favicon.svg" alt="" class="page-loader-mark">
 
         <div class="page-loader-spinner"></div>
 
@@ -50,12 +50,12 @@
 
     <header class="site-header">
 
-        <a href="dashboard.html" class="logo">Prononce</a>
+        <a href="../dashboard.html" class="logo">Prononce</a>
 
         <nav class="main-nav">
-            <a href="dashboard.html">Dashboard</a>
+            <a href="../dashboard.html">Dashboard</a>
             <a href="#" class="active">Practice</a>
-            <a href="progress.html">Progress</a>
+            <a href="../progress.html">Progress</a>
         </nav>
 
         <button class="logout-button" id="logout-button">Log Out</button>
@@ -67,22 +67,22 @@
     <main class="lesson-container">
 
 
-        <a href="dashboard.html" class="back-link">
+        <a href="../dashboard.html" class="back-link">
             ← Back to Dashboard
         </a>
 
 
         <section class="lesson-intro">
 
-            <p class="eyebrow">Lesson 06</p>
+            <p class="eyebrow">Lesson 05</p>
 
-            <h1>Rhythm &amp; Intonation</h1>
+            <h1>Liaison</h1>
 
             <p>
-                French sounds different from English even when
-                every individual sound is right &mdash; because
-                of rhythm (how syllables are timed) and
-                intonation (how pitch rises and falls).
+                French words link together in connected speech.
+                A silent final consonant can suddenly be
+                pronounced &mdash; if the next word starts with
+                a vowel sound.
             </p>
 
         </section>
@@ -107,35 +107,34 @@
 
             <p class="eyebrow">01 · Learn</p>
 
-            <h2>Every syllable gets its turn.</h2>
+            <h2>Two words become one sound.</h2>
 
             <p>
-                English is <strong>stress-timed</strong> &mdash;
-                stressed syllables get more time and unstressed
-                ones get swallowed. French is
-                <strong>syllable-timed</strong> &mdash; each
-                syllable gets roughly equal length, giving French
-                its steady, even rhythm.
+                Say <em>les</em> on its own and the S is silent.
+                Say <em>les</em> right before <em>amis</em>, and
+                that same S turns into a "z" sound that glues
+                the two words together: <em>le-z-ami</em>.
             </p>
 
 
             <div class="sound-card">
 
-                <span class="sound-symbol">🎵</span>
+                <span class="sound-symbol">z</span>
 
                 <div>
 
-                    <h3>Listen for the rhythm</h3>
+                    <h3>Listen for the difference</h3>
 
                     <p>
-                        Notice how each syllable in <em>il fait
-                        beau</em> gets about the same length,
-                        instead of one syllable jumping out.
+                        <em>les</em> alone has no S sound.
+                        <em>les amis</em> together does &mdash;
+                        that's liaison.
                     </p>
 
                     <div class="practice-buttons">
 
-                        <button class="audio-button listen-button" data-audio-src="audio/sentence-il-fait-beau.m4a" data-say="Il fait beau." aria-label="Listen: Il fait beau.">▶ Il fait beau.</button>
+                        <button class="audio-button listen-button" data-audio-src="../audio/word-les.m4a" data-say="les" aria-label="Listen: les">▶ les</button>
+                        <button class="audio-button listen-button" data-audio-src="../audio/phrase-les-amis.m4a" data-say="les amis" aria-label="Listen: les amis">▶ les amis</button>
 
                     </div>
 
@@ -156,12 +155,11 @@
 
             <p class="eyebrow">02 · Position</p>
 
-            <h2>See the melody.</h2>
+            <h2>See the words link up.</h2>
 
             <p>
-                Tap a pattern below. The gold line shows how
-                pitch moves; the dots show the syllables, all
-                the same size.
+                Tap an example below. The gold circle shows the
+                sound that bridges the two words.
             </p>
 
 
@@ -170,25 +168,19 @@
                 <div class="animation-header">
                     <div>
                         <span class="animation-label">INTERACTIVE GUIDE</span>
-                        <h3>Four intonation patterns</h3>
+                        <h3>Five liaison patterns</h3>
                     </div>
                 </div>
 
-                <div class="rhythm-display">
-
-                    <svg class="rhythm-contour" viewBox="0 0 270 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path id="rhythm-contour-path" d="" />
-                    </svg>
-
-                    <p class="rhythm-sentence" id="rhythm-sentence-display"></p>
-
-                    <div class="rhythm-dots" id="rhythm-dots"></div>
-
+                <div class="liaison-bridge">
+                    <span id="liaison-word-before"></span>
+                    <span class="liaison-sound" id="liaison-sound"></span>
+                    <span id="liaison-word-after"></span>
                 </div>
 
-                <div class="animation-instruction" id="rhythm-instruction"></div>
+                <div class="animation-instruction" id="liaison-instruction"></div>
 
-                <div class="animation-controls" id="rhythm-steps"></div>
+                <div class="animation-controls" id="liaison-steps"></div>
 
             </div>
 
@@ -208,9 +200,9 @@
 
             <p class="eyebrow">03 · Practice</p>
 
-            <h2>Practice each pattern.</h2>
+            <h2>Practice each pair.</h2>
 
-            <p>Listen first, then repeat it with the same melody.</p>
+            <p>Listen first, then repeat it as one connected phrase.</p>
 
             <p class="practice-note">
                 Listen uses your browser's built-in French
@@ -222,10 +214,10 @@
 
                 <div class="practice-item">
                     <div class="practice-item-top">
-                        <span>Il fait beau.</span>
+                        <span>les amis</span>
                         <div class="practice-buttons">
-                            <button class="audio-button listen-button" data-audio-src="audio/sentence-il-fait-beau.m4a" data-say="Il fait beau." aria-label="Listen: Il fait beau.">▶</button>
-                            <button class="record-button" data-target="Il fait beau." aria-label="Record yourself saying Il fait beau">●</button>
+                            <button class="audio-button listen-button" data-audio-src="../audio/phrase-les-amis.m4a" data-say="les amis" aria-label="Listen: les amis">▶</button>
+                            <button class="record-button" data-target="les amis" aria-label="Record yourself saying les amis">●</button>
                         </div>
                     </div>
                     <p class="practice-feedback" hidden></p>
@@ -233,10 +225,10 @@
 
                 <div class="practice-item">
                     <div class="practice-item-top">
-                        <span>Il fait beau ?</span>
+                        <span>vous avez</span>
                         <div class="practice-buttons">
-                            <button class="audio-button listen-button" data-audio-src="audio/sentence-il-fait-beau-question.m4a" data-say="Il fait beau ?" aria-label="Listen: Il fait beau?">▶</button>
-                            <button class="record-button" data-target="Il fait beau ?" aria-label="Record yourself saying Il fait beau, as a question">●</button>
+                            <button class="audio-button listen-button" data-audio-src="../audio/phrase-vous-avez.m4a" data-say="vous avez" aria-label="Listen: vous avez">▶</button>
+                            <button class="record-button" data-target="vous avez" aria-label="Record yourself saying vous avez">●</button>
                         </div>
                     </div>
                     <p class="practice-feedback" hidden></p>
@@ -244,10 +236,10 @@
 
                 <div class="practice-item">
                     <div class="practice-item-top">
-                        <span>Où vas-tu ?</span>
+                        <span>un ami</span>
                         <div class="practice-buttons">
-                            <button class="audio-button listen-button" data-audio-src="audio/sentence-ou-vas-tu.m4a" data-say="Où vas-tu ?" aria-label="Listen: Où vas-tu?">▶</button>
-                            <button class="record-button" data-target="Où vas-tu ?" aria-label="Record yourself saying Où vas-tu">●</button>
+                            <button class="audio-button listen-button" data-audio-src="../audio/phrase-un-ami.m4a" data-say="un ami" aria-label="Listen: un ami">▶</button>
+                            <button class="record-button" data-target="un ami" aria-label="Record yourself saying un ami">●</button>
                         </div>
                     </div>
                     <p class="practice-feedback" hidden></p>
@@ -255,10 +247,21 @@
 
                 <div class="practice-item">
                     <div class="practice-item-top">
-                        <span>Du pain, du beurre, et du fromage.</span>
+                        <span>petit ami</span>
                         <div class="practice-buttons">
-                            <button class="audio-button listen-button" data-audio-src="audio/sentence-du-pain-du-beurre-et-du-fromage.m4a" data-say="Du pain, du beurre, et du fromage." aria-label="Listen: Du pain, du beurre, et du fromage.">▶</button>
-                            <button class="record-button" data-target="Du pain, du beurre, et du fromage." aria-label="Record yourself saying the list">●</button>
+                            <button class="audio-button listen-button" data-audio-src="../audio/phrase-petit-ami.m4a" data-say="petit ami" aria-label="Listen: petit ami">▶</button>
+                            <button class="record-button" data-target="petit ami" aria-label="Record yourself saying petit ami">●</button>
+                        </div>
+                    </div>
+                    <p class="practice-feedback" hidden></p>
+                </div>
+
+                <div class="practice-item">
+                    <div class="practice-item-top">
+                        <span>grand homme</span>
+                        <div class="practice-buttons">
+                            <button class="audio-button listen-button" data-audio-src="../audio/phrase-grand-homme.m4a" data-say="grand homme" aria-label="Listen: grand homme">▶</button>
+                            <button class="record-button" data-target="grand homme" aria-label="Record yourself saying grand homme">●</button>
                         </div>
                     </div>
                     <p class="practice-feedback" hidden></p>
@@ -284,16 +287,16 @@
 
             <h2>More examples.</h2>
 
-            <p>The same four patterns, in different sentences.</p>
+            <p>The same idea, in different phrases.</p>
 
             <div class="word-grid">
 
                 <div class="word-card">
                     <div class="word-card-top">
-                        <span>Il pleut.</span>
+                        <span>les enfants</span>
                         <div class="practice-buttons">
-                            <button class="audio-button listen-button" data-audio-src="audio/sentence-il-pleut.m4a" data-say="Il pleut." aria-label="Listen: Il pleut.">▶</button>
-                            <button class="record-button" data-target="Il pleut." aria-label="Record yourself saying Il pleut">●</button>
+                            <button class="audio-button listen-button" data-audio-src="../audio/phrase-les-enfants.m4a" data-say="les enfants" aria-label="Listen: les enfants">▶</button>
+                            <button class="record-button" data-target="les enfants" aria-label="Record yourself saying les enfants">●</button>
                         </div>
                     </div>
                     <p class="practice-feedback" hidden></p>
@@ -301,10 +304,10 @@
 
                 <div class="word-card">
                     <div class="word-card-top">
-                        <span>Tu viens ?</span>
+                        <span>trois heures</span>
                         <div class="practice-buttons">
-                            <button class="audio-button listen-button" data-audio-src="audio/sentence-tu-viens.m4a" data-say="Tu viens ?" aria-label="Listen: Tu viens?">▶</button>
-                            <button class="record-button" data-target="Tu viens ?" aria-label="Record yourself saying Tu viens">●</button>
+                            <button class="audio-button listen-button" data-audio-src="../audio/phrase-trois-heures.m4a" data-say="trois heures" aria-label="Listen: trois heures">▶</button>
+                            <button class="record-button" data-target="trois heures" aria-label="Record yourself saying trois heures">●</button>
                         </div>
                     </div>
                     <p class="practice-feedback" hidden></p>
@@ -312,10 +315,10 @@
 
                 <div class="word-card">
                     <div class="word-card-top">
-                        <span>Quand arrives-tu ?</span>
+                        <span>dix ans</span>
                         <div class="practice-buttons">
-                            <button class="audio-button listen-button" data-audio-src="audio/sentence-quand-arrives-tu.m4a" data-say="Quand arrives-tu ?" aria-label="Listen: Quand arrives-tu?">▶</button>
-                            <button class="record-button" data-target="Quand arrives-tu ?" aria-label="Record yourself saying Quand arrives-tu">●</button>
+                            <button class="audio-button listen-button" data-audio-src="../audio/phrase-dix-ans.m4a" data-say="dix ans" aria-label="Listen: dix ans">▶</button>
+                            <button class="record-button" data-target="dix ans" aria-label="Record yourself saying dix ans">●</button>
                         </div>
                     </div>
                     <p class="practice-feedback" hidden></p>
@@ -323,10 +326,21 @@
 
                 <div class="word-card">
                     <div class="word-card-top">
-                        <span>Il y a Marie, Paul, et Sophie.</span>
+                        <span>quand il</span>
                         <div class="practice-buttons">
-                            <button class="audio-button listen-button" data-audio-src="audio/sentence-il-y-a-marie-paul-et-sophie.m4a" data-say="Il y a Marie, Paul, et Sophie." aria-label="Listen: Il y a Marie, Paul, et Sophie.">▶</button>
-                            <button class="record-button" data-target="Il y a Marie, Paul, et Sophie." aria-label="Record yourself saying the list">●</button>
+                            <button class="audio-button listen-button" data-audio-src="../audio/phrase-quand-il.m4a" data-say="quand il" aria-label="Listen: quand il">▶</button>
+                            <button class="record-button" data-target="quand il" aria-label="Record yourself saying quand il">●</button>
+                        </div>
+                    </div>
+                    <p class="practice-feedback" hidden></p>
+                </div>
+
+                <div class="word-card">
+                    <div class="word-card-top">
+                        <span>on a</span>
+                        <div class="practice-buttons">
+                            <button class="audio-button listen-button" data-audio-src="../audio/phrase-on-a.m4a" data-say="on a" aria-label="Listen: on a">▶</button>
+                            <button class="record-button" data-target="on a" aria-label="Record yourself saying on a">●</button>
                         </div>
                     </div>
                     <p class="practice-feedback" hidden></p>
@@ -353,30 +367,29 @@
             <h2>Now use it naturally.</h2>
 
             <p>
-                A short back-and-forth: a rising question, then
-                a falling answer. Read both slowly, then at a
-                natural pace.
+                This sentence has three liaisons in it. Read it
+                slowly, then at a natural pace.
             </p>
 
             <div class="sentence-card">
 
                 <p class="french-sentence">
-                    Tu viens ce soir ? &mdash; Oui, je viens.
+                    Les enfants ont un petit ami.
                 </p>
 
                 <div class="practice-buttons sentence-buttons">
 
                     <button
                         class="audio-button listen-button"
-                        data-audio-src="audio/sentence-tu-viens-ce-soir-oui-je-viens.m4a"
-                        data-say="Tu viens ce soir ? Oui, je viens."
-                        aria-label="Listen: Tu viens ce soir? Oui, je viens."
+                        data-audio-src="../audio/sentence-les-enfants-ont-un-petit-ami.m4a"
+                        data-say="Les enfants ont un petit ami."
+                        aria-label="Listen: Les enfants ont un petit ami."
                     >▶ Play</button>
 
                     <button
                         class="record-button"
-                        data-target="Tu viens ce soir ? Oui, je viens."
-                        aria-label="Record yourself saying the exchange"
+                        data-target="Les enfants ont un petit ami."
+                        aria-label="Record yourself saying the sentence"
                     >●</button>
 
                 </div>
@@ -389,9 +402,10 @@
             <div class="tip-box">
                 <strong>Pronunciation Tip</strong>
                 <p>
-                    Don't stress individual words the way you
-                    would in English. Let the pitch of the whole
-                    sentence do the work instead.
+                    Not every possible liaison is actually made
+                    in casual speech &mdash; native speakers skip
+                    some of them. When in doubt, these five
+                    patterns are the most reliable ones to use.
                 </p>
             </div>
 
@@ -414,55 +428,49 @@
             <h2>What did you learn?</h2>
 
             <div class="question-card">
-                <h3>Compared to English, French rhythm is&hellip;</h3>
+                <h3>What is liaison in French?</h3>
                 <div class="answer-options">
                     <button class="answer-option" data-correct="true">
-                        Syllable-timed — each syllable gets roughly equal length
+                        Pronouncing a normally-silent final consonant because the next word starts with a vowel sound
                     </button>
                     <button class="answer-option">
-                        Stress-timed, exactly like English
+                        Adding an extra syllable for emphasis
                     </button>
                     <button class="answer-option">
-                        Completely random
+                        A rule for silent verb endings
                     </button>
                 </div>
             </div>
 
             <div class="question-card">
-                <h3>What typically happens to pitch at the end of a yes/no question in French?</h3>
+                <h3>In <em>les amis</em>, the liaison sound is&hellip;</h3>
                 <div class="answer-options">
-                    <button class="answer-option">It falls</button>
-                    <button class="answer-option" data-correct="true">It rises</button>
-                    <button class="answer-option">It stays perfectly flat</button>
+                    <button class="answer-option">s</button>
+                    <button class="answer-option" data-correct="true">z</button>
+                    <button class="answer-option">t</button>
                 </div>
             </div>
 
             <div class="question-card">
-                <h3>In a list like <em>du pain, du beurre, et du fromage</em>, the pitch on the last item&hellip;</h3>
+                <h3>In <em>petit ami</em>, which silent letter becomes pronounced?</h3>
                 <div class="answer-options">
-                    <button class="answer-option" data-correct="true">
-                        Falls, showing the list is complete
-                    </button>
-                    <button class="answer-option">
-                        Rises higher than the others
-                    </button>
-                    <button class="answer-option">
-                        Disappears completely
-                    </button>
+                    <button class="answer-option" data-correct="true">t</button>
+                    <button class="answer-option">p</button>
+                    <button class="answer-option">i</button>
                 </div>
             </div>
 
             <div class="question-card">
-                <h3>Questions starting with a word like <em>où</em> or <em>quand</em> usually&hellip;</h3>
+                <h3>Liaison happens between two words when&hellip;</h3>
                 <div class="answer-options">
                     <button class="answer-option" data-correct="true">
-                        Fall in pitch, like a statement
+                        The first ends in a consonant and the second starts with a vowel sound
                     </button>
                     <button class="answer-option">
-                        Always rise sharply
+                        Both words start with consonants
                     </button>
                     <button class="answer-option">
-                        Are spoken in a monotone
+                        The words are separated by punctuation
                     </button>
                 </div>
             </div>
@@ -484,7 +492,7 @@
             <p class="eyebrow">Lesson Complete</p>
             <div class="completion-icon">✓</div>
             <h2>Très bien!</h2>
-            <p>You've completed your introduction to French rhythm and intonation.</p>
+            <p>You've completed your introduction to liaison.</p>
 
             <div class="completion-stats">
                 <div class="completion-score">
@@ -497,7 +505,7 @@
                 </div>
             </div>
 
-            <a href="dashboard.html" class="dashboard-link">Return to Dashboard</a>
+            <a href="../dashboard.html" class="dashboard-link">Return to Dashboard</a>
 
         </section>
 
@@ -505,8 +513,8 @@
     </main>
 
 
-    <script type="module" src="script.js"></script>
-    <script type="module" src="lesson-rhythm.js"></script>
+    <script type="module" src="../script.js"></script>
+    <script type="module" src="lesson-liaison.js"></script>
 
 </body>
 

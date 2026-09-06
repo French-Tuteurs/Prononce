@@ -94,6 +94,57 @@
 
         <section class="settings-card">
 
+            <h2>Make it yours</h2>
+
+            <p>
+                Purely cosmetic &mdash; an avatar, a little motto under
+                your name, and an accent color for the whole site.
+                None of it touches your progress.
+            </p>
+
+            <div class="settings-field">
+                <label>Avatar</label>
+                <div class="avatar-picker" id="avatar-picker">
+                    <button type="button" class="avatar-option" data-emoji="🐓">🐓</button>
+                    <button type="button" class="avatar-option" data-emoji="🥐">🥐</button>
+                    <button type="button" class="avatar-option" data-emoji="🍷">🍷</button>
+                    <button type="button" class="avatar-option" data-emoji="🎨">🎨</button>
+                    <button type="button" class="avatar-option" data-emoji="🗼">🗼</button>
+                    <button type="button" class="avatar-option" data-emoji="🐌">🐌</button>
+                    <button type="button" class="avatar-option" data-emoji="🧀">🧀</button>
+                    <button type="button" class="avatar-option" data-emoji="🥖">🥖</button>
+                    <button type="button" class="avatar-option" data-emoji="🐈">🐈</button>
+                    <button type="button" class="avatar-option" data-emoji="🌻">🌻</button>
+                    <button type="button" class="avatar-option" data-emoji="⭐">⭐</button>
+                    <button type="button" class="avatar-option" data-emoji="🦋">🦋</button>
+                </div>
+            </div>
+
+            <div class="settings-field">
+                <label for="settings-motto">Your Motto</label>
+                <input type="text" id="settings-motto" maxlength="60" placeholder="A little something under your name">
+            </div>
+
+            <button id="save-motto-button" type="button">Save Motto</button>
+
+            <div class="settings-field">
+                <label>Accent Color</label>
+                <div class="accent-picker" id="accent-picker">
+                    <button type="button" class="accent-option" data-color="gold" style="--swatch: #b08d57" aria-label="Gold"></button>
+                    <button type="button" class="accent-option" data-color="rose" style="--swatch: #b5576b" aria-label="Rose"></button>
+                    <button type="button" class="accent-option" data-color="teal" style="--swatch: #3f7d78" aria-label="Teal"></button>
+                    <button type="button" class="accent-option" data-color="plum" style="--swatch: #6b4d8f" aria-label="Plum"></button>
+                    <button type="button" class="accent-option" data-color="forest" style="--swatch: #4c7a4c" aria-label="Forest"></button>
+                </div>
+            </div>
+
+            <p class="settings-status" id="personalize-status" hidden></p>
+
+        </section>
+
+
+        <section class="settings-card">
+
             <h2>Email address</h2>
 
             <p class="settings-current-value">

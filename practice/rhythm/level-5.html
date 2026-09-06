@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Rhythm & Intonation Practice — Level 5 | Prononce</title>
+
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="lesson-page practice-level-page" data-practice-id="practice-rhythm" data-level="5" data-total-levels="10">
+
+    <!-- Full-screen loader, removed by script.js once Firebase has
+         resolved sign-in state and confirmed this level is actually
+         unlocked for this account. -->
+    <div class="page-loader" id="page-loader">
+
+        <img src="../../favicon.svg" alt="" class="page-loader-mark">
+
+        <div class="page-loader-spinner"></div>
+
+    </div>
+
+
+
+    <header class="site-header">
+
+        <a href="../../dashboard.html" class="logo">Prononce</a>
+
+        <nav class="main-nav">
+            <a href="../../dashboard.html">Dashboard</a>
+            <a href="#" class="active">Practice</a>
+            <a href="../../progress.html">Progress</a>
+            <a href="../../settings.html">Settings</a>
+        </nav>
+
+        <button class="logout-button" id="logout-button">Log Out</button>
+
+    </header>
+
+
+
+    <main class="lesson-container">
+
+
+        <a href="../../dashboard.html" class="back-link">
+            ← Back to Dashboard
+        </a>
+
+
+        <section class="lesson-intro">
+
+            <p class="eyebrow">Practice &middot; Rhythm & Intonation &middot; Level 5 of 10</p>
+
+            <h1>Rhythm Rules</h1>
+
+            <p>
+                French rhythm is built from groups, not individual words — stress falls at the end of each group.
+            </p>
+
+        </section>
+
+
+
+        <div class="lesson-progress">
+            <div class="lesson-progress-top">
+                <span>Practice Progress</span>
+                <span>44%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 44%;"></div>
+            </div>
+        </div>
+
+
+        <div class="practice-question-stage">
+
+            <p class="practice-question-counter">
+                Question <span class="practice-question-current">1</span> of 10
+            </p>
+
+                <div class="question-card">
+                    <h3>In a French rhythmic group, which syllable gets the stress?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">The first one</button>
+                        <button class="answer-option" data-correct="true">The last one</button>
+                        <button class="answer-option">It&#x27;s random</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Does English or French stress syllables more evenly?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">French — stress is more even, mostly on the last syllable of a group</button>
+                        <button class="answer-option">English — stress is more even</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>A comma in a French sentence usually means…</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">Nothing — commas are silent</button>
+                        <button class="answer-option">A full stop</button>
+                        <button class="answer-option" data-correct="true">A short pause and a small pitch rise</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>In “Du pain, du beurre, et du fromage,” how many rhythmic groups are there?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">Three</button>
+                        <button class="answer-option">Five</button>
+                        <button class="answer-option">One</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Does a French statement&#x27;s pitch rise or fall at the very end?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">Falls</button>
+                        <button class="answer-option">Stays flat</button>
+                        <button class="answer-option">Rises</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Does a yes/no question&#x27;s pitch rise or fall at the very end?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">Stays flat</button>
+                        <button class="answer-option">Falls</button>
+                        <button class="answer-option" data-correct="true">Rises</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Is “Tu viens ?” a statement or a question, based on the mark?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">Question</button>
+                        <button class="answer-option">Statement</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>What&#x27;s the main clue for a spoken French question without “est-ce que”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">A pause at the start</button>
+                        <button class="answer-option" data-correct="true">Rising intonation at the end</button>
+                        <button class="answer-option">A different word order always</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>In “Il y a Marie, Paul, et Sophie,” what happens at each comma?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">The sentence ends</button>
+                        <button class="answer-option">A full stop</button>
+                        <button class="answer-option" data-correct="true">A brief pause, listing items</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which gets more stress in French — content words or little grammar words like “le” and “de”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">Grammar words</button>
+                        <button class="answer-option">Both equally</button>
+                        <button class="answer-option" data-correct="true">Content words</button>
+                    </div>
+                </div>
+
+            <button class="practice-next-question" type="button" disabled>
+                Next Question &rarr;
+            </button>
+
+        </div>
+
+
+        <div class="completion-section practice-level-summary hidden">
+
+            <p class="eyebrow">Level 5 Complete</p>
+
+            <div class="completion-icon">&#10003;</div>
+
+            <h2>Nice work!</h2>
+
+            <p>On to Level 6 next time you open this practice.</p>
+
+            <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+            <a href="../../dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+        </div>
+
+
+    </main>
+
+
+    <script type="module" src="../../script.js"></script>
+
+</body>
+
+</html>

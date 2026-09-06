@@ -22,10 +22,12 @@ import {
 import {
     doc,
     getDoc,
+    updateDoc,
     deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 import { db } from "./firebase.js";
+import { applyAccentTheme } from "./theme.js";
 
 
 function hidePageLoader() {
@@ -76,8 +78,9 @@ onAuthStateChanged(auth, async function (user) {
     try {
 
         const snapshot = await getDoc(doc(db, "users", user.uid));
+        const profile = snapshot.exists() ? snapshot.data() : {};
 
-        if (snapshot.exists() && snapshot.data().isOwner === true) {
+        if (profile.isOwner === true) {
 
             const deleteButton = document.getElementById("delete-account-button");
             const deletePasswordInput = document.getElementById("settings-delete-password");
@@ -88,9 +91,14 @@ onAuthStateChanged(auth, async function (user) {
 
         }
 
+        document.getElementById("settings-motto").value = profile.motto || "";
+        setSelectedAvatar(profile.avatarEmoji || "");
+        setSelectedAccent(profile.accentColor || "gold");
+        applyAccentTheme(profile.accentColor);
+
     } catch (error) {
 
-        console.error("Couldn't check owner status:", error);
+        console.error("Couldn't load profile:", error);
 
     }
 
@@ -265,6 +273,109 @@ if (deleteAccountButton) {
             deleteAccountButton.disabled = false;
 
         }
+
+    });
+
+}
+
+
+// ===========================
+// PERSONALIZE (avatar, motto, accent color)
+// ===========================
+//
+// Purely cosmetic, so it saves itself the moment you pick something
+// instead of needing a separate "Save" button — nothing here is
+// sensitive enough to need a confirm step.
+
+function setSelectedAvatar(emoji) {
+
+    document.querySelectorAll(".avatar-option").forEach(function (button) {
+        button.classList.toggle("avatar-option-selected", button.dataset.emoji === emoji);
+    });
+
+}
+
+function setSelectedAccent(colorKey) {
+
+    document.querySelectorAll(".accent-option").forEach(function (button) {
+        button.classList.toggle("accent-option-selected", button.dataset.color === colorKey);
+    });
+
+}
+
+async function savePersonalization(fields) {
+
+    if (!currentUser) {
+        return;
+    }
+
+    try {
+
+        await updateDoc(doc(db, "users", currentUser.uid), fields);
+        showStatus("personalize-status", "Saved.", false);
+
+    } catch (error) {
+
+        console.error(error);
+        showStatus("personalize-status", "Couldn't save that. Please try again.", true);
+
+    }
+
+}
+
+const avatarPicker = document.getElementById("avatar-picker");
+
+if (avatarPicker) {
+
+    avatarPicker.addEventListener("click", function (event) {
+
+        const button = event.target.closest(".avatar-option");
+
+        if (!button) {
+            return;
+        }
+
+        const emoji = button.dataset.emoji;
+        const alreadySelected = button.classList.contains("avatar-option-selected");
+        const newEmoji = alreadySelected ? "" : emoji;
+
+        setSelectedAvatar(newEmoji);
+        savePersonalization({ avatarEmoji: newEmoji });
+
+    });
+
+}
+
+const accentPicker = document.getElementById("accent-picker");
+
+if (accentPicker) {
+
+    accentPicker.addEventListener("click", function (event) {
+
+        const button = event.target.closest(".accent-option");
+
+        if (!button) {
+            return;
+        }
+
+        const colorKey = button.dataset.color;
+
+        setSelectedAccent(colorKey);
+        applyAccentTheme(colorKey);
+        savePersonalization({ accentColor: colorKey });
+
+    });
+
+}
+
+const saveMottoButton = document.getElementById("save-motto-button");
+
+if (saveMottoButton) {
+
+    saveMottoButton.addEventListener("click", function () {
+
+        const motto = document.getElementById("settings-motto").value.trim();
+        savePersonalization({ motto: motto });
 
     });
 

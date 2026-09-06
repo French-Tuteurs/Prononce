@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Vowels Practice — Level 5 | Prononce</title>
+
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="lesson-page practice-level-page" data-practice-id="practice-vowels" data-level="5" data-total-levels="10">
+
+    <!-- Full-screen loader, removed by script.js once Firebase has
+         resolved sign-in state and confirmed this level is actually
+         unlocked for this account. -->
+    <div class="page-loader" id="page-loader">
+
+        <img src="../../favicon.svg" alt="" class="page-loader-mark">
+
+        <div class="page-loader-spinner"></div>
+
+    </div>
+
+
+
+    <header class="site-header">
+
+        <a href="../../dashboard.html" class="logo">Prononce</a>
+
+        <nav class="main-nav">
+            <a href="../../dashboard.html">Dashboard</a>
+            <a href="#" class="active">Practice</a>
+            <a href="../../progress.html">Progress</a>
+            <a href="../../settings.html">Settings</a>
+        </nav>
+
+        <button class="logout-button" id="logout-button">Log Out</button>
+
+    </header>
+
+
+
+    <main class="lesson-container">
+
+
+        <a href="../../dashboard.html" class="back-link">
+            ← Back to Dashboard
+        </a>
+
+
+        <section class="lesson-intro">
+
+            <p class="eyebrow">Practice &middot; Vowels &middot; Level 5 of 10</p>
+
+            <h1>Spelling Patterns</h1>
+
+            <p>
+                French vowel sounds don't map one-to-one onto English spelling.
+            </p>
+
+        </section>
+
+
+
+        <div class="lesson-progress">
+            <div class="lesson-progress-top">
+                <span>Practice Progress</span>
+                <span>44%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 44%;"></div>
+            </div>
+        </div>
+
+
+        <div class="practice-question-stage">
+
+            <p class="practice-question-counter">
+                Question <span class="practice-question-current">1</span> of 10
+            </p>
+
+                <div class="question-card">
+                    <h3>Which spelling makes the “o” sound in “eau”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">on</button>
+                        <button class="answer-option" data-correct="true">eau</button>
+                        <button class="answer-option">ou</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which spelling makes the “u” sound in “tu”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">ou</button>
+                        <button class="answer-option" data-correct="true">u</button>
+                        <button class="answer-option">eu</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which spelling makes the “ou” sound in “vous”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">u</button>
+                        <button class="answer-option">eu</button>
+                        <button class="answer-option" data-correct="true">ou</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which spelling makes the “é” sound in “été”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">è</button>
+                        <button class="answer-option" data-correct="true">é</button>
+                        <button class="answer-option">ê</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which spelling makes the “è” sound in “fête”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">e</button>
+                        <button class="answer-option">é</button>
+                        <button class="answer-option" data-correct="true">ê</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which letter combination usually makes the “eu” sound?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">au</button>
+                        <button class="answer-option" data-correct="true">eu</button>
+                        <button class="answer-option">ou</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which spelling makes the “o” sound in “chaud”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">eu</button>
+                        <button class="answer-option">ou</button>
+                        <button class="answer-option" data-correct="true">au</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>In “chat”, what sound does the “a” make?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">ah (as in father)</button>
+                        <button class="answer-option">oh (as in go)</button>
+                        <button class="answer-option">ay (as in day)</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>In “midi”, what sound does the “i” make?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">ih (as in sit)</button>
+                        <button class="answer-option">eye (as in my)</button>
+                        <button class="answer-option" data-correct="true">ee (as in see)</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which spelling in “école” makes the closed “é” sound?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">é</button>
+                        <button class="answer-option">è</button>
+                        <button class="answer-option">e</button>
+                    </div>
+                </div>
+
+            <button class="practice-next-question" type="button" disabled>
+                Next Question &rarr;
+            </button>
+
+        </div>
+
+
+        <div class="completion-section practice-level-summary hidden">
+
+            <p class="eyebrow">Level 5 Complete</p>
+
+            <div class="completion-icon">&#10003;</div>
+
+            <h2>Nice work!</h2>
+
+            <p>On to Level 6 next time you open this practice.</p>
+
+            <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+            <a href="../../dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+        </div>
+
+
+    </main>
+
+
+    <script type="module" src="../../script.js"></script>
+
+</body>
+
+</html>

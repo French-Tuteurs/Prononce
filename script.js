@@ -3,6 +3,7 @@
 // ===========================
 
 import { auth, db } from "./firebase.js";
+import { applyAccentTheme } from "./theme.js";
 
 import {
     createUserWithEmailAndPassword,
@@ -108,6 +109,8 @@ onAuthStateChanged(auth, async function (user) {
 
         }
 
+        applyAccentTheme(currentUserProfile && currentUserProfile.accentColor);
+
         // If already logged in and on the welcome page,
         // send them directly to the dashboard. Leave the loader up —
         // the dashboard shows its own while it finishes loading.
@@ -135,7 +138,7 @@ onAuthStateChanged(auth, async function (user) {
 
         }
 
-        resumeSavedPracticeLevel();
+        enforcePracticeLevelAccess();
 
         hidePageLoader();
 
@@ -275,6 +278,34 @@ function renderWelcomeName(user) {
 
     eyebrow.textContent = firstName ? "Bienvenue, " + firstName : "Bienvenue";
 
+    const avatarEl = document.getElementById("welcome-avatar");
+    const avatarEmoji = currentUserProfile && currentUserProfile.avatarEmoji;
+
+    if (avatarEl) {
+
+        if (avatarEmoji) {
+            avatarEl.textContent = avatarEmoji;
+            avatarEl.hidden = false;
+        } else {
+            avatarEl.hidden = true;
+        }
+
+    }
+
+    const mottoEl = document.getElementById("welcome-motto");
+    const motto = currentUserProfile && currentUserProfile.motto;
+
+    if (mottoEl) {
+
+        if (motto) {
+            mottoEl.textContent = "“" + motto + "”";
+            mottoEl.hidden = false;
+        } else {
+            mottoEl.hidden = true;
+        }
+
+    }
+
 }
 
 
@@ -322,20 +353,24 @@ function renderPracticeProgress() {
     document.querySelectorAll(".practice-button-link[data-practice-id]").forEach(function (link) {
 
         const practiceId = link.dataset.practiceId;
+        const topic = practiceId.replace("practice-", "");
         const totalLevels = Number(link.dataset.totalLevels) || 10;
         const currentLevel = practiceLevels[practiceId];
 
         if (progress[practiceId] === true) {
 
             link.textContent = "Practice Again (" + totalLevels + " Levels)";
+            link.href = "practice/" + topic + "/level-1.html";
 
         } else if (currentLevel && currentLevel > 1) {
 
             link.textContent = "Continue at Level " + currentLevel;
+            link.href = "practice/" + topic + "/level-" + currentLevel + ".html";
 
         } else {
 
             link.textContent = "Begin Level 1";
+            link.href = "practice/" + topic + "/level-1.html";
 
         }
 
@@ -344,27 +379,30 @@ function renderPracticeProgress() {
 }
 
 
-// On a practice page itself (not the dashboard), jump straight to
-// whatever level the visitor last reached instead of always
-// restarting at Level 1 — unless they've already finished every
-// level, in which case starting over is the point.
+// Each practice level is its own page (practice/<topic>/level-N.html)
+// rather than one big page with 10 sections — simpler to reason
+// about, and it means a level genuinely doesn't exist on the page
+// until you're actually on it. This is what enforces "the next level
+// only unlocks once the one before it is done": if someone jumps
+// straight to a level's URL before earning it, they're bounced back
+// to whichever level they've actually reached.
 
-function resumeSavedPracticeLevel() {
+function enforcePracticeLevelAccess() {
 
-    const totalLevels = document.body.dataset.practiceLevels;
+    const practiceId = document.body.dataset.practiceId;
+    const level = Number(document.body.dataset.level);
 
-    if (!totalLevels || !currentUserProfile) {
+    if (!practiceId || !level || !currentUserProfile) {
         return;
     }
 
-    const practiceId = document.body.dataset.lessonId;
     const progress = currentUserProfile.progress || {};
     const practiceLevels = progress.practiceLevels || {};
-    const savedLevel = practiceLevels[practiceId];
-    const alreadyCompleted = progress[practiceId] === true;
+    const completed = progress[practiceId] === true;
+    const allowedLevel = practiceLevels[practiceId] || 1;
 
-    if (savedLevel && savedLevel > 1 && !alreadyCompleted) {
-        showLessonSection(savedLevel);
+    if (!completed && level > allowedLevel) {
+        window.location.href = "level-" + allowedLevel + ".html";
     }
 
 }
@@ -412,6 +450,13 @@ function renderProgressPage() {
         const currentLevel = practiceLevels[practiceId] || 0;
         const statusEl = row.querySelector(".progress-row-status");
         const fillEl = row.querySelector(".progress-fill");
+        const linkEl = row.querySelector(".progress-row-link");
+
+        if (linkEl) {
+            const topic = practiceId.replace("practice-", "");
+            const openLevel = completed ? 1 : Math.max(1, currentLevel);
+            linkEl.href = "practice/" + topic + "/level-" + openLevel + ".html";
+        }
 
         const levelsForThisPractice = completed ? 10 : Math.max(0, currentLevel - 1);
         levelsCleared += levelsForThisPractice;
@@ -1332,14 +1377,16 @@ function updateCompletionQuizScore() {
 // PRACTICE: ONE QUESTION AT A TIME
 // ===========================
 //
-// Each practice level (practice-r.html and friends) holds its 10
-// questions in a ".practice-question-stage" — only one .question-card
-// is ever visible at once, so nothing has to be scrolled through. The
-// existing Quick Check listener above still owns scoring a card the
-// moment an option is clicked; this just reacts to that (via event
-// bubbling, so it always runs after the card has already been marked
-// answered) to unlock "Next Question" and, on the last question,
-// swap the stage for a level summary instead of advancing further.
+// Each practice level is its own page (practice/<topic>/level-N.html),
+// holding its 10 questions in a single ".practice-question-stage" —
+// only one .question-card is ever visible at once, so nothing has to
+// be scrolled through. The existing Quick Check listener above still
+// owns scoring a card the moment an option is clicked; this just
+// reacts to that (via event bubbling, so it always runs after the
+// card has already been marked answered) to unlock "Next Question"
+// and, on the last question, swap the stage for a level summary
+// instead of advancing further. Deliberately no scrollTo anywhere
+// here — the page position should just stay put as questions change.
 
 const practiceStages =
     document.querySelectorAll(".practice-question-stage");
@@ -1396,7 +1443,6 @@ practiceStages.forEach(function (stage) {
 
             currentIndex++;
             showQuestion(currentIndex);
-            window.scrollTo({ top: 0, behavior: "smooth" });
             return;
 
         }
@@ -1404,8 +1450,7 @@ practiceStages.forEach(function (stage) {
         // Last question answered — show this level's summary instead
         // of a "Next Question" button, and record progress.
 
-        const section = stage.closest(".lesson-section");
-        const summary = section ? section.querySelector(".practice-level-summary") : null;
+        const summary = document.querySelector(".practice-level-summary");
 
         let correctCount = 0;
 
@@ -1429,11 +1474,9 @@ practiceStages.forEach(function (stage) {
 
         }
 
-        window.scrollTo({ top: 0, behavior: "smooth" });
-
-        const practiceId = document.body.dataset.lessonId;
-        const totalLevels = Number(document.body.dataset.practiceLevels);
-        const levelNum = Number(section ? section.dataset.section : NaN);
+        const practiceId = document.body.dataset.practiceId;
+        const totalLevels = Number(document.body.dataset.totalLevels);
+        const levelNum = Number(document.body.dataset.level);
 
         if (practiceId && levelNum) {
 

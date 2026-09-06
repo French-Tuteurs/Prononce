@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Silent Letters Practice — Level 5 | Prononce</title>
+
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="lesson-page practice-level-page" data-practice-id="practice-silent" data-level="5" data-total-levels="10">
+
+    <!-- Full-screen loader, removed by script.js once Firebase has
+         resolved sign-in state and confirmed this level is actually
+         unlocked for this account. -->
+    <div class="page-loader" id="page-loader">
+
+        <img src="../../favicon.svg" alt="" class="page-loader-mark">
+
+        <div class="page-loader-spinner"></div>
+
+    </div>
+
+
+
+    <header class="site-header">
+
+        <a href="../../dashboard.html" class="logo">Prononce</a>
+
+        <nav class="main-nav">
+            <a href="../../dashboard.html">Dashboard</a>
+            <a href="#" class="active">Practice</a>
+            <a href="../../progress.html">Progress</a>
+            <a href="../../settings.html">Settings</a>
+        </nav>
+
+        <button class="logout-button" id="logout-button">Log Out</button>
+
+    </header>
+
+
+
+    <main class="lesson-container">
+
+
+        <a href="../../dashboard.html" class="back-link">
+            ← Back to Dashboard
+        </a>
+
+
+        <section class="lesson-intro">
+
+            <p class="eyebrow">Practice &middot; Silent Letters &middot; Level 5 of 10</p>
+
+            <h1>The Silent Letter Rules</h1>
+
+            <p>
+                A few patterns cover most of it: final consonants are usually silent, except c, r, f, and l.
+            </p>
+
+        </section>
+
+
+
+        <div class="lesson-progress">
+            <div class="lesson-progress-top">
+                <span>Practice Progress</span>
+                <span>44%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 44%;"></div>
+            </div>
+        </div>
+
+
+        <div class="practice-question-stage">
+
+            <p class="practice-question-counter">
+                Question <span class="practice-question-current">1</span> of 10
+            </p>
+
+                <div class="question-card">
+                    <h3>Which of these final letters is usually PRONOUNCED (the “careful” exception letters)?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">t</button>
+                        <button class="answer-option">s</button>
+                        <button class="answer-option" data-correct="true">c</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>The mnemonic for pronounced final letters is “CaReFuL” — which letter does the R stand for?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">r</button>
+                        <button class="answer-option">d</button>
+                        <button class="answer-option">s</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Is the final “f” in “chef” silent or pronounced?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">Pronounced</button>
+                        <button class="answer-option">Silent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Is the final “h” ever pronounced in French?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">Yes, always</button>
+                        <button class="answer-option" data-correct="true">No, never</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Is the final “e” in “table” pronounced?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">No, it&#x27;s silent</button>
+                        <button class="answer-option">Yes, like “ay”</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which letter is silent in “homme”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">o</button>
+                        <button class="answer-option">m</button>
+                        <button class="answer-option" data-correct="true">h</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which letter is silent at the end of “beaucoup”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">p</button>
+                        <button class="answer-option">b</button>
+                        <button class="answer-option">u</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which letter is silent in “chevaux”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">x</button>
+                        <button class="answer-option">a</button>
+                        <button class="answer-option">v</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Verbs ending in “-ent” for “ils/elles” — is that ending pronounced?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">Yes, it&#x27;s pronounced ahn</button>
+                        <button class="answer-option" data-correct="true">No, it&#x27;s silent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Is the final “d” in “nid” pronounced?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">No, it&#x27;s silent</button>
+                        <button class="answer-option">Yes, like English d</button>
+                    </div>
+                </div>
+
+            <button class="practice-next-question" type="button" disabled>
+                Next Question &rarr;
+            </button>
+
+        </div>
+
+
+        <div class="completion-section practice-level-summary hidden">
+
+            <p class="eyebrow">Level 5 Complete</p>
+
+            <div class="completion-icon">&#10003;</div>
+
+            <h2>Nice work!</h2>
+
+            <p>On to Level 6 next time you open this practice.</p>
+
+            <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+            <a href="../../dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+        </div>
+
+
+    </main>
+
+
+    <script type="module" src="../../script.js"></script>
+
+</body>
+
+</html>
