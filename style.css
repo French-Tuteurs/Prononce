@@ -1873,6 +1873,107 @@ button:hover {
 
 
 /* ===========================
+   PRACTICE: ONE QUESTION AT A TIME
+=========================== */
+
+.practice-question-counter {
+
+    margin: 0 0 18px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    color: var(--gold);
+
+}
+
+
+.practice-question-stage .question-card {
+
+    margin: 0 0 26px;
+
+    padding: 30px;
+
+    background-color: var(--cream);
+
+    border-radius: var(--radius-large);
+
+}
+
+
+.practice-question-stage .answer-option {
+
+    background-color: var(--white);
+
+}
+
+
+.practice-question-stage .question-card h3 {
+
+    font-size: 26px;
+
+    line-height: 1.3;
+
+}
+
+
+.practice-next-question {
+
+    width: 100%;
+
+}
+
+
+.practice-next-question:disabled {
+
+    opacity: 0.4;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+
+}
+
+
+.practice-next-question:disabled:hover {
+
+    background-color: var(--navy);
+
+    color: var(--white);
+
+}
+
+
+.practice-level-score {
+
+    margin: 20px 0 30px;
+
+    font-size: 17px;
+
+    color: var(--text-muted);
+
+}
+
+
+.practice-level-score strong {
+
+    font-family: "Playfair Display", serif;
+
+    color: var(--gold);
+
+    font-size: 32px;
+
+}
+
+
+/* ===========================
    NEXT BUTTON
 =========================== */
 
@@ -2167,6 +2268,20 @@ button:hover {
     .lesson-section h2 {
 
         font-size: 29px;
+
+    }
+
+
+    .practice-question-stage .question-card {
+
+        padding: 22px;
+
+    }
+
+
+    .practice-question-stage .question-card h3 {
+
+        font-size: 21px;
 
     }
 
@@ -4218,30 +4333,82 @@ button:hover {
 }
 
 
-.admin-level-picker {
+.admin-practice-grid {
 
     display: flex;
 
-    gap: 8px;
+    flex-direction: column;
 
-    flex-shrink: 0;
+    gap: 8px;
 
 }
 
 
-.admin-level-picker select {
+.admin-practice-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
 
     padding: 10px 14px;
 
+    background-color: var(--cream);
+
     border-radius: 10px;
+
+}
+
+
+.admin-practice-name {
+
+    flex: 1;
+
+    font-size: 14px;
+
+    color: var(--navy);
+
+}
+
+
+.admin-practice-status {
+
+    flex-shrink: 0;
+
+    font-size: 12px;
+
+    color: var(--text-muted);
+
+}
+
+
+.admin-practice-row select {
+
+    flex-shrink: 0;
+
+    padding: 8px 10px;
+
+    border-radius: 8px;
 
     border: 1px solid rgba(0, 0, 0, 0.12);
 
-    background: var(--cream);
+    background: var(--white);
 
     font-family: "Lato", sans-serif;
 
-    font-size: 14px;
+    font-size: 12px;
+
+}
+
+
+.admin-practice-row button {
+
+    flex-shrink: 0;
+
+    padding: 6px 16px;
+
+    font-size: 12px;
 
 }
 
@@ -4346,18 +4513,15 @@ button:hover {
 
     }
 
-    .admin-level-picker {
+    .admin-practice-row {
 
-        width: 100%;
-
-        flex-direction: column;
+        flex-wrap: wrap;
 
     }
 
-    .admin-level-picker select,
-    .admin-level-picker button {
+    .admin-practice-row select {
 
-        width: 100%;
+        flex: 1;
 
     }
 

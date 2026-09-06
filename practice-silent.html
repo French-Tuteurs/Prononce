@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Silent Letters Practice | Prononce</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="lesson-page" data-lesson-id="practice-silent" data-practice-levels="10">
+
+    <!-- Full-screen loader, removed by script.js once Firebase has
+         resolved sign-in state (and, on the dashboard, owner/tester
+         status) so the page never flashes half-ready content. -->
+    <div class="page-loader" id="page-loader">
+
+        <img src="favicon.svg" alt="" class="page-loader-mark">
+
+        <div class="page-loader-spinner"></div>
+
+    </div>
+
+
+
+    <header class="site-header">
+
+        <a href="dashboard.html" class="logo">Prononce</a>
+
+        <nav class="main-nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#" class="active">Practice</a>
+            <a href="#">Progress</a>
+        </nav>
+
+        <button class="logout-button" id="logout-button">Log Out</button>
+
+    </header>
+
+
+
+    <main class="lesson-container">
+
+
+        <a href="dashboard.html" class="back-link">
+            ← Back to Dashboard
+        </a>
+
+
+        <section class="lesson-intro">
+
+            <p class="eyebrow">Practice &middot; Silent Letters</p>
+
+            <h1>Silent Letters Practice</h1>
+
+            <p>
+                10 levels of 10 questions on which letters French speakers don't pronounce &mdash; final consonants, silent h, and the -ent verb ending. This checks your <em>ear</em> for now, the same way the other practices do.
+            </p>
+
+        </section>
+
+
+
+        <div class="lesson-progress">
+            <div class="lesson-progress-top">
+                <span>Practice Progress</span>
+                <span id="lesson-progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="lesson-progress-fill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+
+        <section
+            class="lesson-section"
+            data-section="1"
+        >
+
+            <p class="eyebrow">
+                Level 1 &middot; 10 questions
+            </p>
+
+            <h2>
+                Spot the Silent Letter
+            </h2>
+
+            <p>
+                Most final consonants in French are silent — pick which one is silent here.
+            </p>
+
+            <div class="practice-question-stage">
+
+                <p class="practice-question-counter">
+                    Question <span class="practice-question-current">1</span> of 10
+                </p>
+
+                <div class="question-card">
+                    <h3>Which final letter is silent in “temps”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">It&#x27;s not silent</button>
+                        <button class="answer-option" data-correct="true">s</button>
+                        <button class="answer-option">The vowel before it</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which final letter is silent in “petit”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">The vowel before it</button>
+                        <button class="answer-option" data-correct="true">t</button>
+                        <button class="answer-option">It&#x27;s not silent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which final letter is silent in “chat”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">It&#x27;s not silent</button>
+                        <button class="answer-option">The vowel before it</button>
+                        <button class="answer-option" data-correct="true">t</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which final letter is silent in “riz”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">z</button>
+                        <button class="answer-option">It&#x27;s not silent</button>
+                        <button class="answer-option">The vowel before it</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which final letter is silent in “pied”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">The vowel before it</button>
+                        <button class="answer-option" data-correct="true">d</button>
+                        <button class="answer-option">It&#x27;s not silent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which final letter is silent in “gros”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">s</button>
+                        <button class="answer-option">It&#x27;s not silent</button>
+                        <button class="answer-option">The vowel before it</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which final letter is silent in “lit”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">It&#x27;s not silent</button>
+                        <button class="answer-option" data-correct="true">t</button>
+                        <button class="answer-option">The vowel before it</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which final letter is silent in “nez”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">z</button>
+                        <button class="answer-option">It&#x27;s not silent</button>
+                        <button class="answer-option">The vowel before it</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which final letter is silent in “trop”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">p</button>
+                        <button class="answer-option">The vowel before it</button>
+                        <button class="answer-option">It&#x27;s not silent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which final letter is silent in “dos”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">The vowel before it</button>
+                        <button class="answer-option" data-correct="true">s</button>
+                        <button class="answer-option">It&#x27;s not silent</button>
+                    </div>
+                </div>
+
+                <button class="practice-next-question" type="button" disabled>
+                    Next Question &rarr;
+                </button>
+
+            </div>
+
+            <div class="completion-section practice-level-summary hidden">
+
+                <p class="eyebrow">Level 1 Complete</p>
+
+                <div class="completion-icon">&#10003;</div>
+
+                <h2>Nice work!</h2>
+
+                <p>On to Level 2 next time you open this practice.</p>
+
+                <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+                <a href="dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="lesson-section"
+            data-section="2"
+        >
+
+            <p class="eyebrow">
+                Level 2 &middot; 10 questions
+            </p>
+
+            <h2>
+                Listen and Identify
+            </h2>
+
+            <p>
+                Press Listen, then pick the matching word.
+            </p>
+
+            <div class="practice-question-stage">
+
+                <p class="practice-question-counter">
+                    Question <span class="practice-question-current">1</span> of 10
+                </p>
+
+                <div class="question-card">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="dos" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">gros</button>
+                        <button class="answer-option" data-correct="true">dos</button>
+                        <button class="answer-option">parlent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="chef" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">chef</button>
+                        <button class="answer-option">homme</button>
+                        <button class="answer-option">beaucoup</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="nez" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">nez</button>
+                        <button class="answer-option">dos</button>
+                        <button class="answer-option">chef</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="nid" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">table</button>
+                        <button class="answer-option">trop</button>
+                        <button class="answer-option" data-correct="true">nid</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="hiver" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">gros</button>
+                        <button class="answer-option" data-correct="true">hiver</button>
+                        <button class="answer-option">pied</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="homme" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">homme</button>
+                        <button class="answer-option">nez</button>
+                        <button class="answer-option">lit</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="petit" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">petit</button>
+                        <button class="answer-option">parlent</button>
+                        <button class="answer-option">nez</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="trop" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">chats</button>
+                        <button class="answer-option" data-correct="true">trop</button>
+                        <button class="answer-option">pied</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="parlent" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">riz</button>
+                        <button class="answer-option" data-correct="true">parlent</button>
+                        <button class="answer-option">homme</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="pied" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">pied</button>
+                        <button class="answer-option">nid</button>
+                        <button class="answer-option">chats</button>
+                    </div>
+                </div>
+
+                <button class="practice-next-question" type="button" disabled>
+                    Next Question &rarr;
+                </button>
+
+            </div>
+
+            <div class="completion-section practice-level-summary hidden">
+
+                <p class="eyebrow">Level 2 Complete</p>
+
+                <div class="completion-icon">&#10003;</div>
+
+                <h2>Nice work!</h2>
+
+                <p>On to Level 3 next time you open this practice.</p>
+
+                <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+                <a href="dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="lesson-section"
+            data-section="3"
+        >
+
+            <p class="eyebrow">
+                Level 3 &middot; 10 questions
+            </p>
+
+            <h2>
+                Silent Plurals
+            </h2>
+
+            <p>
+                Adding -s (or -nt to a verb) almost never changes the sound — only the spelling.
+            </p>
+
+            <div class="practice-question-stage">
+
+                <p class="practice-question-counter">
+                    Question <span class="practice-question-current">1</span> of 10
+                </p>
+
+                <div class="question-card">
+                    <h3>These sound identical out loud — which spelling is it?</h3>
+                    <button class="audio-button listen-button" data-say="amis" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">ami</button>
+                        <button class="answer-option" data-correct="true">amis</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>These sound identical out loud — which spelling is it?</h3>
+                    <button class="audio-button listen-button" data-say="garçon" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">garçons</button>
+                        <button class="answer-option" data-correct="true">garçon</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>These sound identical out loud — which spelling is it?</h3>
+                    <button class="audio-button listen-button" data-say="chat" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">chat</button>
+                        <button class="answer-option">chats</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>These sound identical out loud — which spelling is it?</h3>
+                    <button class="audio-button listen-button" data-say="porte" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">porte</button>
+                        <button class="answer-option">portent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>These sound identical out loud — which spelling is it?</h3>
+                    <button class="audio-button listen-button" data-say="dansent" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">danse</button>
+                        <button class="answer-option" data-correct="true">dansent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>These sound identical out loud — which spelling is it?</h3>
+                    <button class="audio-button listen-button" data-say="parle" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">parle</button>
+                        <button class="answer-option">parlent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>These sound identical out loud — which spelling is it?</h3>
+                    <button class="audio-button listen-button" data-say="dansent" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">dansent</button>
+                        <button class="answer-option">danse</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>These sound identical out loud — which spelling is it?</h3>
+                    <button class="audio-button listen-button" data-say="ami" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">ami</button>
+                        <button class="answer-option">amis</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>These sound identical out loud — which spelling is it?</h3>
+                    <button class="audio-button listen-button" data-say="garçons" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">garçons</button>
+                        <button class="answer-option">garçon</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>These sound identical out loud — which spelling is it?</h3>
+                    <button class="audio-button listen-button" data-say="chats" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">chat</button>
+                        <button class="answer-option" data-correct="true">chats</button>
+                    </div>
+                </div>
+
+                <button class="practice-next-question" type="button" disabled>
+                    Next Question &rarr;
+                </button>
+
+            </div>
+
+            <div class="completion-section practice-level-summary hidden">
+
+                <p class="eyebrow">Level 3 Complete</p>
+
+                <div class="completion-icon">&#10003;</div>
+
+                <h2>Nice work!</h2>
+
+                <p>On to Level 4 next time you open this practice.</p>
+
+                <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+                <a href="dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="lesson-section"
+            data-section="4"
+        >
+
+            <p class="eyebrow">
+                Level 4 &middot; 10 questions
+            </p>
+
+            <h2>
+                Every Word, Again
+            </h2>
+
+            <p>
+                Same silent-letter words, so the spelling sticks even once you can't see it.
+            </p>
+
+            <div class="practice-question-stage">
+
+                <p class="practice-question-counter">
+                    Question <span class="practice-question-current">1</span> of 10
+                </p>
+
+                <div class="question-card">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="chat" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">dos</button>
+                        <button class="answer-option" data-correct="true">chat</button>
+                        <button class="answer-option">pied</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="lit" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">dos</button>
+                        <button class="answer-option" data-correct="true">lit</button>
+                        <button class="answer-option">chat</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="nez" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">nez</button>
+                        <button class="answer-option">pied</button>
+                        <button class="answer-option">dos</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="gros" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">gros</button>
+                        <button class="answer-option">chat</button>
+                        <button class="answer-option">dos</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="riz" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">riz</button>
+                        <button class="answer-option">petit</button>
+                        <button class="answer-option">pied</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="petit" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">riz</button>
+                        <button class="answer-option">nez</button>
+                        <button class="answer-option" data-correct="true">petit</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="pied" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">dos</button>
+                        <button class="answer-option">petit</button>
+                        <button class="answer-option" data-correct="true">pied</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="dos" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">chat</button>
+                        <button class="answer-option" data-correct="true">dos</button>
+                        <button class="answer-option">riz</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="trop" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">dos</button>
+                        <button class="answer-option">pied</button>
+                        <button class="answer-option" data-correct="true">trop</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen, then choose the word you heard.</h3>
+                    <button class="audio-button listen-button" data-say="temps" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">gros</button>
+                        <button class="answer-option" data-correct="true">temps</button>
+                        <button class="answer-option">petit</button>
+                    </div>
+                </div>
+
+                <button class="practice-next-question" type="button" disabled>
+                    Next Question &rarr;
+                </button>
+
+            </div>
+
+            <div class="completion-section practice-level-summary hidden">
+
+                <p class="eyebrow">Level 4 Complete</p>
+
+                <div class="completion-icon">&#10003;</div>
+
+                <h2>Nice work!</h2>
+
+                <p>On to Level 5 next time you open this practice.</p>
+
+                <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+                <a href="dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="lesson-section"
+            data-section="5"
+        >
+
+            <p class="eyebrow">
+                Level 5 &middot; 10 questions
+            </p>
+
+            <h2>
+                The Silent Letter Rules
+            </h2>
+
+            <p>
+                A few patterns cover most of it: final consonants are usually silent, except c, r, f, and l.
+            </p>
+
+            <div class="practice-question-stage">
+
+                <p class="practice-question-counter">
+                    Question <span class="practice-question-current">1</span> of 10
+                </p>
+
+                <div class="question-card">
+                    <h3>Which of these final letters is usually PRONOUNCED (the “careful” exception letters)?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">t</button>
+                        <button class="answer-option">s</button>
+                        <button class="answer-option" data-correct="true">c</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>The mnemonic for pronounced final letters is “CaReFuL” — which letter does the R stand for?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">r</button>
+                        <button class="answer-option">d</button>
+                        <button class="answer-option">s</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Is the final “f” in “chef” silent or pronounced?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">Pronounced</button>
+                        <button class="answer-option">Silent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Is the final “h” ever pronounced in French?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">Yes, always</button>
+                        <button class="answer-option" data-correct="true">No, never</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Is the final “e” in “table” pronounced?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">No, it&#x27;s silent</button>
+                        <button class="answer-option">Yes, like “ay”</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which letter is silent in “homme”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">o</button>
+                        <button class="answer-option">m</button>
+                        <button class="answer-option" data-correct="true">h</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which letter is silent at the end of “beaucoup”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">p</button>
+                        <button class="answer-option">b</button>
+                        <button class="answer-option">u</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Which letter is silent in “chevaux”?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">x</button>
+                        <button class="answer-option">a</button>
+                        <button class="answer-option">v</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Verbs ending in “-ent” for “ils/elles” — is that ending pronounced?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">Yes, it&#x27;s pronounced ahn</button>
+                        <button class="answer-option" data-correct="true">No, it&#x27;s silent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Is the final “d” in “nid” pronounced?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">No, it&#x27;s silent</button>
+                        <button class="answer-option">Yes, like English d</button>
+                    </div>
+                </div>
+
+                <button class="practice-next-question" type="button" disabled>
+                    Next Question &rarr;
+                </button>
+
+            </div>
+
+            <div class="completion-section practice-level-summary hidden">
+
+                <p class="eyebrow">Level 5 Complete</p>
+
+                <div class="completion-icon">&#10003;</div>
+
+                <h2>Nice work!</h2>
+
+                <p>On to Level 6 next time you open this practice.</p>
+
+                <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+                <a href="dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="lesson-section"
+            data-section="6"
+        >
+
+            <p class="eyebrow">
+                Level 6 &middot; 10 questions
+            </p>
+
+            <h2>
+                Where's the Silent Letter?
+            </h2>
+
+            <p>
+                Silent letters cluster at the ends of words and at the very beginning with h.
+            </p>
+
+            <div class="practice-question-stage">
+
+                <p class="practice-question-counter">
+                    Question <span class="practice-question-current">1</span> of 10
+                </p>
+
+                <div class="question-card">
+                    <h3>Where&#x27;s the silent letter in “chef”, and what kind is it?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">End (silent p)</button>
+                        <button class="answer-option">End (silent s)</button>
+                        <button class="answer-option" data-correct="true">End (but pronounced!)</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Where&#x27;s the silent letter in “homme”, and what kind is it?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">End (silent -ent)</button>
+                        <button class="answer-option" data-correct="true">Beginning (h is always silent)</button>
+                        <button class="answer-option">End (silent s)</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Where&#x27;s the silent letter in “table”, and what kind is it?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">Beginning (h is always silent)</button>
+                        <button class="answer-option" data-correct="true">End (silent e)</button>
+                        <button class="answer-option">End (silent s)</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Where&#x27;s the silent letter in “chats”, and what kind is it?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">End (silent p)</button>
+                        <button class="answer-option" data-correct="true">End (silent s)</button>
+                        <button class="answer-option">Beginning (h is always silent)</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Where&#x27;s the silent letter in “parlent”, and what kind is it?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">End (silent s)</button>
+                        <button class="answer-option">End (but pronounced!)</button>
+                        <button class="answer-option" data-correct="true">End (silent -ent)</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Where&#x27;s the silent letter in “hiver”, and what kind is it?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">End (silent x)</button>
+                        <button class="answer-option" data-correct="true">Beginning (h is always silent)</button>
+                        <button class="answer-option">End (silent s)</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Where&#x27;s the silent letter in “trop”, and what kind is it?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">End (silent -ent)</button>
+                        <button class="answer-option">End (silent d)</button>
+                        <button class="answer-option" data-correct="true">End (silent p)</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Where&#x27;s the silent letter in “nid”, and what kind is it?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">End (silent p)</button>
+                        <button class="answer-option" data-correct="true">End (silent d)</button>
+                        <button class="answer-option">Beginning (h is always silent)</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Where&#x27;s the silent letter in “beaucoup”, and what kind is it?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">End (silent d)</button>
+                        <button class="answer-option">Beginning (h is always silent)</button>
+                        <button class="answer-option" data-correct="true">End (silent p)</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Where&#x27;s the silent letter in “chevaux”, and what kind is it?</h3>
+                    <div class="answer-options">
+                        <button class="answer-option">End (silent -ent)</button>
+                        <button class="answer-option" data-correct="true">End (silent x)</button>
+                        <button class="answer-option">End (silent p)</button>
+                    </div>
+                </div>
+
+                <button class="practice-next-question" type="button" disabled>
+                    Next Question &rarr;
+                </button>
+
+            </div>
+
+            <div class="completion-section practice-level-summary hidden">
+
+                <p class="eyebrow">Level 6 Complete</p>
+
+                <div class="completion-icon">&#10003;</div>
+
+                <h2>Nice work!</h2>
+
+                <p>On to Level 7 next time you open this practice.</p>
+
+                <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+                <a href="dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="lesson-section"
+            data-section="7"
+        >
+
+            <p class="eyebrow">
+                Level 7 &middot; 10 questions
+            </p>
+
+            <h2>
+                Sharper Contrasts
+            </h2>
+
+            <p>
+                One of these has a pronounced final consonant, one doesn't — listen for the difference.
+            </p>
+
+            <div class="practice-question-stage">
+
+                <p class="practice-question-counter">
+                    Question <span class="practice-question-current">1</span> of 10
+                </p>
+
+                <div class="question-card">
+                    <h3>Listen closely — which word did you hear?</h3>
+                    <button class="audio-button listen-button" data-say="pot" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">pot</button>
+                        <button class="answer-option">port</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen closely — which word did you hear?</h3>
+                    <button class="audio-button listen-button" data-say="cours" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">cours</button>
+                        <button class="answer-option">court</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen closely — which word did you hear?</h3>
+                    <button class="audio-button listen-button" data-say="banc" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">banc</button>
+                        <button class="answer-option">bas</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen closely — which word did you hear?</h3>
+                    <button class="audio-button listen-button" data-say="tort" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">tort</button>
+                        <button class="answer-option">tôt</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen closely — which word did you hear?</h3>
+                    <button class="audio-button listen-button" data-say="mot" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">mort</button>
+                        <button class="answer-option" data-correct="true">mot</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen closely — which word did you hear?</h3>
+                    <button class="audio-button listen-button" data-say="sort" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">sot</button>
+                        <button class="answer-option" data-correct="true">sort</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen closely — which word did you hear?</h3>
+                    <button class="audio-button listen-button" data-say="port" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">pot</button>
+                        <button class="answer-option" data-correct="true">port</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen closely — which word did you hear?</h3>
+                    <button class="audio-button listen-button" data-say="sort" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">sot</button>
+                        <button class="answer-option" data-correct="true">sort</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen closely — which word did you hear?</h3>
+                    <button class="audio-button listen-button" data-say="mot" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">mort</button>
+                        <button class="answer-option" data-correct="true">mot</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen closely — which word did you hear?</h3>
+                    <button class="audio-button listen-button" data-say="court" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">cours</button>
+                        <button class="answer-option" data-correct="true">court</button>
+                    </div>
+                </div>
+
+                <button class="practice-next-question" type="button" disabled>
+                    Next Question &rarr;
+                </button>
+
+            </div>
+
+            <div class="completion-section practice-level-summary hidden">
+
+                <p class="eyebrow">Level 7 Complete</p>
+
+                <div class="completion-icon">&#10003;</div>
+
+                <h2>Nice work!</h2>
+
+                <p>On to Level 8 next time you open this practice.</p>
+
+                <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+                <a href="dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="lesson-section"
+            data-section="8"
+        >
+
+            <p class="eyebrow">
+                Level 8 &middot; 10 questions
+            </p>
+
+            <h2>
+                Longer Words
+            </h2>
+
+            <p>
+                Silent letters hiding inside longer, faster words.
+            </p>
+
+            <div class="practice-question-stage">
+
+                <p class="practice-question-counter">
+                    Question <span class="practice-question-current">1</span> of 10
+                </p>
+
+                <div class="question-card">
+                    <h3>Listen to the full word, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="aujourd&#x27;hui" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">télévision</button>
+                        <button class="answer-option">architecture</button>
+                        <button class="answer-option" data-correct="true">aujourd&#x27;hui</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the full word, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="important" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">extraordinaire</button>
+                        <button class="answer-option" data-correct="true">important</button>
+                        <button class="answer-option">anniversaire</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the full word, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="appartement" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">architecture</button>
+                        <button class="answer-option">extraordinaire</button>
+                        <button class="answer-option" data-correct="true">appartement</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the full word, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="gouvernement" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">université</button>
+                        <button class="answer-option" data-correct="true">gouvernement</button>
+                        <button class="answer-option">anniversaire</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the full word, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="quelquefois" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">dictionnaire</button>
+                        <button class="answer-option">université</button>
+                        <button class="answer-option" data-correct="true">quelquefois</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the full word, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="beaucoup" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">université</button>
+                        <button class="answer-option" data-correct="true">beaucoup</button>
+                        <button class="answer-option">télévision</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the full word, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="restaurant" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">dictionnaire</button>
+                        <button class="answer-option">architecture</button>
+                        <button class="answer-option" data-correct="true">restaurant</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the full word, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="beaucoup" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">dictionnaire</button>
+                        <button class="answer-option" data-correct="true">beaucoup</button>
+                        <button class="answer-option">extraordinaire</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the full word, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="aujourd&#x27;hui" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">aujourd&#x27;hui</button>
+                        <button class="answer-option">extraordinaire</button>
+                        <button class="answer-option">université</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the full word, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="restaurant" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">dictionnaire</button>
+                        <button class="answer-option" data-correct="true">restaurant</button>
+                        <button class="answer-option">télévision</button>
+                    </div>
+                </div>
+
+                <button class="practice-next-question" type="button" disabled>
+                    Next Question &rarr;
+                </button>
+
+            </div>
+
+            <div class="completion-section practice-level-summary hidden">
+
+                <p class="eyebrow">Level 8 Complete</p>
+
+                <div class="completion-icon">&#10003;</div>
+
+                <h2>Nice work!</h2>
+
+                <p>On to Level 9 next time you open this practice.</p>
+
+                <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+                <a href="dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="lesson-section"
+            data-section="9"
+        >
+
+            <p class="eyebrow">
+                Level 9 &middot; 10 questions
+            </p>
+
+            <h2>
+                Phrases
+            </h2>
+
+            <p>
+                Multiple silent letters in a row, at natural speed.
+            </p>
+
+            <div class="practice-question-stage">
+
+                <p class="practice-question-counter">
+                    Question <span class="practice-question-current">1</span> of 10
+                </p>
+
+                <div class="question-card">
+                    <h3>Listen to the phrase, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="beaucoup de temps" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">les enfants parlent</button>
+                        <button class="answer-option">un petit nid</button>
+                        <button class="answer-option" data-correct="true">beaucoup de temps</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the phrase, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="un grand homme" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">un petit nid</button>
+                        <button class="answer-option" data-correct="true">un grand homme</button>
+                        <button class="answer-option">les chats dorment</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the phrase, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="les enfants parlent" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">un grand homme</button>
+                        <button class="answer-option">les chats dorment</button>
+                        <button class="answer-option" data-correct="true">les enfants parlent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the phrase, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="les chats dorment" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">les chats dorment</button>
+                        <button class="answer-option">les enfants parlent</button>
+                        <button class="answer-option">un grand homme</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the phrase, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="un petit nid" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">beaucoup de temps</button>
+                        <button class="answer-option" data-correct="true">un petit nid</button>
+                        <button class="answer-option">un grand homme</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the phrase, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="les enfants parlent" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">beaucoup de temps</button>
+                        <button class="answer-option">un petit nid</button>
+                        <button class="answer-option" data-correct="true">les enfants parlent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the phrase, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="un grand homme" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">beaucoup de temps</button>
+                        <button class="answer-option">les enfants parlent</button>
+                        <button class="answer-option" data-correct="true">un grand homme</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the phrase, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="beaucoup de temps" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">un grand homme</button>
+                        <button class="answer-option" data-correct="true">beaucoup de temps</button>
+                        <button class="answer-option">les enfants parlent</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the phrase, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="les chats dorment" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">les chats dorment</button>
+                        <button class="answer-option">beaucoup de temps</button>
+                        <button class="answer-option">un petit nid</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the phrase, then choose it.</h3>
+                    <button class="audio-button listen-button" data-say="un petit nid" aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">un petit nid</button>
+                        <button class="answer-option">les chats dorment</button>
+                        <button class="answer-option">les enfants parlent</button>
+                    </div>
+                </div>
+
+                <button class="practice-next-question" type="button" disabled>
+                    Next Question &rarr;
+                </button>
+
+            </div>
+
+            <div class="completion-section practice-level-summary hidden">
+
+                <p class="eyebrow">Level 9 Complete</p>
+
+                <div class="completion-icon">&#10003;</div>
+
+                <h2>Nice work!</h2>
+
+                <p>On to Level 10 next time you open this practice.</p>
+
+                <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+                <a href="dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="lesson-section"
+            data-section="10"
+        >
+
+            <p class="eyebrow">
+                Level 10 &middot; 10 questions
+            </p>
+
+            <h2>
+                Full Sentences
+            </h2>
+
+            <p>
+                Near-identical sentences at natural speed — silent letters make spelling tricky, not sound.
+            </p>
+
+            <div class="practice-question-stage">
+
+                <p class="practice-question-counter">
+                    Question <span class="practice-question-current">1</span> of 10
+                </p>
+
+                <div class="question-card">
+                    <h3>Listen to the sentence, then choose the exact match.</h3>
+                    <button class="audio-button listen-button" data-say="Le grand homme parle beaucoup." aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">Le grand homme parle beaucoup.</button>
+                        <button class="answer-option">Le grand homme parle rarement.</button>
+                        <button class="answer-option">Le petit homme parle beaucoup.</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the sentence, then choose the exact match.</h3>
+                    <button class="audio-button listen-button" data-say="Les chats dansent dans le froid." aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">Les chats dansent dans le vent.</button>
+                        <button class="answer-option" data-correct="true">Les chats dansent dans le froid.</button>
+                        <button class="answer-option">Le chat danse dans le froid.</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the sentence, then choose the exact match.</h3>
+                    <button class="audio-button listen-button" data-say="Les enfants parlent tous en même temps." aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">Les enfants parlent tous en même temps.</button>
+                        <button class="answer-option">Les enfants dansent tous en même temps.</button>
+                        <button class="answer-option">Les enfants parlent tous en anglais.</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the sentence, then choose the exact match.</h3>
+                    <button class="audio-button listen-button" data-say="Il fait trop froid cet hiver." aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">Il fait trop froid cet hiver.</button>
+                        <button class="answer-option">Il fait trop froid cet été.</button>
+                        <button class="answer-option">Il fait trop chaud cet hiver.</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the sentence, then choose the exact match.</h3>
+                    <button class="audio-button listen-button" data-say="Les chevaux dorment dans le champ." aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">Les chevaux courent dans le champ.</button>
+                        <button class="answer-option" data-correct="true">Les chevaux dorment dans le champ.</button>
+                        <button class="answer-option">Le cheval dort dans le champ.</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the sentence, then choose the exact match.</h3>
+                    <button class="audio-button listen-button" data-say="Il fait trop froid cet hiver." aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">Il fait trop froid cet été.</button>
+                        <button class="answer-option">Il fait trop chaud cet hiver.</button>
+                        <button class="answer-option" data-correct="true">Il fait trop froid cet hiver.</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the sentence, then choose the exact match.</h3>
+                    <button class="audio-button listen-button" data-say="Les chats dansent dans le froid." aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">Le chat danse dans le froid.</button>
+                        <button class="answer-option">Les chats dansent dans le vent.</button>
+                        <button class="answer-option" data-correct="true">Les chats dansent dans le froid.</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the sentence, then choose the exact match.</h3>
+                    <button class="audio-button listen-button" data-say="Les enfants parlent tous en même temps." aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">Les enfants parlent tous en anglais.</button>
+                        <button class="answer-option">Les enfants dansent tous en même temps.</button>
+                        <button class="answer-option" data-correct="true">Les enfants parlent tous en même temps.</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the sentence, then choose the exact match.</h3>
+                    <button class="audio-button listen-button" data-say="Les chevaux dorment dans le champ." aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option">Les chevaux courent dans le champ.</button>
+                        <button class="answer-option" data-correct="true">Les chevaux dorment dans le champ.</button>
+                        <button class="answer-option">Le cheval dort dans le champ.</button>
+                    </div>
+                </div>
+
+                <div class="question-card hidden">
+                    <h3>Listen to the sentence, then choose the exact match.</h3>
+                    <button class="audio-button listen-button" data-say="Le grand homme parle beaucoup." aria-label="Listen">&#9654; Listen</button>
+                    <div class="answer-options">
+                        <button class="answer-option" data-correct="true">Le grand homme parle beaucoup.</button>
+                        <button class="answer-option">Le grand homme parle rarement.</button>
+                        <button class="answer-option">Le petit homme parle beaucoup.</button>
+                    </div>
+                </div>
+
+                <button class="practice-next-question" type="button" disabled>
+                    Next Question &rarr;
+                </button>
+
+            </div>
+
+            <div class="completion-section practice-level-summary hidden">
+
+                <p class="eyebrow">Practice Complete</p>
+
+                <div class="completion-icon">&#10003;</div>
+
+                <h2>Très bien !</h2>
+
+                <p>You've been through every level. Come back any time to try again &mdash; your ear gets sharper with repetition.</p>
+
+                <p class="practice-level-score"><strong>0</strong> / 10 correct</p>
+
+                <a href="dashboard.html" class="dashboard-link">Back to Dashboard</a>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <script type="module" src="script.js"></script>
+
+</body>
+
+</html>
