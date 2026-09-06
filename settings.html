@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Account Settings | Prononce</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="settings-page">
+
+    <!-- Full-screen loader, removed once Firebase has resolved
+         sign-in state, so the page never flashes half-ready content. -->
+    <div class="page-loader" id="page-loader">
+
+        <img src="favicon.svg" alt="" class="page-loader-mark">
+
+        <div class="page-loader-spinner"></div>
+
+    </div>
+
+
+    <header class="site-header">
+
+        <a href="dashboard.html" class="logo">Prononce</a>
+
+        <nav class="main-nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#">Practice</a>
+            <a href="progress.html">Progress</a>
+            <a href="settings.html" class="active">Settings</a>
+        </nav>
+
+        <button class="logout-button" id="logout-button">Log Out</button>
+
+    </header>
+
+
+    <main class="settings-container">
+
+        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+
+        <p class="eyebrow">Account Settings</p>
+        <h1>Manage your account.</h1>
+        <p class="settings-intro">
+            This is for the basics only &mdash; your name, your email,
+            and the option to delete your account. Lesson and practice
+            progress, your recording consent, and password resets are
+            all handled by the site owner to keep them consistent.
+        </p>
+
+
+        <section class="settings-card">
+
+            <h2>Your details</h2>
+
+            <div class="settings-field">
+                <label for="settings-name">Full Name</label>
+                <input type="text" id="settings-name" autocomplete="name">
+            </div>
+
+            <button id="save-name-button" type="button">Save Name</button>
+
+            <p class="settings-status" id="name-status" hidden></p>
+
+        </section>
+
+
+        <section class="settings-card">
+
+            <h2>Email address</h2>
+
+            <p class="settings-current-value">
+                Current: <strong id="current-email">—</strong>
+            </p>
+
+            <div class="settings-field">
+                <label for="settings-new-email">New Email</label>
+                <input type="email" id="settings-new-email" autocomplete="email">
+            </div>
+
+            <div class="settings-field">
+                <label for="settings-email-password">Current Password</label>
+                <input type="password" id="settings-email-password" autocomplete="current-password">
+            </div>
+
+            <button id="save-email-button" type="button">Update Email</button>
+
+            <p class="settings-status" id="email-status" hidden></p>
+
+        </section>
+
+
+        <section class="settings-card settings-danger-card">
+
+            <h2>Delete account</h2>
+
+            <p>
+                Permanently deletes your account, sign-in, and all
+                saved lesson and practice progress. This can't be
+                undone.
+            </p>
+
+            <div class="settings-field">
+                <label for="settings-delete-password">Current Password</label>
+                <input type="password" id="settings-delete-password" autocomplete="current-password">
+            </div>
+
+            <button id="delete-account-button" type="button" class="admin-danger-button">
+                Delete My Account
+            </button>
+
+            <p class="settings-status" id="delete-status" hidden></p>
+
+        </section>
+
+
+    </main>
+
+
+    <script type="module" src="settings.js"></script>
+
+</body>
+
+</html>

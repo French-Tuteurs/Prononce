@@ -37,6 +37,9 @@ const isIndexPage =
 const isDashboardPage =
     currentPage.endsWith("/dashboard.html");
 
+const isProgressPage =
+    currentPage.endsWith("/progress.html");
+
 
 // ===========================
 // Firebase Login State
@@ -86,7 +89,22 @@ onAuthStateChanged(auth, async function (user) {
             // the page still renders instead of looking broken.
 
             console.error("Couldn't load user profile:", error);
-            currentUserProfile = { email: user.email, isOwner: false, isTester: false, progress: {}, consent: null };
+            currentUserProfile = { email: user.email, isOwner: false, isTester: false, disabled: false, progress: {}, consent: null };
+
+        }
+
+        // An owner-disabled account gets signed out the moment its
+        // profile loads, on every page — this is what actually
+        // enforces a ban client-side (the Firestore rules are the
+        // real boundary; this just keeps a disabled account from
+        // using the app in the meantime).
+
+        if (currentUserProfile && currentUserProfile.disabled === true) {
+
+            alert("This account has been disabled. Contact the site owner if you think this is a mistake.");
+            await signOut(auth);
+            window.location.href = "index.html";
+            return;
 
         }
 
@@ -103,10 +121,17 @@ onAuthStateChanged(auth, async function (user) {
 
         if (isDashboardPage) {
 
+            renderWelcomeName(user);
             renderDashboardLessonProgress();
             renderPracticeProgress();
             renderTesterAccessCard();
             renderOwnerAdminPanel();
+
+        }
+
+        if (isProgressPage) {
+
+            renderProgressPage();
 
         }
 
@@ -120,11 +145,12 @@ onAuthStateChanged(auth, async function (user) {
         currentUserId = null;
         currentUserProfile = null;
 
-        // If someone tries to access the dashboard without being
-        // logged in, send them back home. Leave the loader up — the
-        // welcome page shows its own once it takes over.
+        // If someone tries to access the dashboard or progress page
+        // without being logged in, send them back home. Leave the
+        // loader up — the welcome page shows its own once it takes
+        // over.
 
-        if (isDashboardPage) {
+        if (isDashboardPage || isProgressPage) {
 
             window.location.href = "index.html";
             return;
@@ -169,6 +195,8 @@ async function ensureUserProfile(user) {
             email: user.email,
             isOwner: false,
             isTester: false,
+            disabled: false,
+            createdAt: new Date().toISOString(),
             progress: {},
             consent: null
         };
@@ -229,6 +257,23 @@ async function markPracticeLevel(practiceId, level) {
         currentUserProfile.progress.practiceLevels[practiceId] = level;
 
     }
+
+}
+
+
+function renderWelcomeName(user) {
+
+    const eyebrow = document.getElementById("welcome-eyebrow");
+
+    if (!eyebrow) {
+        return;
+    }
+
+    const firstName = user && user.displayName
+        ? user.displayName.trim().split(/\s+/)[0]
+        : null;
+
+    eyebrow.textContent = firstName ? "Bienvenue, " + firstName : "Bienvenue";
 
 }
 
@@ -320,6 +365,96 @@ function resumeSavedPracticeLevel() {
 
     if (savedLevel && savedLevel > 1 && !alreadyCompleted) {
         showLessonSection(savedLevel);
+    }
+
+}
+
+
+// ===========================
+// PROGRESS PAGE
+// ===========================
+
+function renderProgressPage() {
+
+    if (!currentUserProfile) {
+        return;
+    }
+
+    const progress = currentUserProfile.progress || {};
+    const practiceLevels = progress.practiceLevels || {};
+
+    let lessonsDone = 0;
+
+    document.querySelectorAll(".progress-row[data-lesson-id]").forEach(function (row) {
+
+        const lessonId = row.dataset.lessonId;
+        const completed = progress[lessonId] === true;
+        const statusEl = row.querySelector(".progress-row-status");
+
+        if (completed) {
+            lessonsDone++;
+        }
+
+        if (statusEl) {
+            statusEl.textContent = completed ? "Completed" : "Not Started";
+            statusEl.classList.toggle("progress-row-status-done", completed);
+        }
+
+    });
+
+    let practicesDone = 0;
+    let levelsCleared = 0;
+
+    document.querySelectorAll(".progress-row[data-practice-id]").forEach(function (row) {
+
+        const practiceId = row.dataset.practiceId;
+        const completed = progress[practiceId] === true;
+        const currentLevel = practiceLevels[practiceId] || 0;
+        const statusEl = row.querySelector(".progress-row-status");
+        const fillEl = row.querySelector(".progress-fill");
+
+        const levelsForThisPractice = completed ? 10 : Math.max(0, currentLevel - 1);
+        levelsCleared += levelsForThisPractice;
+
+        if (completed) {
+            practicesDone++;
+        }
+
+        if (statusEl) {
+
+            statusEl.textContent = completed
+                ? "All 10 Levels Complete"
+                : currentLevel > 1
+                    ? "Level " + currentLevel + " of 10"
+                    : "Not Started";
+
+            statusEl.classList.toggle("progress-row-status-done", completed);
+
+        }
+
+        if (fillEl) {
+
+            const percent = completed ? 100 : Math.round((levelsForThisPractice / 10) * 100);
+            fillEl.style.width = percent + "%";
+
+        }
+
+    });
+
+    const summaryLessons = document.getElementById("summary-lessons");
+    const summaryPractices = document.getElementById("summary-practices");
+    const summaryLevels = document.getElementById("summary-levels");
+
+    if (summaryLessons) {
+        summaryLessons.textContent = lessonsDone + " / 6";
+    }
+
+    if (summaryPractices) {
+        summaryPractices.textContent = practicesDone + " / 6";
+    }
+
+    if (summaryLevels) {
+        summaryLevels.textContent = levelsCleared + " / 60";
     }
 
 }
@@ -849,6 +984,8 @@ if (createAccountButton) {
                         email: email,
                         isOwner: false,
                         isTester: false,
+                        disabled: false,
+                        createdAt: new Date().toISOString(),
                         progress: {},
                         consent: null
                     }

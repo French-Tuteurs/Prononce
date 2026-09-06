@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Progress | Prononce</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="progress-page">
+
+    <!-- Full-screen loader, removed by script.js once Firebase has
+         resolved sign-in state so the page never flashes half-ready
+         content. -->
+    <div class="page-loader" id="page-loader">
+
+        <img src="favicon.svg" alt="" class="page-loader-mark">
+
+        <div class="page-loader-spinner"></div>
+
+    </div>
+
+
+    <header class="site-header">
+
+        <a href="dashboard.html" class="logo">Prononce</a>
+
+        <nav class="main-nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#">Practice</a>
+            <a href="progress.html" class="active">Progress</a>
+            <a href="settings.html">Settings</a>
+        </nav>
+
+        <button class="logout-button" id="logout-button">Log Out</button>
+
+    </header>
+
+
+    <main class="progress-container">
+
+        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+
+        <p class="eyebrow">Your Progress</p>
+        <h1>Track how far you've come.</h1>
+        <p class="progress-intro">
+            Every lesson and every practice level you finish is saved
+            here automatically.
+        </p>
+
+
+        <section class="progress-summary">
+
+            <div class="progress-summary-stat">
+                <strong id="summary-lessons">0 / 6</strong>
+                <span>Lessons Completed</span>
+            </div>
+
+            <div class="progress-summary-stat">
+                <strong id="summary-practices">0 / 6</strong>
+                <span>Practices Finished</span>
+            </div>
+
+            <div class="progress-summary-stat">
+                <strong id="summary-levels">0 / 60</strong>
+                <span>Practice Levels Cleared</span>
+            </div>
+
+        </section>
+
+
+        <section class="progress-section">
+
+            <h2>Lessons</h2>
+
+            <div class="progress-list">
+
+                <div class="progress-row" data-lesson-id="vowels">
+                    <span class="progress-row-name">Vowels</span>
+                    <span class="progress-row-status">Not Started</span>
+                    <a href="lesson-vowels.html" class="progress-row-link">Open</a>
+                </div>
+
+                <div class="progress-row" data-lesson-id="r">
+                    <span class="progress-row-name">R Sound</span>
+                    <span class="progress-row-status">Not Started</span>
+                    <a href="lesson-r.html" class="progress-row-link">Open</a>
+                </div>
+
+                <div class="progress-row" data-lesson-id="nasal">
+                    <span class="progress-row-name">Nasal Sounds</span>
+                    <span class="progress-row-status">Not Started</span>
+                    <a href="lesson-nasal.html" class="progress-row-link">Open</a>
+                </div>
+
+                <div class="progress-row" data-lesson-id="silent">
+                    <span class="progress-row-name">Silent Letters</span>
+                    <span class="progress-row-status">Not Started</span>
+                    <a href="lesson-silent.html" class="progress-row-link">Open</a>
+                </div>
+
+                <div class="progress-row" data-lesson-id="liaison">
+                    <span class="progress-row-name">Liaison</span>
+                    <span class="progress-row-status">Not Started</span>
+                    <a href="lesson-liaison.html" class="progress-row-link">Open</a>
+                </div>
+
+                <div class="progress-row" data-lesson-id="rhythm">
+                    <span class="progress-row-name">Rhythm &amp; Intonation</span>
+                    <span class="progress-row-status">Not Started</span>
+                    <a href="lesson-rhythm.html" class="progress-row-link">Open</a>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="progress-section">
+
+            <h2>Practice</h2>
+
+            <div class="progress-list">
+
+                <div class="progress-row progress-row-practice" data-practice-id="practice-r">
+                    <span class="progress-row-name">R Sound</span>
+                    <div class="progress-row-bar"><div class="progress-fill" style="width: 0%;"></div></div>
+                    <span class="progress-row-status">Not Started</span>
+                    <a href="practice-r.html" class="progress-row-link">Open</a>
+                </div>
+
+                <div class="progress-row progress-row-practice" data-practice-id="practice-vowels">
+                    <span class="progress-row-name">Vowels</span>
+                    <div class="progress-row-bar"><div class="progress-fill" style="width: 0%;"></div></div>
+                    <span class="progress-row-status">Not Started</span>
+                    <a href="practice-vowels.html" class="progress-row-link">Open</a>
+                </div>
+
+                <div class="progress-row progress-row-practice" data-practice-id="practice-nasal">
+                    <span class="progress-row-name">Nasal Sounds</span>
+                    <div class="progress-row-bar"><div class="progress-fill" style="width: 0%;"></div></div>
+                    <span class="progress-row-status">Not Started</span>
+                    <a href="practice-nasal.html" class="progress-row-link">Open</a>
+                </div>
+
+                <div class="progress-row progress-row-practice" data-practice-id="practice-silent">
+                    <span class="progress-row-name">Silent Letters</span>
+                    <div class="progress-row-bar"><div class="progress-fill" style="width: 0%;"></div></div>
+                    <span class="progress-row-status">Not Started</span>
+                    <a href="practice-silent.html" class="progress-row-link">Open</a>
+                </div>
+
+                <div class="progress-row progress-row-practice" data-practice-id="practice-liaison">
+                    <span class="progress-row-name">Liaison</span>
+                    <div class="progress-row-bar"><div class="progress-fill" style="width: 0%;"></div></div>
+                    <span class="progress-row-status">Not Started</span>
+                    <a href="practice-liaison.html" class="progress-row-link">Open</a>
+                </div>
+
+                <div class="progress-row progress-row-practice" data-practice-id="practice-rhythm">
+                    <span class="progress-row-name">Rhythm &amp; Intonation</span>
+                    <div class="progress-row-bar"><div class="progress-fill" style="width: 0%;"></div></div>
+                    <span class="progress-row-status">Not Started</span>
+                    <a href="practice-rhythm.html" class="progress-row-link">Open</a>
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <script type="module" src="script.js"></script>
+
+</body>
+
+</html>

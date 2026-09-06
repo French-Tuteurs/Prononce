@@ -17,6 +17,11 @@ rules_version = '2';
 //   - progress         (map)   — { lessonId: true, ... }
 //   - consent          (map or null) — voice-recording consent,
 //                                recorded once per account.
+//   - disabled         (bool)  — an owner-only ban flag. Same
+//                                protection as isOwner/isTester: a
+//                                user can never flip this on their
+//                                own document.
+//   - createdAt        (string, ISO date) — set once at signup.
 //
 // The core guarantee: a signed-in user can freely read and update
 // their OWN document (progress, consent, email) but can never touch
@@ -49,18 +54,27 @@ service cloud.firestore {
         && request.resource.data.isOwner == false
         && request.resource.data.isTester == false;
 
-      // A user may update their own document as long as isOwner and
-      // isTester come out unchanged.
+      // A user may update their own document as long as isOwner,
+      // isTester, and disabled (an owner-only ban flag) come out
+      // unchanged. get(key, default) tolerates older documents that
+      // predate the disabled field.
       allow update: if isSignedIn()
         && request.auth.uid == userId
         && request.resource.data.isOwner == resource.data.isOwner
-        && request.resource.data.isTester == resource.data.isTester;
+        && request.resource.data.isTester == resource.data.isTester
+        && request.resource.data.get('disabled', false) == resource.data.get('disabled', false);
 
       // The owner may update any document (this is how tester
       // access is granted/revoked).
       allow update: if isOwnerAccount();
 
-      allow delete: if false;
+      // A non-owner account may delete its own document (this is
+      // what powers the self-service "delete my account" button —
+      // the owner account is excluded so there's always someone left
+      // who can run the admin tools).
+      allow delete: if isSignedIn()
+        && request.auth.uid == userId
+        && resource.data.isOwner != true;
 
     }
 
