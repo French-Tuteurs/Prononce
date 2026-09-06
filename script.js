@@ -45,6 +45,28 @@ const isDashboardPage =
 let currentUserId = null;
 let currentUserProfile = null;
 
+
+// ===========================
+// PAGE LOADER
+// ===========================
+//
+// Shown by default on every page (see the markup right after
+// <body>) so nothing flashes half-ready while Firebase resolves
+// sign-in state. Removed below once that's settled for the current
+// page — never removed on a page that's about to redirect, since
+// the destination page shows its own loader instead.
+
+function hidePageLoader() {
+
+    const loader = document.getElementById("page-loader");
+
+    if (loader) {
+        loader.classList.add("page-loader-hidden");
+    }
+
+}
+
+
 onAuthStateChanged(auth, async function (user) {
 
     if (user) {
@@ -69,11 +91,13 @@ onAuthStateChanged(auth, async function (user) {
         }
 
         // If already logged in and on the welcome page,
-        // send them directly to the dashboard.
+        // send them directly to the dashboard. Leave the loader up —
+        // the dashboard shows its own while it finishes loading.
 
         if (isIndexPage) {
 
             window.location.href = "dashboard.html";
+            return;
 
         }
 
@@ -85,20 +109,26 @@ onAuthStateChanged(auth, async function (user) {
 
         }
 
+        hidePageLoader();
+
     } else {
 
         console.log("No user is logged in.");
         currentUserId = null;
         currentUserProfile = null;
 
-        // If someone tries to access the dashboard
-        // without being logged in, send them back home.
+        // If someone tries to access the dashboard without being
+        // logged in, send them back home. Leave the loader up — the
+        // welcome page shows its own once it takes over.
 
         if (isDashboardPage) {
 
             window.location.href = "index.html";
+            return;
 
         }
+
+        hidePageLoader();
 
     }
 
