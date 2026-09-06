@@ -37,7 +37,15 @@ const LESSONS = [
     { id: "rhythm", name: "Rhythm & Intonation" }
 ];
 
-const PRACTICE_ID = "practice-r";
+const PRACTICES = [
+    { id: "practice-r", name: "R Sound" },
+    { id: "practice-vowels", name: "Vowels" },
+    { id: "practice-nasal", name: "Nasal Sounds" },
+    { id: "practice-silent", name: "Silent Letters" },
+    { id: "practice-liaison", name: "Liaison" },
+    { id: "practice-rhythm", name: "Rhythm & Intonation" }
+];
+
 const PRACTICE_TOTAL_LEVELS = 10;
 
 
@@ -315,52 +323,81 @@ function renderAccountDetail() {
     });
 
 
-    // Practice level
+    // Practice levels — one compact row per topic (status + a level
+    // picker + Set), so adding more practices later never means
+    // adding more static markup here.
 
-    const practiceStatus = document.getElementById("practice-level-status");
-    const practiceCompleted = progress[PRACTICE_ID] === true;
-    const currentLevel = practiceLevels[PRACTICE_ID];
+    const practiceGrid = document.getElementById("practice-progress-grid");
+    practiceGrid.innerHTML = "";
 
-    if (practiceCompleted) {
-        practiceStatus.textContent = "Finished all " + PRACTICE_TOTAL_LEVELS + " levels.";
-    } else if (currentLevel) {
-        practiceStatus.textContent = "Currently on Level " + currentLevel + ".";
-    } else {
-        practiceStatus.textContent = "Hasn't started practice yet.";
-    }
+    PRACTICES.forEach(function (practice) {
 
-    const levelSelect = document.getElementById("practice-level-select");
-    levelSelect.value = String(currentLevel || 1);
+        const completed = progress[practice.id] === true;
+        const currentLevel = practiceLevels[practice.id];
 
-    document.getElementById("practice-level-set-button").onclick = async function () {
+        const row = document.createElement("div");
+        row.className = "admin-practice-row";
 
-        const level = Number(levelSelect.value);
-        const button = document.getElementById("practice-level-set-button");
-        button.disabled = true;
+        const label = document.createElement("span");
+        label.className = "admin-practice-name";
+        label.textContent = practice.name;
 
-        try {
+        const status = document.createElement("span");
+        status.className = "admin-practice-status" + (completed ? " admin-lesson-status-done" : "");
+        status.textContent = completed
+            ? "Finished all " + PRACTICE_TOTAL_LEVELS
+            : currentLevel
+                ? "Level " + currentLevel
+                : "Not started";
 
-            await updateDoc(doc(db, "users", selectedUid), {
-                ["progress." + PRACTICE_ID]: false,
-                ["progress.practiceLevels." + PRACTICE_ID]: level
-            });
+        const select = document.createElement("select");
 
-            progress[PRACTICE_ID] = false;
-            practiceLevels[PRACTICE_ID] = level;
-            renderAccountDetail();
-
-        } catch (error) {
-
-            console.error(error);
-            alert("Couldn't set that practice level.");
-
-        } finally {
-
-            button.disabled = false;
-
+        for (let level = 1; level <= PRACTICE_TOTAL_LEVELS; level++) {
+            const option = document.createElement("option");
+            option.value = String(level);
+            option.textContent = "Level " + level;
+            select.appendChild(option);
         }
 
-    };
+        select.value = String(currentLevel || 1);
+
+        const setButton = document.createElement("button");
+        setButton.type = "button";
+        setButton.textContent = "Set";
+
+        setButton.addEventListener("click", async function () {
+
+            const level = Number(select.value);
+            setButton.disabled = true;
+
+            try {
+
+                await updateDoc(doc(db, "users", selectedUid), {
+                    ["progress." + practice.id]: false,
+                    ["progress.practiceLevels." + practice.id]: level
+                });
+
+                progress[practice.id] = false;
+                practiceLevels[practice.id] = level;
+                renderAccountDetail();
+
+            } catch (error) {
+
+                console.error(error);
+                alert("Couldn't set that practice level.");
+                setButton.disabled = false;
+
+            }
+
+        });
+
+        row.appendChild(label);
+        row.appendChild(status);
+        row.appendChild(select);
+        row.appendChild(setButton);
+        practiceGrid.appendChild(row);
+
+    });
 
 
     // Consent
@@ -407,7 +444,7 @@ function renderAccountDetail() {
     document.getElementById("reset-all-button").onclick = async function () {
 
         const confirmed = window.confirm(
-            "Reset every lesson, the R Sound practice level, and recording consent for " +
+            "Reset every lesson, every practice level, and recording consent for " +
             (selectedData.email || selectedUid) +
             "? This can't be undone."
         );
@@ -422,8 +459,10 @@ function renderAccountDetail() {
             updates["progress." + lesson.id] = false;
         });
 
-        updates["progress." + PRACTICE_ID] = false;
-        updates["progress.practiceLevels." + PRACTICE_ID] = 1;
+        PRACTICES.forEach(function (practice) {
+            updates["progress." + practice.id] = false;
+            updates["progress.practiceLevels." + practice.id] = 1;
+        });
 
         try {
 
@@ -433,8 +472,11 @@ function renderAccountDetail() {
                 progress[lesson.id] = false;
             });
 
-            progress[PRACTICE_ID] = false;
-            practiceLevels[PRACTICE_ID] = 1;
+            PRACTICES.forEach(function (practice) {
+                progress[practice.id] = false;
+                practiceLevels[practice.id] = 1;
+            });
+
             selectedData.consent = null;
 
             renderAccountDetail();

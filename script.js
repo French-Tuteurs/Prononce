@@ -1030,14 +1030,6 @@ function showLessonSection(sectionNumber) {
                 markLessonComplete(lessonId);
             }
 
-        } else if (document.body.dataset.practiceLevels) {
-
-            const practiceId = document.body.dataset.lessonId;
-
-            if (practiceId) {
-                markPracticeLevel(practiceId, sectionNumber);
-            }
-
         }
 
         window.scrollTo({
@@ -1197,6 +1189,131 @@ function updateCompletionQuizScore() {
         correctCount + " / " + questionCards.length;
 
 }
+
+
+// ===========================
+// PRACTICE: ONE QUESTION AT A TIME
+// ===========================
+//
+// Each practice level (practice-r.html and friends) holds its 10
+// questions in a ".practice-question-stage" — only one .question-card
+// is ever visible at once, so nothing has to be scrolled through. The
+// existing Quick Check listener above still owns scoring a card the
+// moment an option is clicked; this just reacts to that (via event
+// bubbling, so it always runs after the card has already been marked
+// answered) to unlock "Next Question" and, on the last question,
+// swap the stage for a level summary instead of advancing further.
+
+const practiceStages =
+    document.querySelectorAll(".practice-question-stage");
+
+practiceStages.forEach(function (stage) {
+
+    const cards = Array.from(stage.querySelectorAll(".question-card"));
+    const counter = stage.querySelector(".practice-question-current");
+    const nextButton = stage.querySelector(".practice-next-question");
+
+    if (!cards.length || !nextButton) {
+        return;
+    }
+
+    let currentIndex = 0;
+
+    function showQuestion(index) {
+
+        cards.forEach(function (card, i) {
+            card.classList.toggle("hidden", i !== index);
+        });
+
+        if (counter) {
+            counter.textContent = String(index + 1);
+        }
+
+        nextButton.disabled = cards[index].dataset.answered !== "true";
+        nextButton.textContent =
+            index === cards.length - 1 ? "See My Score" : "Next Question →";
+
+    }
+
+    showQuestion(0);
+
+    stage.addEventListener("click", function (event) {
+
+        if (!event.target.classList.contains("answer-option")) {
+            return;
+        }
+
+        if (cards[currentIndex].contains(event.target)) {
+            nextButton.disabled = false;
+        }
+
+    });
+
+    nextButton.addEventListener("click", function () {
+
+        if (nextButton.disabled) {
+            return;
+        }
+
+        if (currentIndex < cards.length - 1) {
+
+            currentIndex++;
+            showQuestion(currentIndex);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            return;
+
+        }
+
+        // Last question answered — show this level's summary instead
+        // of a "Next Question" button, and record progress.
+
+        const section = stage.closest(".lesson-section");
+        const summary = section ? section.querySelector(".practice-level-summary") : null;
+
+        let correctCount = 0;
+
+        cards.forEach(function (card) {
+            if (card.querySelector(".selected-correct")) {
+                correctCount++;
+            }
+        });
+
+        stage.classList.add("hidden");
+
+        if (summary) {
+
+            const scoreEl = summary.querySelector(".practice-level-score strong");
+
+            if (scoreEl) {
+                scoreEl.textContent = String(correctCount);
+            }
+
+            summary.classList.remove("hidden");
+
+        }
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        const practiceId = document.body.dataset.lessonId;
+        const totalLevels = Number(document.body.dataset.practiceLevels);
+        const levelNum = Number(section ? section.dataset.section : NaN);
+
+        if (practiceId && levelNum) {
+
+            if (levelNum >= totalLevels) {
+                markPracticeLevel(practiceId, levelNum);
+                markLessonComplete(practiceId);
+            } else {
+                markPracticeLevel(practiceId, levelNum + 1);
+            }
+
+        }
+
+    });
+
+});
+
+
 // ===========================
 // FRENCH R AUDIO
 // ===========================
