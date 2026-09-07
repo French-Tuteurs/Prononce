@@ -1,642 +1,559 @@
-# Generates ~10,000 "record yourself saying this" French prompts for a
-# future AI-pronunciation-analysis feature. Not wired into any page —
-# pure data at rest. Grammatical correctness is guaranteed by
-# construction (explicit conjugation tables, explicit gender/number
-# agreement) rather than by hand-typing thousands of unique sentences.
+# Generates ~10,000 "record yourself saying this" PRONUNCIATION prompts
+# for a future AI pronunciation-analysis feature. Not wired into any
+# page — pure data at rest.
+#
+# Unlike a grammar/vocab drill bank, every item here targets a specific
+# French pronunciation feature: the R sound (by position), individual
+# vowel qualities, nasal vowels, silent letters, liaison, rhythm and
+# question intonation, minimal pairs, and classic tongue-twisters.
+# Word lists are curated real vocabulary; volume comes from wrapping
+# those words in carrier phrases and multi-word drill combos, not from
+# grammar-sentence templates.
 
+import itertools
 import json
 import random
 
-random.seed(7)
-
-# ===========================
-# 1. VOCAB WORDS
-# ===========================
-
-def number_to_french(n):
-    ones = ["zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept",
-            "huit", "neuf", "dix", "onze", "douze", "treize", "quatorze",
-            "quinze", "seize"]
-    if n <= 16:
-        return ones[n]
-    if n < 20:
-        return "dix-" + ones[n - 10]
-    tens_words = {20: "vingt", 30: "trente", 40: "quarante", 50: "cinquante",
-                  60: "soixante"}
-    if n < 70:
-        tens = (n // 10) * 10
-        rem = n % 10
-        if rem == 0:
-            return tens_words[tens]
-        if rem == 1:
-            return tens_words[tens] + " et un"
-        return tens_words[tens] + "-" + ones[rem]
-    if n < 80:
-        rem = n - 60
-        if rem == 11:
-            return "soixante et onze"
-        return "soixante-" + number_to_french(rem).replace("soixante-", "")
-    if n < 100:
-        rem = n - 80
-        prefix = "quatre-vingt" if rem == 0 else "quatre-vingt-"
-        if rem == 0:
-            return "quatre-vingts"
-        if rem == 1:
-            return "quatre-vingt-un"
-        return "quatre-vingt-" + number_to_french(rem)
-    if n == 100:
-        return "cent"
-    raise ValueError(n)
+random.seed(11)
 
 
-NUMBERS = [number_to_french(n) for n in range(0, 101)]
-
-DAYS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
-MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
-          "août", "septembre", "octobre", "novembre", "décembre"]
-SEASONS = ["le printemps", "l'été", "l'automne", "l'hiver"]
-COLORS = ["rouge", "bleu", "vert", "jaune", "noir", "blanc", "gris",
-          "orange", "violet", "rose", "marron", "beige", "doré", "argenté"]
-
-VOCAB_CATEGORIES = {
-    "family": ["la mère", "le père", "la sœur", "le frère", "la fille",
-               "le fils", "la grand-mère", "le grand-père", "la tante",
-               "l'oncle", "la cousine", "le cousin", "les parents",
-               "le bébé", "la famille", "le mari", "la femme",
-               "la belle-mère", "le beau-père", "les enfants"],
-    "food": ["le pain", "le fromage", "le lait", "l'eau", "le vin",
-             "la viande", "le poisson", "le poulet", "les légumes",
-             "les fruits", "la pomme", "la banane", "l'orange",
-             "la fraise", "la carotte", "la pomme de terre", "le riz",
-             "les pâtes", "la soupe", "le sucre", "le sel", "le poivre",
-             "le beurre", "l'huile", "le café", "le thé", "le jus",
-             "le gâteau", "le chocolat", "la glace", "l'œuf", "la salade",
-             "la tomate", "le citron", "la confiture", "le miel"],
-    "animals": ["le chat", "le chien", "le cheval", "la vache", "le mouton",
-                "le cochon", "la poule", "le canard", "l'oiseau",
-                "le poisson", "le lapin", "la souris", "le lion",
-                "le tigre", "l'éléphant", "le singe", "l'ours",
-                "le loup", "le renard", "la chèvre", "l'abeille",
-                "le papillon", "l'araignée", "la grenouille", "le serpent"],
-    "body": ["la tête", "les cheveux", "le visage", "les yeux", "le nez",
-             "la bouche", "les oreilles", "le cou", "les épaules",
-             "le bras", "la main", "les doigts", "le dos", "le ventre",
-             "la jambe", "le pied", "le genou", "le cœur", "les dents"],
-    "house": ["la maison", "l'appartement", "la chambre", "la cuisine",
-              "le salon", "la salle de bain", "le jardin", "la porte",
-              "la fenêtre", "le toit", "le mur", "l'escalier",
-              "la table", "la chaise", "le lit", "l'armoire", "le canapé",
-              "la lampe", "le miroir", "le tapis", "l'étagère"],
-    "clothing": ["la chemise", "le pantalon", "la robe", "la jupe",
-                 "les chaussures", "le manteau", "le chapeau", "les gants",
-                 "l'écharpe", "le pull", "les chaussettes", "la ceinture",
-                 "le costume", "les lunettes", "le sac"],
-    "school": ["l'école", "le professeur", "l'élève", "le livre",
-               "le cahier", "le stylo", "le crayon", "la règle",
-               "la salle de classe", "la leçon", "le devoir", "l'examen",
-               "la note", "le tableau", "la bibliothèque"],
-    "weather_nature": ["le soleil", "la lune", "les étoiles", "le ciel",
-                       "la pluie", "la neige", "le vent", "le nuage",
-                       "la mer", "la montagne", "la rivière", "la forêt",
-                       "le lac", "la plage", "l'arbre", "la fleur",
-                       "l'herbe", "la pierre", "le sable"],
-    "professions": ["le médecin", "l'infirmière", "le professeur",
-                    "l'avocat", "le policier", "le pompier", "le boulanger",
-                    "le boucher", "le facteur", "le chauffeur",
-                    "l'ingénieur", "le cuisinier", "le vendeur",
-                    "l'artiste", "le musicien"],
-    "transport": ["la voiture", "le vélo", "le train", "l'avion",
-                  "le bateau", "le bus", "le métro", "la moto",
-                  "le taxi", "la route", "l'aéroport", "la gare"],
-    "adjectives": ["grand", "petit", "beau", "joli", "jeune", "vieux",
-                   "nouveau", "bon", "mauvais", "gros", "long", "court",
-                   "gentil", "méchant", "heureux", "triste", "fatigué",
-                   "content", "fâché", "calme", "rapide", "lent",
-                   "facile", "difficile", "chaud", "froid", "propre",
-                   "sale", "cher", "riche", "pauvre", "fort", "faible",
-                   "intelligent", "drôle", "sérieux", "timide", "poli"],
-    "verbs_infinitive": ["parler", "manger", "boire", "dormir", "courir",
-                         "marcher", "nager", "voler", "chanter", "danser",
-                         "écrire", "lire", "dessiner", "peindre", "jouer",
-                         "travailler", "étudier", "voyager", "cuisiner",
-                         "nettoyer", "réparer", "construire", "acheter",
-                         "vendre", "payer", "économiser", "rire", "pleurer",
-                         "crier", "chuchoter", "sourire", "réfléchir",
-                         "espérer", "rêver", "essayer"],
-}
-
-vocab_words = []
-vocab_words.extend(NUMBERS)
-vocab_words.extend(DAYS)
-vocab_words.extend(MONTHS)
-vocab_words.extend(SEASONS)
-vocab_words.extend(COLORS)
-for words in VOCAB_CATEGORIES.values():
-    vocab_words.extend(words)
-
-vocab_words = list(dict.fromkeys(vocab_words))  # de-dupe, keep order
+def dedupe(seq):
+    return list(dict.fromkeys(seq))
 
 
 # ===========================
-# 2. NOUN PHRASES (gender + number agreement)
+# CURATED WORD LISTS, BY TARGET SOUND
 # ===========================
 
-# (singular, plural, gender) — gender only affects which adjective form
-# is picked; the article is always definite (le/la/les).
-NOUNS = [
-    ("chat", "chats", "m"), ("chien", "chiens", "m"),
-    ("maison", "maisons", "f"), ("voiture", "voitures", "f"),
-    ("livre", "livres", "m"), ("table", "tables", "f"),
-    ("fenêtre", "fenêtres", "f"), ("porte", "portes", "f"),
-    ("jardin", "jardins", "m"), ("fleur", "fleurs", "f"),
-    ("arbre", "arbres", "m"), ("montagne", "montagnes", "f"),
-    ("rivière", "rivières", "f"), ("ville", "villes", "f"),
-    ("route", "routes", "f"), ("pont", "ponts", "m"),
-    ("château", "châteaux", "m"), ("village", "villages", "m"),
-    ("enfant", "enfants", "m"), ("homme", "hommes", "m"),
-    ("femme", "femmes", "f"), ("ami", "amis", "m"),
-    ("amie", "amies", "f"), ("professeur", "professeurs", "m"),
-    ("étudiant", "étudiants", "m"), ("chanson", "chansons", "f"),
-    ("histoire", "histoires", "f"), ("idée", "idées", "f"),
-    ("question", "questions", "f"), ("réponse", "réponses", "f"),
-    ("problème", "problèmes", "m"), ("solution", "solutions", "f"),
-    ("gâteau", "gâteaux", "m"), ("pomme", "pommes", "f"),
-    ("orange", "oranges", "f"), ("banane", "bananes", "f"),
-    ("robe", "robes", "f"), ("chemise", "chemises", "f"),
-    ("chapeau", "chapeaux", "m"), ("sac", "sacs", "m"),
-    ("valise", "valises", "f"), ("clé", "clés", "f"),
-    ("lettre", "lettres", "f"), ("photo", "photos", "f"),
-    ("image", "images", "f"), ("film", "films", "m"),
-    ("musique", "musiques", "f"), ("guitare", "guitares", "f"),
-    ("piano", "pianos", "m"), ("oiseau", "oiseaux", "m"),
-    ("poisson", "poissons", "m"), ("cheval", "chevaux", "m"),
-    ("lapin", "lapins", "m"), ("étoile", "étoiles", "f"),
-    ("lune", "lunes", "f"), ("plage", "plages", "f"),
-    ("forêt", "forêts", "f"), ("lac", "lacs", "m"),
-    ("île", "îles", "f"), ("nuage", "nuages", "m"),
-    ("chambre", "chambres", "f"), ("cuisine", "cuisines", "f"),
-    ("lit", "lits", "m"), ("chaise", "chaises", "f"),
-    ("lampe", "lampes", "f"), ("miroir", "miroirs", "m"),
-    ("tapis", "tapis", "m"), ("boîte", "boîtes", "f"),
-    ("bouteille", "bouteilles", "f"), ("tasse", "tasses", "f"),
-    ("assiette", "assiettes", "f"), ("cuillère", "cuillères", "f"),
-    ("couteau", "couteaux", "m"), ("magasin", "magasins", "m"),
-    ("marché", "marchés", "m"), ("restaurant", "restaurants", "m"),
-    ("hôtel", "hôtels", "m"), ("hôpital", "hôpitaux", "m"),
-    ("école", "écoles", "f"), ("bureau", "bureaux", "m"),
-    ("usine", "usines", "f"), ("ferme", "fermes", "f"),
-    ("jardinier", "jardiniers", "m"), ("boulanger", "boulangers", "m"),
-    ("étudiante", "étudiantes", "f"), ("écrivain", "écrivains", "m"),
+R_INITIAL = dedupe([
+    "rue", "robe", "radio", "rouge", "riz", "rare", "roue", "rond", "rire",
+    "raison", "rideau", "rivière", "ruban", "racine", "radis", "régime",
+    "rentrée", "réveil", "réponse", "résultat", "restaurant", "région",
+    "religion", "remède", "rencontre", "robinet", "rocher", "roman",
+    "rosée", "route", "royaume", "ruche", "rumeur", "rythme", "ronde",
+    "rouille", "rosier", "ruisseau", "radiateur", "raisin", "ramasser",
+    "ranger", "rappeler", "raser", "rassurer", "rater", "rattraper",
+    "ravir", "rayon", "réaliser", "recevoir", "réchauffer", "recommencer",
+    "reconnaître", "refaire", "réfléchir", "refroidir", "refuser",
+    "regarder", "remarquer", "remercier", "remplacer", "remplir",
+    "rencontrer", "rendre", "renoncer", "rentrer", "réparer", "repartir",
+    "répéter", "répondre", "reposer", "reprendre", "réserver", "résister",
+    "respirer", "ressembler", "rester", "retenir", "retirer", "retourner",
+    "retrouver", "réunir", "réussir", "rêver", "revenir", "réviser", "revoir",
+])
+
+R_MEDIAL = dedupe([
+    "parler", "arriver", "direction", "orange", "garçon", "chercher",
+    "marcher", "sourire", "préparer", "apporter", "voiture", "guitare",
+    "journal", "ferme", "personne", "verre", "terre", "hier", "argent",
+    "arbre", "carte", "farine", "garder", "jardin", "marché", "marque",
+    "parfum", "partie", "partir", "sardine", "tarte", "vertu", "chariot",
+    "soirée", "miroir", "histoire", "mémoire", "victoire", "territoire",
+    "laboratoire", "tiroir", "armoire", "couloir", "pouvoir", "savoir",
+    "devoir", "apercevoir", "décevoir", "farine", "ordinateur",
+    "ordonnance", "corbeille", "corde", "corps", "gorge", "forge",
+    "horloge", "orgue", "sorcière", "forcer", "porter", "sortir",
+    "importer", "rapporter", "supporter", "transporter", "exporter",
+    "ordinaire", "extraordinaire", "formidable", "orchestre", "norme",
+    "forme", "terme", "charme", "alarme", "arme", "larme", "carreau",
+    "arrêter", "arracher", "arranger", "arrondir",
+])
+
+R_FINAL = dedupe([
+    "pour", "sur", "air", "mer", "cher", "professeur", "jour", "tour",
+    "cœur", "fleur", "peur", "beurre", "leur", "sœur", "ordinateur",
+    "ingénieur", "docteur", "acteur", "couleur", "chaleur", "majeur",
+    "mineur", "meilleur", "supérieur", "extérieur", "intérieur",
+    "antérieur", "postérieur", "ultérieur", "chauffeur", "vendeur",
+    "acheteur", "joueur", "danseur", "chanteur", "nageur", "voyageur",
+    "menteur", "moteur", "facteur", "secteur", "directeur", "inspecteur",
+    "auteur", "hauteur", "largeur", "longueur", "épaisseur", "douceur",
+    "chercheur", "serveur",
+])
+
+R_CLUSTERS = dedupe([
+    "trois", "gris", "prendre", "français", "libre", "entre", "autre",
+    "quatre", "montre", "ministre", "propre", "chambre", "membre",
+    "nombre", "ordre", "sucre", "titre", "votre", "notre", "arbre",
+    "triste", "trouver", "travailler", "train", "trop", "très", "trait",
+    "tranquille", "transport", "traduire", "tracer", "trancher",
+    "trembler", "tresse", "trier", "triompher", "tromper", "trône",
+    "tronc", "truite", "truc", "prix", "présent", "printemps", "prince",
+    "prison", "problème", "produit", "programme", "projet", "promesse",
+    "prononcer", "province", "prudent", "brun", "bras", "brave", "bref",
+    "brique", "brosse", "brouillard", "bruit", "brûler", "brume",
+    "cravate", "crayon", "crème", "crevette", "cri", "crime", "croire",
+    "croix", "croquer", "cru", "cuivre", "gramme", "grand", "grange",
+    "gras", "gratter", "grave", "grec", "grenier", "grenouille", "griffe",
+    "gronder", "gros", "groupe", "fraise", "franc", "frapper", "frère",
+    "frire", "frite", "froid", "fromage", "front", "frontière", "fruit",
+    "drap", "drame", "drapeau", "droit", "dragon",
+])
+
+I_WORDS = dedupe([
+    "si", "il", "lit", "ami", "ici", "vie", "rire", "midi", "tapis",
+    "souris", "fourmi", "riz", "prix", "mari", "nid", "ski", "pyjama",
+    "style", "île", "cri", "ni", "qui", "dix", "six", "fils", "habit",
+    "appétit", "esprit", "profit", "circuit", "biscuit", "minuit",
+    "produit", "conduit", "ravi", "joli", "poli", "uni", "fini", "petit",
+    "sortie", "partie", "envie", "dormir", "sourire", "plaisir", "désir",
+    "avenir", "souvenir", "tenir", "venir", "ainsi",
+])
+
+Y_WORDS = dedupe([
+    "tu", "rue", "sur", "lune", "musique", "mur", "pur", "jus", "vue",
+    "statue", "minute", "voiture", "nature", "culture", "aventure", "du",
+    "su", "vu", "nu", "cru", "bu", "lu", "plus", "dur", "mûr", "sûr",
+    "futur", "musée", "humain", "humeur", "humide", "une", "usine",
+    "usage", "utile", "unique", "univers", "urgent", "usure", "tulipe",
+    "bulle", "cube", "tube", "lutte", "habitude", "altitude", "attitude",
+    "gratitude", "solitude", "longitude",
+])
+
+U_WORDS = dedupe([
+    "vous", "tout", "nous", "rouge", "amour", "jour", "cou", "bijou",
+    "genou", "poule", "roule", "boule", "foule", "coude", "moule",
+    "ouvert", "outil", "source", "course", "couvert", "couleur", "coupe",
+    "couple", "courage", "courrier", "cousin", "coussin", "doux",
+    "tousser", "trouver", "toucher", "toujours", "tourner", "tour",
+    "boucher", "bouche", "bouger", "bougie", "boulanger", "bouquet",
+    "bourse", "boussole", "bout", "bouteille", "doute", "écoute",
+    "goutte", "joue", "loue", "moulin", "mousse", "moustache", "nouveau",
+    "pousser", "rousse", "souple", "soupe", "sourd",
+])
+
+E_WORDS = dedupe([
+    "été", "étoile", "éléphant", "énergie", "écouter", "écrire", "élève",
+    "échelle", "économie", "égal", "église", "employer", "enfermer",
+    "épaule", "épice", "épingle", "éponge", "équipe", "escalier",
+    "espace", "étage", "étang", "étoffe", "étroit", "événement", "évier",
+    "être", "tête", "fête", "bête", "forêt", "arrêt", "intérêt",
+    "honnête", "conquête", "enquête", "mère", "père", "frère", "sœur",
+    "lumière", "première", "dernière", "entière", "matière", "rivière",
+    "carrière", "manière", "cimetière", "mystère", "système", "problème",
+    "poème", "chèque", "crème", "modèle", "siècle", "ficelle", "fidèle",
+    "grêle", "zèle", "pièce", "chèvre", "lièvre",
+])
+
+EU_WORDS = dedupe([
+    "peu", "jeu", "deux", "feu", "lieu", "milieu", "adieu", "bleu",
+    "cheveux", "yeux", "vieux", "joyeux", "heureux", "nombreux",
+    "dangereux", "sérieux", "curieux", "ennuyeux", "généreux",
+    "silencieux", "précieux", "courageux", "merveilleux", "chanceux",
+    "peureux", "cœur", "sœur", "heure", "beurre", "fleur", "professeur",
+    "docteur", "acteur", "chaleur", "couleur", "largeur", "longueur",
+    "peur", "leur", "meilleur", "majeur", "jeune", "jeudi", "neuf",
+    "œuf", "bœuf", "nœud", "veut", "peut", "peuvent",
+])
+
+AN_WORDS = dedupe([
+    "dans", "temps", "enfant", "chambre", "blanc", "grand", "maman",
+    "dimanche", "décembre", "novembre", "ensemble", "entendre", "penser",
+    "chanter", "danser", "commencer", "quarante", "cinquante", "vacances",
+    "banc", "camp", "champ", "chance", "danger", "dent", "gant", "lampe",
+    "ange", "orange", "plante", "rampe", "tante", "vent", "ventre",
+    "vendre", "entrer", "enfance", "enseigne", "enterrer", "entier",
+    "grande", "branche", "tranche", "avalanche", "blanche", "manche",
+    "marchand", "méchant", "gendarme", "pendant", "cependant",
+    "maintenant", "important", "suivant", "avant", "devant", "autant",
+    "tant", "cent", "sans", "dedans",
+])
+
+IN_WORDS = dedupe([
+    "vin", "pain", "main", "plein", "matin", "jardin", "cousin", "voisin",
+    "magasin", "chemin", "dessin", "lapin", "moulin", "requin", "train",
+    "bain", "faim", "demain", "américain", "africain", "mexicain",
+    "ancien", "bien", "rien", "tien", "sien", "chien", "combien",
+    "moyen", "citoyen", "examen", "européen", "lycéen", "quinze", "cinq",
+    "imperméable", "impossible", "incroyable", "indien", "individu",
+    "information", "ingénieur", "instant", "instrument", "intéressant",
+    "intelligent", "intérieur", "invité", "timbre", "simple", "symbole",
+    "syndicat", "synthèse", "thym",
+])
+
+ON_WORDS = dedupe([
+    "bon", "maison", "nom", "avion", "garçon", "poisson", "saison",
+    "oncle", "ombre", "nombre", "réponse", "concombre", "ongle",
+    "plafond", "salon", "ballon", "citron", "savon", "bonbon", "bonjour",
+    "combien", "fonction", "fontaine", "front", "horizon", "long",
+    "monde", "monsieur", "montre", "oignon", "opinion", "pardon",
+    "poumon", "pont", "prison", "profond", "raison", "ronde", "rond",
+    "son", "ton", "bouton", "carton", "coton", "mouton", "béton",
+])
+
+UN_WORDS = dedupe([
+    "un", "brun", "lundi", "parfum", "humble", "chacun", "aucun",
+    "commun", "défunt", "emprunt", "opportun", "importun", "à jeun",
+])
+
+FINAL_SILENT_CONSONANT = dedupe([
+    "petit", "trop", "beaucoup", "nid", "chat", "gris", "nez", "pied",
+    "corps", "tabac", "estomac", "respect", "aspect", "exact", "gros",
+    "dos", "repos", "propos", "discours", "velours", "bijoux", "doigt",
+    "sang", "rang", "banc", "blanc", "franc", "camp", "champ", "temps",
+    "poids", "plomb", "croc", "matelas", "verglas", "bras", "embarras",
+    "repas", "compas", "radis", "colis", "avis", "permis", "paradis",
+    "souris", "dessous", "dessus", "tapis", "puits", "circuit",
+    "biscuit", "minuit", "produit", "conduit", "fruit", "lit", "nuit",
+    "cuit", "habit", "appétit", "esprit", "profit",
+])
+
+ENT_VERBS = dedupe([
+    "parlent", "mangent", "jouent", "habitent", "regardent", "écoutent",
+    "chantent", "dansent", "cherchent", "trouvent", "donnent", "montrent",
+    "ferment", "dessinent", "lavent", "préparent", "invitent", "visitent",
+    "continuent", "tournent", "aident", "apportent", "désirent",
+    "gagnent", "gardent", "goûtent", "oublient", "plantent", "portent",
+    "posent", "poussent", "présentent", "prêtent", "quittent",
+    "racontent", "refusent", "rencontrent", "signent", "souhaitent",
+    "terminent", "tirent", "touchent", "utilisent", "arrivent", "entrent",
+    "restent", "tombent", "passent", "montent", "sortent", "partent",
+    "dorment", "sentent", "viennent", "tiennent", "prennent", "mettent",
+    "lisent", "écrivent", "connaissent", "comprennent", "boivent",
+    "voient", "disent", "veulent", "peuvent", "doivent", "savent",
+])
+
+S_PLURAL_WORDS = dedupe([
+    "chats", "tables", "roses", "livres", "chiens", "maisons", "voitures",
+    "enfants", "amis", "portes", "fenêtres", "jardins", "arbres",
+    "fleurs", "oiseaux", "animaux", "chevaux", "chapeaux", "gâteaux",
+    "cadeaux", "bureaux", "tableaux", "morceaux", "journaux", "hôpitaux",
+    "châteaux", "rideaux", "plateaux",
+])
+
+H_MUET_PHRASES = dedupe([
+    "l'hôtel", "l'homme", "l'heure", "l'hiver", "l'histoire",
+    "l'habitude", "l'horloge", "l'hôpital", "l'horizon", "l'humeur",
+])
+
+H_ASPIRE_PHRASES = dedupe([
+    "le héros", "le haricot", "le hasard", "la honte", "le hibou",
+    "la hauteur", "le hockey", "le hall", "le hamac", "le homard",
+])
+
+LIAISON_POSITIVE = dedupe([
+    "les amis", "les enfants", "un ami", "un homme", "vous êtes",
+    "ils ont", "nous avons", "deux heures", "trois ans", "petit ami",
+    "grand homme", "mon ami", "ton ami", "son ami", "très intéressant",
+    "plus important", "quand il pleut", "comment allez-vous", "chez elle",
+    "dans un jardin", "sous un arbre", "chez eux", "en avion", "en hiver",
+    "aux amis", "des amis", "ces amis", "ses amis", "nos amis",
+    "vos amis", "leurs amis", "premier amour", "dernier arrivé",
+    "grand arbre", "petit enfant", "bon appétit", "tout à fait",
+    "c'est un ami", "il est arrivé", "elle est allée", "nous sommes ici",
+    "vous avez appris", "ils vont arriver", "elles ont oublié",
+])
+
+LIAISON_NO_LIAISON_CONTRAST = dedupe([
+    "les chats", "un chien", "deux femmes", "trois garçons", "les tables",
+])
+
+MINIMAL_PAIRS = [
+    ("tu", "tout"), ("su", "sous"), ("pu", "pou"), ("vu", "vous"),
+    ("dessus", "dessous"), ("pur", "pour"),
+    ("été", "être"), ("thé", "tête"), ("les", "lait"), ("chez", "chaise"),
+    ("ses", "sept"), ("mes", "mais"),
+    ("peu", "peur"), ("jeu", "jeune"),
+    ("bon", "bonne"), ("fin", "fine"), ("plein", "pleine"),
+    ("brun", "brune"), ("certain", "certaine"), ("moyen", "moyenne"),
+    ("ancien", "ancienne"),
+    ("pain", "bain"), ("vin", "vain"), ("son", "sont"),
+    ("dans", "don"), ("banc", "bon"), ("vent", "vont"),
 ]
 
-# (masc, fem, masc_pl, fem_pl, position, special_before_vowel_m) —
-# position is "before" or "after"; special_before_vowel_m is the
-# liaison form (bel/vieil/nouvel) used only for masc. singular
-# "before" adjectives immediately in front of a vowel-initial noun —
-# None for every adjective that doesn't have one.
-ADJECTIVES = [
-    ("petit", "petite", "petits", "petites", "before", None),
-    ("grand", "grande", "grands", "grandes", "before", None),
-    ("beau", "belle", "beaux", "belles", "before", "bel"),
-    ("joli", "jolie", "jolis", "jolies", "before", None),
-    ("jeune", "jeune", "jeunes", "jeunes", "before", None),
-    ("vieux", "vieille", "vieux", "vieilles", "before", "vieil"),
-    ("nouveau", "nouvelle", "nouveaux", "nouvelles", "before", "nouvel"),
-    ("bon", "bonne", "bons", "bonnes", "before", None),
-    ("mauvais", "mauvaise", "mauvais", "mauvaises", "before", None),
-    ("gros", "grosse", "gros", "grosses", "before", None),
-    ("long", "longue", "longs", "longues", "before", None),
-    ("court", "courte", "courts", "courtes", "after", None),
-    ("rouge", "rouge", "rouges", "rouges", "after", None),
-    ("bleu", "bleue", "bleus", "bleues", "after", None),
-    ("vert", "verte", "verts", "vertes", "after", None),
-    ("noir", "noire", "noirs", "noires", "after", None),
-    ("blanc", "blanche", "blancs", "blanches", "after", None),
-    ("chaud", "chaude", "chauds", "chaudes", "after", None),
-    ("froid", "froide", "froids", "froides", "after", None),
-    ("propre", "propre", "propres", "propres", "after", None),
-    ("sale", "sale", "sales", "sales", "after", None),
-    ("cher", "chère", "chers", "chères", "after", None),
-    ("calme", "calme", "calmes", "calmes", "after", None),
-    ("rapide", "rapide", "rapides", "rapides", "after", None),
-    ("lent", "lente", "lents", "lentes", "after", None),
-    ("facile", "facile", "faciles", "faciles", "after", None),
-    ("difficile", "difficile", "difficiles", "difficiles", "after", None),
-    ("intelligent", "intelligente", "intelligents", "intelligentes", "after", None),
-    ("heureux", "heureuse", "heureux", "heureuses", "after", None),
-    ("fort", "forte", "forts", "fortes", "after", None),
+NASAL_QUADRUPLET_SENTENCES = [
+    "Un bon vin blanc.", "Un bon pain blanc.", "Cinq cents ans.",
+    "Un grand vin blanc et un bon pain.", "Vingt-cinq ans.",
 ]
 
-
-def build_noun_phrase(noun, adjective, plural):
-    sing, pl, gender = noun
-    m, f, mpl, fpl, position, special_m = adjective
-
-    if plural:
-        noun_word = pl
-        adj_word = mpl if gender == "m" else fpl
-        words = [adj_word, noun_word] if position == "before" else [noun_word, adj_word]
-        phrase = "les " + " ".join(words)
-
-    else:
-        noun_word = sing
-        adj_word = m if gender == "m" else f
-
-        if position == "before":
-            starts_vowel = noun_word[0].lower() in "aeiouhéèêàâîïôûù"
-            if gender == "m" and starts_vowel and special_m:
-                adj_word = special_m
-            first, second = adj_word, noun_word
-        else:
-            first, second = noun_word, adj_word
-
-        starts_vowel_at_article = first[0].lower() in "aeiouhéèêàâîïôûù"
-
-        if starts_vowel_at_article:
-            phrase = "l'" + first + " " + second
-        else:
-            article = "le" if gender == "m" else "la"
-            phrase = article + " " + first + " " + second
-
-    return phrase[0].upper() + phrase[1:] + "."
-
-
-noun_phrase_combos = [(n, a, p) for n in NOUNS for a in ADJECTIVES for p in (False, True)]
-random.shuffle(noun_phrase_combos)
-
-
-# ===========================
-# 3. DECLARATIVE SENTENCES (full conjugation engine)
-# ===========================
-
-PRONOUNS = ["je", "tu", "il", "elle", "nous", "vous", "ils", "elles"]
-
-REGULAR_ER_VERBS = [
-    "aimer", "regarder", "écouter", "chercher", "trouver", "donner",
-    "montrer", "fermer", "dessiner", "chanter", "laver", "préparer",
-    "inviter", "visiter", "continuer", "tourner", "aider", "apporter",
-    "désirer", "gagner", "garder", "goûter", "oublier", "planter",
-    "porter", "poser", "pousser", "présenter", "prêter", "quitter",
-    "raconter", "refuser", "rencontrer", "signer", "souhaiter",
-    "terminer", "tirer", "toucher", "utiliser",
+STATEMENT_QUESTION_PAIRS = [
+    ("Tu viens.", "Tu viens ?"), ("Il est là.", "Il est là ?"),
+    ("Elle a fini.", "Elle a fini ?"), ("Vous partez.", "Vous partez ?"),
+    ("C'est vrai.", "C'est vrai ?"), ("Il pleut.", "Il pleut ?"),
+    ("Tu as faim.", "Tu as faim ?"), ("Ça va.", "Ça va ?"),
+    ("Il fait beau.", "Il fait beau ?"), ("Tu es prêt.", "Tu es prêt ?"),
 ]
 
-ER_ENDINGS = ["e", "es", "e", "e", "ons", "ez", "ent", "ent"]
-
-IRREGULAR_VERBS = {
-    # infinitive: (je, tu, il, elle, nous, vous, ils, elles, participle)
-    "avoir": ("ai", "as", "a", "a", "avons", "avez", "ont", "ont", "eu"),
-    "faire": ("fais", "fais", "fait", "fait", "faisons", "faites", "font", "font", "fait"),
-    "vouloir": ("veux", "veux", "veut", "veut", "voulons", "voulez", "veulent", "veulent", "voulu"),
-    "prendre": ("prends", "prends", "prend", "prend", "prenons", "prenez", "prennent", "prennent", "pris"),
-    "voir": ("vois", "vois", "voit", "voit", "voyons", "voyez", "voient", "voient", "vu"),
-    "dire": ("dis", "dis", "dit", "dit", "disons", "dites", "disent", "disent", "dit"),
-    "mettre": ("mets", "mets", "met", "met", "mettons", "mettez", "mettent", "mettent", "mis"),
-    "lire": ("lis", "lis", "lit", "lit", "lisons", "lisez", "lisent", "lisent", "lu"),
-    "écrire": ("écris", "écris", "écrit", "écrit", "écrivons", "écrivez", "écrivent", "écrivent", "écrit"),
-    "connaître": ("connais", "connais", "connaît", "connaît", "connaissons", "connaissez", "connaissent", "connaissent", "connu"),
-    "comprendre": ("comprends", "comprends", "comprend", "comprend", "comprenons", "comprenez", "comprennent", "comprennent", "compris"),
-    "boire": ("bois", "bois", "boit", "boit", "buvons", "buvez", "boivent", "boivent", "bu"),
-}
-
-ALLER_PRESENT = ["vais", "vas", "va", "va", "allons", "allez", "vont", "vont"]
-
-OBJECTS = [
-    "le café", "la musique", "un livre", "une pomme", "le film",
-    "la lettre", "un gâteau", "la porte", "la fenêtre", "le jardin",
-    "la maison", "le vélo", "une chanson", "la guitare", "le piano",
-    "la voiture", "une valise", "le sac", "la table", "la chaise",
-    "la ville", "la montagne", "la plage", "le chemin", "une carte",
-    "la lampe", "la lumière", "un dessin", "la question", "la réponse",
-    "un ami", "une histoire", "le journal", "un cadeau", "la vérité",
-    "un chapeau", "un chat", "un problème", "le prix", "la salade",
+INVERSION_QUESTIONS = [
+    "Viens-tu ?", "Est-il là ?", "Avez-vous fini ?",
+    "Parlez-vous français ?", "Peux-tu m'aider ?", "Veux-tu manger ?",
+    "Sais-tu nager ?", "Voulez-vous danser ?", "Aimez-vous voyager ?",
+    "Es-tu prêt ?", "Sommes-nous en retard ?", "Vont-ils venir ?",
+    "A-t-elle compris ?", "Ont-ils mangé ?", "Pouvez-vous répéter ?",
 ]
 
-VOWEL_START = "aeiouhéèêàâîïôûù"
-
-
-def subject_and_verb(pronoun, verb_form, capitalize=True):
-    if pronoun == "je" and verb_form[0].lower() in VOWEL_START:
-        text = "j'" + verb_form
-    else:
-        text = pronoun + " " + verb_form
-    return text[0].upper() + text[1:] if capitalize else text
-
-
-def er_present_form(verb, idx):
-    stem = verb[:-2]
-    return stem + ER_ENDINGS[idx]
-
-
-def conjugate_present(verb, idx):
-    if verb in IRREGULAR_VERBS:
-        return IRREGULAR_VERBS[verb][idx]
-    return er_present_form(verb, idx)
-
-
-def participle(verb):
-    if verb in IRREGULAR_VERBS:
-        return IRREGULAR_VERBS[verb][8]
-    return verb[:-2] + "é"
-
-
-def declarative_sentence(pronoun, verb, tense, obj):
-    idx = PRONOUNS.index(pronoun)
-
-    if tense == "present":
-        form = conjugate_present(verb, idx)
-        return subject_and_verb(pronoun, form) + " " + obj + "."
-
-    if tense == "passe_compose":
-        aux = IRREGULAR_VERBS["avoir"][idx]
-        lead = subject_and_verb(pronoun, aux)
-        return lead + " " + participle(verb) + " " + obj + "."
-
-    if tense == "futur_proche":
-        aux = ALLER_PRESENT[idx]
-        lead = subject_and_verb(pronoun, aux)
-        return lead + " " + verb + " " + obj + "."
-
-    raise ValueError(tense)
-
-
-ALL_VERBS = REGULAR_ER_VERBS + list(IRREGULAR_VERBS.keys())
-TENSES = ["present", "passe_compose", "futur_proche"]
-
-decl_combos = [(p, v, t, o) for p in PRONOUNS for v in ALL_VERBS for t in TENSES for o in OBJECTS]
-random.shuffle(decl_combos)
-
-
-# ===========================
-# 4. QUESTIONS
-# ===========================
-
-QUE_VOWEL_PRONOUNS = {"il", "elle", "ils", "elles", "on"}
-
-
-def est_ce_que_question(pronoun, verb, obj):
-    idx = PRONOUNS.index(pronoun)
-    form = conjugate_present(verb, idx)
-
-    if pronoun in QUE_VOWEL_PRONOUNS:
-        lead = "Est-ce qu'" + pronoun
-    else:
-        lead = "Est-ce que " + pronoun
-
-    subj_verb = subject_and_verb(pronoun, form, capitalize=False)
-    # subj_verb already handles je -> j' elision; strip the leading
-    # pronoun word since "lead" already supplies it.
-    verb_only = subj_verb.split(" ", 1)[1] if " " in subj_verb else subj_verb[len(pronoun):]
-
-    return lead + " " + verb_only + " " + obj + " ?"
-
-
-question_combos = [(p, v, o) for p in PRONOUNS for v in ALL_VERBS for o in OBJECTS]
-random.shuffle(question_combos)
-
-CURATED_QUESTIONS = [
-    "Comment tu t'appelles ?", "Quel âge as-tu ?", "Où habites-tu ?",
-    "D'où viens-tu ?", "Quelle heure est-il ?", "Quel temps fait-il ?",
-    "Qu'est-ce que tu fais ?", "Qu'est-ce que c'est ?",
-    "Pourquoi est-ce que tu ris ?", "Comment ça va ?",
-    "Où est la gare ?", "Où sont les toilettes ?",
-    "Combien ça coûte ?", "Quel jour sommes-nous ?",
-    "Quelle est la date aujourd'hui ?", "Est-ce que tu parles anglais ?",
-    "Est-ce que tu as faim ?", "Est-ce que tu as soif ?",
-    "Qui est-ce ?", "Qui a fait ça ?", "Que veux-tu manger ?",
-    "Que préfères-tu ?", "Comment s'appelle ton frère ?",
-    "Depuis quand habites-tu ici ?", "Depuis combien de temps étudies-tu le français ?",
-    "À quelle heure commence le film ?", "À quelle heure finit le cours ?",
-    "Quel est ton plat préféré ?", "Quelle est ta couleur préférée ?",
-    "Quel est ton sport préféré ?", "As-tu des frères et sœurs ?",
-    "As-tu un animal de compagnie ?", "Aimes-tu voyager ?",
-    "Peux-tu m'aider, s'il te plaît ?", "Pouvez-vous répéter, s'il vous plaît ?",
-    "Parlez-vous plus lentement, s'il vous plaît ?", "Où puis-je acheter des billets ?",
-    "Comment on dit ça en français ?", "Que signifie ce mot ?",
-    "Es-tu prêt ?", "Êtes-vous prêts ?", "Avez-vous une réservation ?",
-    "Y a-t-il un restaurant près d'ici ?", "Y a-t-il une pharmacie ouverte ?",
-    "Comment allez-vous aujourd'hui ?", "Où allez-vous en vacances ?",
-    "Quand pars-tu en voyage ?", "Quand rentres-tu à la maison ?",
-    "Comment était le film ?", "Comment s'est passée ta journée ?",
-    "Pourquoi es-tu en retard ?", "Pourquoi as-tu peur ?",
-    "Que fais-tu ce week-end ?", "Que fait-il dans la vie ?",
-    "Où travailles-tu ?", "Où étudies-tu ?",
-    "Combien de langues parles-tu ?", "Combien d'enfants avez-vous ?",
-    "Qu'est-ce que tu penses de ce livre ?", "Qu'est-ce que tu penses de cette idée ?",
-    "Veux-tu venir avec nous ?", "Voulez-vous un café ?",
-    "Pouvez-vous m'indiquer le chemin ?", "Puis-je vous poser une question ?",
-    "Est-ce que je peux vous aider ?", "Est-ce que c'est loin d'ici ?",
-    "Est-ce que le train est à l'heure ?", "Est-ce que tu es libre ce soir ?",
-    "Quel âge a ton frère ?", "Quelle taille fais-tu ?",
-    "Où as-tu appris le français ?", "Comment as-tu trouvé ce restaurant ?",
-    "Quand est-ce que tu es arrivé ?", "Pourquoi est-ce qu'elle pleure ?",
-    "Que voulez-vous faire ce soir ?", "Où sont mes clés ?",
-    "Où est mon téléphone ?", "Est-ce que tu as vu mon sac ?",
-    "As-tu bien dormi ?", "As-tu bien mangé ?",
-    "Est-ce que tout va bien ?", "Est-ce que ça te plaît ?",
-    "Quel est le problème ?", "Qu'est-ce qui s'est passé ?",
-    "Qui vient avec nous ?", "Qui a gagné le match ?",
-    "Comment fonctionne cet appareil ?", "Comment s'écrit ton nom ?",
-    "Où avez-vous grandi ?", "Quel métier fais-tu ?",
-    "Quelle est ton adresse ?", "Quel est ton numéro de téléphone ?",
-    "Est-ce que vous acceptez les cartes de crédit ?",
-    "Est-ce qu'il y a du wifi ici ?", "Où puis-je garer ma voiture ?",
-    "Quand ouvre le magasin ?", "Quand ferme la banque ?",
-    "Pourquoi as-tu choisi cette université ?", "Comment se passe ton nouveau travail ?",
+EXCLAMATIONS = [
+    "Quelle belle journée !", "Comme c'est beau !", "Quel dommage !",
+    "Quelle bonne idée !", "Comme tu as grandi !", "Quelle surprise !",
+    "Bravo, c'est magnifique !", "Quel beau temps !",
+    "Comme c'est gentil !", "Quelle horreur !",
 ]
 
-question_pool = [
-    est_ce_que_question(p, v, o) for (p, v, o) in question_combos
+BREATH_GROUP_SENTENCES = [
+    "Je voudrais, s'il vous plaît, une baguette.",
+    "Alors, qu'est-ce qu'on fait ce soir ?",
+    "Écoute, je pense que c'est une bonne idée.",
+    "En fait, je ne suis pas sûr.", "Bon, on y va ?",
+    "Franchement, je ne sais pas.", "D'accord, on se voit demain.",
+    "Bien sûr, je peux t'aider.", "Enfin, nous sommes arrivés.",
+    "Donc, tu es d'accord ?",
+]
+
+TONGUE_TWISTERS = [
+    "Un chasseur sachant chasser sait chasser sans son chien.",
+    "Les chaussettes de l'archiduchesse sont-elles sèches, archi-sèches ?",
+    "Si six scies scient six cyprès, six cent six scies scient six cent six cyprès.",
+    "Ces cerises sont si sûres qu'on ne sait pas si c'en sont.",
+    "Le ver vert va vers le verre vert.",
+    "Cinq chiens chassent six chats.",
+    "Trois tortues trottaient sur trois toits très étroits.",
+    "Didon dîna, dit-on, du dos d'un dodu dindon.",
+    "Rat vit riz, rat mit patte à ras, riz cuit patte à rat.",
+    "Je veux et j'exige d'exquises excuses.",
+    "Un dragon gradé dégrada un gradé dragon.",
+    "Douze douches douces.",
+    "La roue tourne, tourne, tourne autour de la route.",
+    "Combien de sous sont ces six saucissons-ci ? Six sous, ces six saucissons-ci.",
+    "Fruits frais, fruits frits, fruits cuits, fruits crus.",
+    "Natacha n'attacha pas son chat Pacha qui s'échappa.",
+    "Poisson sans boisson est poison.",
+    "Ton thé t'a-t-il ôté ta toux ?",
+    "Seize chaises sèchent ici, seize chaises sèchent là.",
+    "Le chasseur, sachant chasser, doit savoir chasser sans son chien.",
+    "Suis-je bien chez ce cher Serge ?",
+    "Un chien qui chante fait fuir les chats qui chassent.",
+    "Trois gros rats gris rongent trois gros rats gris.",
+    "Que lit Lili sous ces lilas-là ? Lili lit l'Iliade.",
+    "Zazie causait avec sa cousine en cousant.",
+    "Pauvre petit pêcheur, prends patience pour pouvoir prendre plusieurs poissons.",
+    "Il était une fois, dans la ville de Foix, une marchande de foie.",
+    "Buvez peu et bien, mangez peu et bien.",
+    "Ciel, si ceci se sait, ces soins sont sans succès.",
+    "Où niche la pie ? La pie niche haut.",
+    "Bonjour madame la saucissonnière, combien vendez-vous ces six saucissons-là ?",
+    "Chasseur, sachez chasser sans chien.",
+    "Trois petites truites cuites, trois petites truites crues.",
+    "Un ver de terre vert qui va vers un verre vert.",
+    "Six saucisses sèches suffisent.",
+    "Je suis ce que je suis, et si je suis ce que je suis, qu'est-ce que je suis ?",
+    "Le fisc fixe exprès chaque taxe fixe excessive exclusivement au luxe et à l'exquis.",
+    "Pie niche haut, oie niche bas, mais où niche l'hibou ?",
 ]
 
 
 # ===========================
-# 5. CURATED EVERYDAY PHRASES
+# CARRIER PHRASES (word-level -> phrase-level, meaning stays neutral)
 # ===========================
 
-CURATED_PHRASES = [
-    "Bonjour, comment allez-vous ?", "Bonsoir tout le monde.",
-    "Salut, ça va ?", "Au revoir, à bientôt !", "À demain !",
-    "À plus tard.", "Bonne nuit, dors bien.", "Merci beaucoup.",
-    "Merci pour votre aide.", "De rien.", "Je vous en prie.",
-    "S'il vous plaît.", "S'il te plaît.", "Excusez-moi.",
-    "Je suis désolé.", "Je suis désolée.", "Pardon, je ne comprends pas.",
-    "Enchanté de vous rencontrer.", "Ravi de faire votre connaissance.",
-    "Comment vous appelez-vous ?", "Je m'appelle Camille.",
-    "J'habite à Paris.", "Je viens de Lyon.", "J'ai vingt ans.",
-    "Je suis étudiant.", "Je suis étudiante.", "Je parle un peu français.",
-    "Je ne parle pas très bien français.", "Pouvez-vous parler plus lentement ?",
-    "Je ne comprends pas.", "Pouvez-vous répéter, s'il vous plaît ?",
-    "Comment dit-on cela en français ?", "Bonne chance !",
-    "Bon appétit !", "Bon voyage !", "Bon week-end !",
-    "Joyeux anniversaire !", "Joyeuses fêtes !", "Félicitations !",
-    "Bienvenue chez nous.", "Faites comme chez vous.",
-    "Il fait beau aujourd'hui.", "Il fait très chaud cet été.",
-    "Il fait froid en hiver.", "Il pleut depuis ce matin.",
-    "Il neige beaucoup cette semaine.", "Le ciel est bleu et dégagé.",
-    "Le vent souffle fort aujourd'hui.", "Quelle belle journée !",
-    "Il est huit heures du matin.", "Il est midi.",
-    "Il est minuit passé.", "Il est trois heures et demie.",
-    "Il est presque cinq heures.", "Nous sommes lundi.",
-    "Nous sommes le premier janvier.", "C'est aujourd'hui mon anniversaire.",
-    "La réunion commence à neuf heures.", "Le magasin ferme à dix-huit heures.",
-    "J'ai rendez-vous chez le médecin.", "J'ai besoin d'aller à la pharmacie.",
-    "Je voudrais réserver une table pour deux.", "L'addition, s'il vous plaît.",
-    "C'est délicieux, merci.", "Je prendrai la même chose.",
-    "Je suis allergique aux arachides.", "Je suis végétarien.",
-    "Je suis végétarienne.", "Où se trouve la station de métro ?",
-    "Le train part dans dix minutes.", "L'avion a du retard.",
-    "Prenez la première rue à gauche.", "Continuez tout droit.",
-    "Tournez à droite au feu rouge.", "C'est à côté de la banque.",
-    "C'est en face de l'église.", "C'est tout près d'ici.",
-    "C'est assez loin d'ici.", "Combien de temps ça prend ?",
-    "J'ai perdu mon passeport.", "Pouvez-vous m'aider, s'il vous plaît ?",
-    "Où est l'hôpital le plus proche ?", "Appelez une ambulance, s'il vous plaît.",
-    "J'ai besoin d'un médecin.", "Ce n'est pas grave.",
-    "Ne vous inquiétez pas.", "Tout va bien se passer.",
-    "Prenez soin de vous.", "Faites attention, s'il vous plaît.",
-    "C'est une bonne idée.", "Je suis tout à fait d'accord.",
-    "Je ne suis pas d'accord.", "Tu as raison.",
-    "Tu as tort.", "Ça n'a pas d'importance.",
-    "Ça m'est égal.", "Peu importe.",
-    "Je suis très content aujourd'hui.", "Je suis un peu fatigué.",
-    "Je suis vraiment désolé du retard.", "Nous sommes ravis de vous accueillir.",
-    "Elle est très gentille avec tout le monde.", "Il est toujours de bonne humeur.",
-    "Ils habitent juste à côté de chez nous.", "Nous allons au cinéma ce soir.",
-    "Vous parlez très bien français.", "Tu apprends vite.",
-    "C'est un plaisir de travailler avec vous.", "Nous avons beaucoup appris aujourd'hui.",
-    "Le cours commence dans cinq minutes.", "N'oubliez pas vos devoirs.",
-    "Ouvrez votre livre à la page dix.", "Répétez après moi, s'il vous plaît.",
-    "Levez la main si vous avez une question.", "Travaillez en groupe de deux.",
-    "Le temps est presque écoulé.", "C'est la fin du cours.",
+WORD_CARRIERS = [
+    lambda w: w,
+    lambda w: "Dites « " + w + " ».",
+    lambda w: "Répétez « " + w + " ».",
+    lambda w: "Écoutez et répétez : " + w + ".",
+    lambda w: "Peux-tu dire « " + w + " » ?",
+    lambda w: "Prononcez lentement : " + w + ".",
 ]
 
 
+def capitalize_sentence(s):
+    return s[0].upper() + s[1:]
+
+
+def word_items(word_list, category, target, n_bare, n_carrier, n_pairs, n_triples):
+    items = []
+    words = word_list[:]
+    random.shuffle(words)
+
+    for w in words[:n_bare]:
+        items.append({"text": w, "category": category, "target": target, "type": "word"})
+
+    carrier_combos = list(itertools.product(words, WORD_CARRIERS[1:]))
+    random.shuffle(carrier_combos)
+    for w, carrier in carrier_combos[:n_carrier]:
+        items.append({"text": carrier(w), "category": category, "target": target, "type": "carrier_phrase"})
+
+    if len(words) >= 2:
+        pair_combos = list(itertools.combinations(words, 2))
+        random.shuffle(pair_combos)
+        for a, b in pair_combos[:n_pairs]:
+            text = capitalize_sentence(a + ", " + b + ".")
+            items.append({"text": text, "category": category, "target": target, "type": "pair_drill"})
+
+    if len(words) >= 3:
+        triple_combos = list(itertools.combinations(words, 3))
+        random.shuffle(triple_combos)
+        for a, b, c in triple_combos[:n_triples]:
+            text = capitalize_sentence(a + ", " + b + ", " + c + ".")
+            items.append({"text": text, "category": category, "target": target, "type": "triple_drill"})
+
+    return items
+
+
 # ===========================
-# ASSEMBLE, DE-DUPLICATE, SAMPLE TO TARGET COUNTS
+# ASSEMBLE
 # ===========================
 
-TARGETS = {
-    "vocab_word": 800,
-    "noun_phrase": 2200,
-    "declarative_sentence": 5000,
-    "question": 1500,
-    "curated_phrase": 500,
-}
+all_items = []
 
-items = []
-seen_text = set()
+WORD_SUBCATEGORIES = [
+    (R_INITIAL, "r_sound", "r_initial"),
+    (R_MEDIAL, "r_sound", "r_medial"),
+    (R_FINAL, "r_sound", "r_final"),
+    (R_CLUSTERS, "r_sound", "r_cluster"),
+    (I_WORDS, "vowel", "i"),
+    (Y_WORDS, "vowel", "y_u_sound"),
+    (U_WORDS, "vowel", "ou_sound"),
+    (E_WORDS, "vowel", "e_open_closed"),
+    (EU_WORDS, "vowel", "eu_sound"),
+    (AN_WORDS, "nasal_vowel", "an_en"),
+    (IN_WORDS, "nasal_vowel", "in_ain"),
+    (ON_WORDS, "nasal_vowel", "on"),
+    (UN_WORDS, "nasal_vowel", "un"),
+    (FINAL_SILENT_CONSONANT, "silent_letter", "final_consonant"),
+    (ENT_VERBS, "silent_letter", "verb_ent_ending"),
+    (S_PLURAL_WORDS, "silent_letter", "plural_marker"),
+]
+
+for word_list, category, target in WORD_SUBCATEGORIES:
+    all_items.extend(word_items(
+        word_list, category, target,
+        n_bare=len(word_list),
+        n_carrier=220,
+        n_pairs=260,
+        n_triples=220,
+    ))
+
+# h muet / h aspiré, as short phrases (lighter carrier set)
+for phrase in H_MUET_PHRASES:
+    all_items.append({"text": capitalize_sentence(phrase) + ".", "category": "silent_letter", "target": "h_muet", "type": "phrase"})
+    all_items.append({"text": "Dites « " + phrase + " ».", "category": "silent_letter", "target": "h_muet", "type": "carrier_phrase"})
+    all_items.append({"text": "Répétez « " + phrase + " ».", "category": "silent_letter", "target": "h_muet", "type": "carrier_phrase"})
+
+for phrase in H_ASPIRE_PHRASES:
+    all_items.append({"text": capitalize_sentence(phrase) + ".", "category": "silent_letter", "target": "h_aspire", "type": "phrase"})
+    all_items.append({"text": "Dites « " + phrase + " ».", "category": "silent_letter", "target": "h_aspire", "type": "carrier_phrase"})
+    all_items.append({"text": "Répétez « " + phrase + " ».", "category": "silent_letter", "target": "h_aspire", "type": "carrier_phrase"})
+
+# Liaison
+for phrase in LIAISON_POSITIVE:
+    all_items.append({"text": capitalize_sentence(phrase) + ".", "category": "liaison", "target": "liaison_present", "type": "phrase"})
+    all_items.append({"text": "Répétez, avec la liaison : " + phrase + ".", "category": "liaison", "target": "liaison_present", "type": "carrier_phrase"})
+    all_items.append({"text": "Dites « " + phrase + " ».", "category": "liaison", "target": "liaison_present", "type": "carrier_phrase"})
+
+for phrase in LIAISON_NO_LIAISON_CONTRAST:
+    all_items.append({"text": capitalize_sentence(phrase) + ".", "category": "liaison", "target": "no_liaison", "type": "phrase"})
+    all_items.append({"text": "Répétez, sans liaison : " + phrase + ".", "category": "liaison", "target": "no_liaison", "type": "carrier_phrase"})
+
+# Minimal pairs
+for a, b in MINIMAL_PAIRS:
+    text = capitalize_sentence(a + " / " + b + ".")
+    all_items.append({"text": text, "category": "minimal_pair", "target": a + "_vs_" + b, "type": "minimal_pair"})
+    all_items.append({"text": "Dites « " + a + " », puis « " + b + " ».", "category": "minimal_pair", "target": a + "_vs_" + b, "type": "carrier_phrase"})
+    all_items.append({"text": "Comparez : " + a + ", " + b + ".", "category": "minimal_pair", "target": a + "_vs_" + b, "type": "carrier_phrase"})
+
+# Nasal quadruplets
+for s in NASAL_QUADRUPLET_SENTENCES:
+    all_items.append({"text": s, "category": "nasal_vowel", "target": "an_in_on_un_contrast", "type": "sentence"})
+    all_items.append({"text": "Répétez : " + s, "category": "nasal_vowel", "target": "an_in_on_un_contrast", "type": "carrier_phrase"})
+
+# Rhythm / intonation
+for statement, question in STATEMENT_QUESTION_PAIRS:
+    all_items.append({"text": statement, "category": "rhythm_intonation", "target": "statement_intonation", "type": "sentence"})
+    all_items.append({"text": question, "category": "rhythm_intonation", "target": "question_intonation", "type": "sentence"})
+
+for s in INVERSION_QUESTIONS:
+    all_items.append({"text": s, "category": "rhythm_intonation", "target": "inversion_question", "type": "sentence"})
+    all_items.append({"text": "Répétez : " + s, "category": "rhythm_intonation", "target": "inversion_question", "type": "carrier_phrase"})
+
+for s in EXCLAMATIONS:
+    all_items.append({"text": s, "category": "rhythm_intonation", "target": "exclamation", "type": "sentence"})
+    all_items.append({"text": "Répétez avec enthousiasme : " + s, "category": "rhythm_intonation", "target": "exclamation", "type": "carrier_phrase"})
+
+for s in BREATH_GROUP_SENTENCES:
+    all_items.append({"text": s, "category": "rhythm_intonation", "target": "breath_group", "type": "sentence"})
+    all_items.append({"text": "Répétez, en respectant les pauses : " + s, "category": "rhythm_intonation", "target": "breath_group", "type": "carrier_phrase"})
+
+# Tongue twisters
+for s in TONGUE_TWISTERS:
+    all_items.append({"text": s, "category": "tongue_twister", "target": "tongue_twister", "type": "sentence"})
+    all_items.append({"text": "Répétez trois fois : " + s, "category": "tongue_twister", "target": "tongue_twister", "type": "carrier_phrase"})
 
 
-def add_unique(text, category, source_pool_used):
-    if text in seen_text:
-        return False
-    seen_text.add(text)
-    items.append({"text": text, "category": category})
-    return True
-
-
-# 1. vocab words
-count = 0
-for w in vocab_words:
-    if count >= TARGETS["vocab_word"]:
-        break
-    if add_unique(w, "vocab_word", None):
-        count += 1
-
-# 2. noun phrases
-count = 0
-for (n, a, p) in noun_phrase_combos:
-    if count >= TARGETS["noun_phrase"]:
-        break
-    text = build_noun_phrase(n, a, p)
-    if add_unique(text, "noun_phrase", None):
-        count += 1
-
-# 3. declarative sentences
-count = 0
-for (p, v, t, o) in decl_combos:
-    if count >= TARGETS["declarative_sentence"]:
-        break
-    text = declarative_sentence(p, v, t, o)
-    if add_unique(text, "declarative_sentence", None):
-        count += 1
-
-# 4. questions (curated first, then generated fill the rest)
-count = 0
-for q in CURATED_QUESTIONS:
-    if count >= TARGETS["question"]:
-        break
-    if add_unique(q, "question", None):
-        count += 1
-for q in question_pool:
-    if count >= TARGETS["question"]:
-        break
-    if add_unique(q, "question", None):
-        count += 1
-
-# 5. curated phrases
-count = 0
-for ph in CURATED_PHRASES:
-    if count >= TARGETS["curated_phrase"]:
-        break
-    if add_unique(ph, "curated_phrase", None):
-        count += 1
-
-
-# Top up to exactly 10,000 by drawing more from whichever generative
-# pool (noun phrases / sentences / questions) still has unused combos,
-# since those pools are large enough to cover any shortfall from the
-# curated lists running out.
+# ===========================
+# DE-DUPLICATE, TOP UP / TRIM TO EXACTLY 10,000
+# ===========================
 
 TOTAL_TARGET = 10000
 
+seen = set()
+unique_items = []
+for item in all_items:
+    if item["text"] in seen:
+        continue
+    seen.add(item["text"])
+    unique_items.append(item)
 
-def topup_from(pool_iterable, category, formatter):
-    for combo in pool_iterable:
-        if len(items) >= TOTAL_TARGET:
-            return
-        text = formatter(combo)
-        add_unique(text, category, None)
+random.shuffle(unique_items)
 
+if len(unique_items) < TOTAL_TARGET:
+    # Top up with denser pair/triple drills from the biggest word lists —
+    # still genuinely pronunciation-targeted, just more combinations.
+    topup_sources = [
+        (R_INITIAL, "r_sound", "r_initial"), (R_MEDIAL, "r_sound", "r_medial"),
+        (R_FINAL, "r_sound", "r_final"), (R_CLUSTERS, "r_sound", "r_cluster"),
+        (AN_WORDS, "nasal_vowel", "an_en"), (IN_WORDS, "nasal_vowel", "in_ain"),
+        (ON_WORDS, "nasal_vowel", "on"), (FINAL_SILENT_CONSONANT, "silent_letter", "final_consonant"),
+        (U_WORDS, "vowel", "ou_sound"), (E_WORDS, "vowel", "e_open_closed"),
+    ]
+    src_idx = 0
+    while len(unique_items) < TOTAL_TARGET:
+        word_list, category, target = topup_sources[src_idx % len(topup_sources)]
+        words = word_list[:]
+        random.shuffle(words)
+        quad = words[:4]
+        if len(quad) == 4:
+            text = capitalize_sentence(", ".join(quad) + ".")
+            if text not in seen:
+                seen.add(text)
+                unique_items.append({"text": text, "category": category, "target": target, "type": "quad_drill"})
+        src_idx += 1
+        if src_idx > 200000:
+            break
 
-if len(items) < TOTAL_TARGET:
-    topup_from(decl_combos, "declarative_sentence", lambda c: declarative_sentence(*c))
-if len(items) < TOTAL_TARGET:
-    topup_from(noun_phrase_combos, "noun_phrase", lambda c: build_noun_phrase(*c))
-if len(items) < TOTAL_TARGET:
-    topup_from(question_combos, "question", lambda c: est_ce_que_question(*c))
+unique_items = unique_items[:TOTAL_TARGET]
 
-items = items[:TOTAL_TARGET]
-
-for i, item in enumerate(items):
-    item["id"] = "qb-%05d" % (i + 1)
+for i, item in enumerate(unique_items):
+    item["id"] = "pb-%05d" % (i + 1)
 
 # ===========================
 # VALIDATION
 # ===========================
 
-assert len(items) == TOTAL_TARGET, f"expected {TOTAL_TARGET}, got {len(items)}"
-assert len(set(i["text"] for i in items)) == TOTAL_TARGET, "duplicate text found"
-for item in items:
-    assert item["text"].strip() == item["text"], "leading/trailing whitespace"
+assert len(unique_items) == TOTAL_TARGET, f"expected {TOTAL_TARGET}, got {len(unique_items)}"
+assert len(set(i["text"] for i in unique_items)) == TOTAL_TARGET, "duplicate text found"
+for item in unique_items:
+    assert item["text"].strip() == item["text"]
     assert len(item["text"]) > 0
+    assert item["category"] in {
+        "r_sound", "vowel", "nasal_vowel", "silent_letter", "liaison",
+        "minimal_pair", "rhythm_intonation", "tongue_twister",
+    }
 
 by_category = {}
-for item in items:
+for item in unique_items:
     by_category[item["category"]] = by_category.get(item["category"], 0) + 1
 
-print("Total items:", len(items))
+print("Total items:", len(unique_items))
 print("By category:")
 for cat, n in sorted(by_category.items()):
     print(f"  {cat}: {n}")
 
 print("\nSample items:")
-for item in random.sample(items, 15):
-    print(" ", item["category"], "->", item["text"])
+for item in random.sample(unique_items, 20):
+    print(" ", item["category"], "/", item["target"], "->", item["text"])
 
-OUT_PATH = "/tmp/claude-0/-home-user-Prononce/2bce692f-ac19-55cb-b223-31ce8fb4b2fd/scratchpad/question_bank.json"
+OUT_PATH = "/tmp/claude-0/-home-user-Prononce/2bce692f-ac19-55cb-b223-31ce8fb4b2fd/scratchpad/pronunciation_bank.json"
 with open(OUT_PATH, "w", encoding="utf-8") as f:
-    json.dump(items, f, ensure_ascii=False, indent=2)
+    json.dump(unique_items, f, ensure_ascii=False, indent=2)
 
 print("\nWrote", OUT_PATH)
