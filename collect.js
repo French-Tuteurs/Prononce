@@ -17,6 +17,7 @@
 // recordings can be matched to a speaker later.
 
 import { auth, db } from "./firebase.js";
+import { applyAllPreferences } from "./preferences.js";
 
 import {
     onAuthStateChanged,
@@ -435,6 +436,8 @@ onAuthStateChanged(auth, async function (user) {
         }
 
         const profile = snapshot.data();
+
+        applyAllPreferences(profile);
 
         // isTester is its own gate, independent of isOwner — see the
         // matching note in script.js's renderTesterAccessCard.

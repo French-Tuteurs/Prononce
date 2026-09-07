@@ -16,6 +16,12 @@
 
     --navy: #14213d;
 
+    /* Heading/label text color — starts identical to --navy, but is
+       its own variable so dark mode can lighten just the TEXT use of
+       navy without touching navy used as a button/panel background
+       (those look right unchanged in both themes). */
+    --heading: var(--navy);
+
     --gold: #b08d57;
 
     --gold-light: #d4b483;
@@ -32,6 +38,13 @@
 
     --white: #ffffff;
 
+    /* Card/panel background — a separate variable from --white so
+       dark mode can flip it without touching the (always-white) text
+       that sits on navy buttons and hero panels. */
+    --surface: var(--white);
+
+    --border-soft: rgba(0, 0, 0, 0.12);
+
 
     /* Shadows */
 
@@ -45,6 +58,47 @@
 
     --radius-pill: 50px;
 
+}
+
+
+/* Dark mode: only the page/card surface and body-text colors flip —
+   brand colors (navy, gold, white-on-navy text) stay the same in
+   both themes, which is what keeps buttons and hero panels looking
+   intentional rather than washed out. Applied via a `data-theme`
+   attribute set by preferences.js, not the OS media query directly,
+   so "light"/"dark"/"system" all resolve to one explicit choice. */
+
+html[data-theme="dark"] {
+
+    color-scheme: dark;
+
+    --cream: #1b1e25;
+
+    --surface: #262a33;
+
+    --heading: #f0ece2;
+
+    --text-dark: #ece9e2;
+
+    --text-muted: #b3b0aa;
+
+    --border-soft: rgba(255, 255, 255, 0.16);
+
+    --soft-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.45);
+
+}
+
+
+/* Font size: three presets on the root element, so every rem-based
+   size in the file scales together. Medium is the default (100%). */
+
+html[data-font-size="small"] {
+    font-size: 87.5%;
+}
+
+html[data-font-size="large"] {
+    font-size: 112.5%;
 }
 
 
@@ -94,9 +148,9 @@ h1 {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 70px;
+    font-size: 4.375rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     letter-spacing: 2px;
 
@@ -109,7 +163,7 @@ h2 {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 30px;
+    font-size: 1.875rem;
 
     font-weight: normal;
 
@@ -124,7 +178,7 @@ h2 {
 
 p {
 
-    font-size: 20px;
+    font-size: 1.25rem;
 
     line-height: 1.8;
 
@@ -151,7 +205,7 @@ button {
 
     padding: 15px 40px;
 
-    font-size: 18px;
+    font-size: 1.125rem;
 
     font-family: "Lato", sans-serif;
 
@@ -170,7 +224,7 @@ button:hover {
 
     background-color: transparent;
 
-    color: var(--navy);
+    color: var(--heading);
 
     transform: translateY(-3px);
 
@@ -187,7 +241,7 @@ button:hover {
 
     margin-top: 25px;
 
-    font-size: 16px;
+    font-size: 1rem;
 
 }
 
@@ -205,7 +259,7 @@ button:hover {
 
 .login-text a:hover {
 
-    color: var(--navy);
+    color: var(--heading);
 
     text-decoration: underline;
 
@@ -255,7 +309,7 @@ button:hover {
 
     max-width: 420px;
 
-    background: var(--white);
+    background: var(--surface);
 
     border-top: 4px solid var(--gold);
 
@@ -314,13 +368,13 @@ button:hover {
 
     margin-bottom: 12px;
 
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--border-soft);
 
     border-radius: 12px;
 
     background: var(--cream);
 
-    font-size: 16px;
+    font-size: 1rem;
 
     font-family: "Lato", sans-serif;
 
@@ -359,7 +413,7 @@ button:hover {
 
     text-align: center;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
 }
 
@@ -377,7 +431,7 @@ button:hover {
 
 .switch-form a:hover {
 
-    color: var(--navy);
+    color: var(--heading);
 
     text-decoration: underline;
 
@@ -400,9 +454,9 @@ button:hover {
 
     border: none;
 
-    font-size: 28px;
+    font-size: 1.75rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     padding: 0;
 
@@ -466,21 +520,21 @@ button:hover {
 
     h1 {
 
-        font-size: 45px;
+        font-size: 2.8125rem;
 
     }
 
 
     h2 {
 
-        font-size: 24px;
+        font-size: 1.5rem;
 
     }
 
 
     p {
 
-        font-size: 17px;
+        font-size: 1.0625rem;
 
     }
 
@@ -548,9 +602,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 30px;
+    font-size: 1.875rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     text-decoration: none;
 
@@ -572,7 +626,7 @@ button:hover {
 
     text-decoration: none;
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
     transition: color 0.3s ease;
 
@@ -591,7 +645,7 @@ button:hover {
 
     padding: 10px 22px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
 }
 
@@ -624,7 +678,7 @@ button:hover {
 
 .dashboard-welcome h1 {
 
-    font-size: 52px;
+    font-size: 3.25rem;
 
     line-height: 1.15;
 
@@ -637,7 +691,7 @@ button:hover {
 
     margin: 0;
 
-    font-size: 18px;
+    font-size: 1.125rem;
 
 }
 
@@ -655,7 +709,7 @@ button:hover {
 
 .welcome-avatar {
 
-    font-size: 22px;
+    font-size: 1.375rem;
 
     line-height: 1;
 
@@ -666,7 +720,7 @@ button:hover {
 
     margin: 10px 0 0;
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
     font-style: italic;
 
@@ -685,7 +739,7 @@ button:hover {
 
     color: var(--gold);
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     font-weight: bold;
 
@@ -721,9 +775,9 @@ button:hover {
 
     margin: 5px 0 0;
 
-    color: var(--navy);
+    color: var(--heading);
 
-    font-size: 30px;
+    font-size: 1.875rem;
 
 }
 
@@ -775,7 +829,7 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 28px;
+    font-size: 1.75rem;
 
 }
 
@@ -786,7 +840,7 @@ button:hover {
 
     color: rgba(255, 255, 255, 0.75);
 
-    font-size: 16px;
+    font-size: 1rem;
 
 }
 
@@ -795,9 +849,9 @@ button:hover {
 
     flex-shrink: 0;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
-    color: var(--navy);
+    color: var(--heading);
 
     border-color: var(--white);
 
@@ -835,7 +889,7 @@ button:hover {
 
 .lesson-card {
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border: 1px solid rgba(20, 33, 61, 0.08);
 
@@ -868,7 +922,7 @@ button:hover {
 
     color: var(--gold);
 
-    font-size: 12px;
+    font-size: 0.75rem;
 
     font-weight: bold;
 
@@ -881,11 +935,11 @@ button:hover {
 
     margin: 12px 0 10px;
 
-    color: var(--navy);
+    color: var(--heading);
 
     font-family: "Playfair Display", serif;
 
-    font-size: 25px;
+    font-size: 1.5625rem;
 
 }
 
@@ -894,7 +948,7 @@ button:hover {
 
     margin: 0 0 25px;
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
     line-height: 1.6;
 
@@ -909,7 +963,7 @@ button:hover {
 
     margin-bottom: 8px;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     color: var(--text-muted);
 
@@ -950,7 +1004,7 @@ button:hover {
 
     padding: 12px;
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
 }
 
@@ -967,7 +1021,7 @@ button:hover {
 
     padding: 12px;
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
     font-family: "Lato", sans-serif;
 
@@ -996,7 +1050,7 @@ button:hover {
 
     background-color: transparent;
 
-    color: var(--navy);
+    color: var(--heading);
 
     transform: translateY(-3px);
 
@@ -1009,7 +1063,7 @@ button:hover {
 
     margin-top: 10px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
 }
 
@@ -1020,11 +1074,11 @@ button:hover {
 
     padding: 10px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
-    color: var(--navy);
+    color: var(--heading);
 
     border: 2px solid var(--navy);
 
@@ -1086,7 +1140,7 @@ button:hover {
 
     .dashboard-welcome h1 {
 
-        font-size: 38px;
+        font-size: 2.375rem;
 
     }
 
@@ -1155,7 +1209,7 @@ button:hover {
 
 .lesson-card .progress-info span:last-child {
 
-    font-size: 12px;
+    font-size: 0.75rem;
 
     letter-spacing: 0.3px;
 
@@ -1197,7 +1251,7 @@ button:hover {
 
 .lesson-intro h1 {
 
-    font-size: 58px;
+    font-size: 3.625rem;
 
     margin: 10px 0 15px;
 
@@ -1208,7 +1262,7 @@ button:hover {
 
     margin: 0 auto;
 
-    font-size: 18px;
+    font-size: 1.125rem;
 
 }
 
@@ -1232,7 +1286,7 @@ button:hover {
 
     margin-bottom: 10px;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     font-weight: bold;
 
@@ -1247,7 +1301,7 @@ button:hover {
 
 .lesson-section {
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border: 1px solid rgba(20, 33, 61, 0.08);
 
@@ -1264,9 +1318,9 @@ button:hover {
 
 .lesson-section h2 {
 
-    color: var(--navy);
+    color: var(--heading);
 
-    font-size: 36px;
+    font-size: 2.25rem;
 
     margin: 10px 0 20px;
 
@@ -1275,7 +1329,7 @@ button:hover {
 
 .lesson-section > p:not(.eyebrow) {
 
-    font-size: 17px;
+    font-size: 1.0625rem;
 
     line-height: 1.8;
 
@@ -1340,7 +1394,7 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 38px;
+    font-size: 2.375rem;
 
 }
 
@@ -1351,7 +1405,7 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -1360,7 +1414,7 @@ button:hover {
 
     margin: 0;
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
 }
 
@@ -1404,9 +1458,9 @@ button:hover {
 
     border-radius: 50%;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
-    font-size: 55px;
+    font-size: 3.4375rem;
 
 }
 
@@ -1415,7 +1469,7 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -1424,7 +1478,7 @@ button:hover {
 
     margin: 0;
 
-    font-size: 16px;
+    font-size: 1rem;
 
 }
 
@@ -1481,9 +1535,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    color: var(--navy);
+    color: var(--heading);
 
-    font-size: 24px;
+    font-size: 1.5rem;
 
 }
 
@@ -1496,7 +1550,7 @@ button:hover {
 
     padding: 10px 16px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
 }
 
@@ -1527,7 +1581,7 @@ button:hover {
 
     margin: 0 0 14px;
 
-    font-size: 14px !important;
+    font-size: 0.875rem !important;
 
     color: var(--text-muted);
 
@@ -1567,13 +1621,13 @@ button:hover {
 
     border-radius: 50%;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
-    color: var(--navy);
+    color: var(--heading);
 
     border: 2px solid var(--navy);
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
 }
 
@@ -1619,13 +1673,13 @@ button:hover {
 
     padding: 10px 14px !important;
 
-    font-size: 13px !important;
+    font-size: 0.8125rem !important;
 
     line-height: 1.5 !important;
 
     color: var(--text-muted);
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border-left: 3px solid var(--gold);
 
@@ -1686,9 +1740,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    color: var(--navy);
+    color: var(--heading);
 
-    font-size: 25px;
+    font-size: 1.5625rem;
 
 }
 
@@ -1718,7 +1772,7 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 30px !important;
+    font-size: 1.875rem !important;
 
     margin: 0 auto 25px !important;
 
@@ -1727,9 +1781,9 @@ button:hover {
 
 .sentence-card .audio-button {
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
-    color: var(--navy);
+    color: var(--heading);
 
     border-color: var(--white);
 
@@ -1758,9 +1812,9 @@ button:hover {
 
 .sentence-card .record-button:hover {
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -1791,7 +1845,7 @@ button:hover {
 
 .tip-box strong {
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -1800,7 +1854,7 @@ button:hover {
 
     margin: 8px 0 0 !important;
 
-    font-size: 15px !important;
+    font-size: 0.9375rem !important;
 
 }
 
@@ -1820,9 +1874,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    color: var(--navy);
+    color: var(--heading);
 
-    font-size: 23px;
+    font-size: 1.4375rem;
 
 }
 
@@ -1848,7 +1902,7 @@ button:hover {
 
     border-color: rgba(20, 33, 61, 0.10);
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -1917,7 +1971,7 @@ button:hover {
 
     margin: 0 0 18px;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     font-weight: 700;
 
@@ -1945,14 +1999,14 @@ button:hover {
 
 .practice-question-stage .answer-option:not(.selected-correct):not(.selected-incorrect) {
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
 }
 
 
 .practice-question-stage .question-card h3 {
 
-    font-size: 26px;
+    font-size: 1.625rem;
 
     line-height: 1.3;
 
@@ -1992,7 +2046,7 @@ button:hover {
 
     margin: 20px 0 30px;
 
-    font-size: 17px;
+    font-size: 1.0625rem;
 
     color: var(--text-muted);
 
@@ -2005,7 +2059,7 @@ button:hover {
 
     color: var(--gold);
 
-    font-size: 32px;
+    font-size: 2rem;
 
 }
 
@@ -2033,7 +2087,7 @@ button:hover {
 
     color: var(--gold);
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
     font-weight: bold;
 
@@ -2044,7 +2098,7 @@ button:hover {
 
 .back-link:hover {
 
-    color: var(--navy);
+    color: var(--heading);
 
     text-decoration: underline;
 
@@ -2075,7 +2129,7 @@ button:hover {
 
     background-color: transparent;
 
-    color: var(--navy);
+    color: var(--heading);
 
     border-color: rgba(20, 33, 61, 0.2);
 
@@ -2139,14 +2193,14 @@ button:hover {
 
     color: var(--white);
 
-    font-size: 32px;
+    font-size: 2rem;
 
 }
 
 
 .completion-section h2 {
 
-    font-size: 42px;
+    font-size: 2.625rem;
 
 }
 
@@ -2200,7 +2254,7 @@ button:hover {
 
 .completion-score span {
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     text-transform: uppercase;
 
@@ -2215,7 +2269,7 @@ button:hover {
 
     color: var(--gold);
 
-    font-size: 38px;
+    font-size: 2.375rem;
 
 }
 
@@ -2243,7 +2297,7 @@ button:hover {
 
     background-color: transparent;
 
-    color: var(--navy);
+    color: var(--heading);
 
     border: 2px solid var(--navy);
 
@@ -2290,7 +2344,7 @@ button:hover {
 
     .lesson-intro h1 {
 
-        font-size: 42px;
+        font-size: 2.625rem;
 
     }
 
@@ -2304,7 +2358,7 @@ button:hover {
 
     .lesson-section h2 {
 
-        font-size: 29px;
+        font-size: 1.8125rem;
 
     }
 
@@ -2318,7 +2372,7 @@ button:hover {
 
     .practice-question-stage .question-card h3 {
 
-        font-size: 21px;
+        font-size: 1.3125rem;
 
     }
 
@@ -2397,7 +2451,7 @@ button:hover {
 
     color: var(--gold);
 
-    font-size: 11px;
+    font-size: 0.6875rem;
 
     font-weight: bold;
 
@@ -2410,11 +2464,11 @@ button:hover {
 
     margin: 0;
 
-    color: var(--navy);
+    color: var(--heading);
 
     font-family: "Playfair Display", serif;
 
-    font-size: 24px;
+    font-size: 1.5rem;
 
 }
 
@@ -2423,7 +2477,7 @@ button:hover {
 
     color: var(--text-muted);
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     white-space: nowrap;
 
@@ -2536,24 +2590,24 @@ button:hover {
 }
 
 .mouth-labels-lines line {
-    stroke: #b08d57;
+    stroke: var(--gold);
     stroke-width: 1.6;
 }
 
 .mouth-labels-dots circle {
-    fill: #b08d57;
+    fill: var(--gold);
     r: 4.2;
 }
 
 .mouth-labels-text text {
     fill: #14213d;
     font-family: "Lato", sans-serif;
-    font-size: 17px;
+    font-size: 1.0625rem;
 }
 
 .narrow-passage {
     fill: none;
-    stroke: #b08d57;
+    stroke: var(--gold);
     stroke-width: 3.5;
     stroke-linecap: round;
     stroke-dasharray: 2 7;
@@ -2563,7 +2617,7 @@ button:hover {
 
 .airflow {
     fill: none;
-    stroke: #b08d57;
+    stroke: var(--gold);
     stroke-width: 3.5;
     stroke-linecap: round;
     opacity: 0;
@@ -2585,7 +2639,7 @@ button:hover {
 }
 
 .airflow-arrow {
-    fill: #b08d57;
+    fill: var(--gold);
 }
 
 .uvula.vibrating {
@@ -2619,9 +2673,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 56px;
+    font-size: 3.5rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     text-align: center;
 
@@ -2645,7 +2699,7 @@ button:hover {
 
     .word-xray {
 
-        font-size: 40px;
+        font-size: 2.5rem;
 
         min-height: 140px;
 
@@ -2680,9 +2734,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 42px;
+    font-size: 2.625rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -2709,7 +2763,7 @@ button:hover {
 
     font-family: "Lato", sans-serif;
 
-    font-size: 18px;
+    font-size: 1.125rem;
 
     font-weight: bold;
 
@@ -2722,7 +2776,7 @@ button:hover {
 
     .liaison-bridge {
 
-        font-size: 30px;
+        font-size: 1.875rem;
 
         min-height: 150px;
 
@@ -2811,9 +2865,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 26px;
+    font-size: 1.625rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     text-align: center;
 
@@ -2841,7 +2895,7 @@ button:hover {
 
     padding: 18px;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border-radius: 15px;
 
@@ -2879,7 +2933,7 @@ button:hover {
 
     margin-bottom: 4px;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -2888,7 +2942,7 @@ button:hover {
 
     margin: 0;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
     line-height: 1.6;
 
@@ -2925,13 +2979,13 @@ button:hover {
 
     border-radius: 50%;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
-    color: var(--navy);
+    color: var(--heading);
 
     border: 1px solid rgba(20, 33, 61, 0.15);
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
 }
 
@@ -2993,7 +3047,7 @@ button:hover {
 
     .diagram-label {
 
-        font-size: 14px;
+        font-size: 0.875rem;
 
     }
 
@@ -3006,7 +3060,7 @@ button:hover {
 
 .collect-header-note {
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     color: var(--text-muted);
 
@@ -3035,7 +3089,7 @@ button:hover {
 
 .collect-step h1 {
 
-    font-size: 34px;
+    font-size: 2.125rem;
 
     line-height: 1.2;
 
@@ -3054,7 +3108,7 @@ button:hover {
 
     padding: 30px;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border-top: 4px solid var(--gold);
 
@@ -3075,7 +3129,7 @@ button:hover {
 
     margin-bottom: 18px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
     color: var(--text-muted);
 
@@ -3086,13 +3140,13 @@ button:hover {
 
     padding: 15px;
 
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--border-soft);
 
     border-radius: 12px;
 
     background: var(--cream);
 
-    font-size: 16px;
+    font-size: 1rem;
 
     font-family: "Lato", sans-serif;
 
@@ -3122,7 +3176,7 @@ button:hover {
 
     padding: 14px 16px;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     line-height: 1.5;
 
@@ -3150,7 +3204,7 @@ button:hover {
 
     margin: 0 0 16px;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     color: #a8574a;
 
@@ -3166,11 +3220,11 @@ button:hover {
 
 .collect-progress {
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
     font-weight: bold;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -3190,7 +3244,7 @@ button:hover {
 
 .collect-topic {
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border: 1px solid rgba(20, 33, 61, 0.1);
 
@@ -3217,9 +3271,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 19px;
+    font-size: 1.1875rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -3237,7 +3291,7 @@ button:hover {
 
     font-family: "Lato", sans-serif;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
     color: var(--text-muted);
 
@@ -3267,7 +3321,7 @@ button:hover {
 
     font-family: "Lato", sans-serif;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     color: var(--text-muted);
 
@@ -3291,7 +3345,7 @@ button:hover {
 
     padding: 20px 22px;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border: 1px solid rgba(20, 33, 61, 0.1);
 
@@ -3325,9 +3379,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 20px;
+    font-size: 1.25rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -3349,7 +3403,7 @@ button:hover {
 
     padding: 10px 22px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
 }
 
@@ -3369,11 +3423,11 @@ button:hover {
 
     padding: 10px 20px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
-    color: var(--navy);
+    color: var(--heading);
 
     border: 2px solid var(--navy);
 
@@ -3400,9 +3454,9 @@ button:hover {
 
 .collect-save-button:disabled:hover {
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
-    color: var(--navy);
+    color: var(--heading);
 
     transform: none;
 
@@ -3415,7 +3469,7 @@ button:hover {
 
     margin: 12px 0 0;
 
-    font-size: 13px !important;
+    font-size: 0.8125rem !important;
 
     color: var(--text-muted);
 
@@ -3435,7 +3489,7 @@ button:hover {
 
     margin: 10px 0 0;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     color: var(--text-muted);
 
@@ -3503,7 +3557,7 @@ button:hover {
 
     margin: 0 0 20px;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     color: var(--text-muted);
 
@@ -3540,7 +3594,7 @@ button:hover {
 
     margin: 0 0 16px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
     line-height: 1.6;
 
@@ -3569,7 +3623,7 @@ button:hover {
 
     padding: 12px 18px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
     text-align: center;
 
@@ -3599,18 +3653,18 @@ button:hover {
 
     background-color: transparent;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
 
 .collect-email-copy-button {
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border: 2px solid var(--navy);
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -3626,7 +3680,7 @@ button:hover {
 
 .collect-done-link {
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
     color: var(--gold);
 
@@ -3639,7 +3693,7 @@ button:hover {
 
 .collect-done-link:hover {
 
-    color: var(--navy);
+    color: var(--heading);
 
     text-decoration: underline;
 
@@ -3657,7 +3711,7 @@ button:hover {
 
     .collect-step h1 {
 
-        font-size: 26px;
+        font-size: 1.625rem;
 
     }
 
@@ -3693,7 +3747,7 @@ button:hover {
 
     padding: 30px;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border-top: 4px solid var(--gold);
 
@@ -3708,7 +3762,7 @@ button:hover {
 
     margin: 0 0 20px;
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
     color: var(--text-muted);
 
@@ -3730,13 +3784,13 @@ button:hover {
 
     padding: 14px 16px;
 
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--border-soft);
 
     border-radius: 12px;
 
     background: var(--cream);
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
     font-family: "Lato", sans-serif;
 
@@ -3758,7 +3812,7 @@ button:hover {
 
     padding: 14px 26px;
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
 }
 
@@ -3767,7 +3821,7 @@ button:hover {
 
     margin: 14px 0 0;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     color: #a8574a;
 
@@ -3785,7 +3839,7 @@ button:hover {
 
     margin: 0;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
     color: var(--text-muted);
 
@@ -3810,7 +3864,7 @@ button:hover {
 
     margin-bottom: 10px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
 }
 
@@ -3828,9 +3882,9 @@ button:hover {
 
     padding: 8px 18px;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     color: #a8574a;
 
@@ -3886,15 +3940,15 @@ button:hover {
 
     padding: 8px 16px;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
-    color: var(--navy);
+    color: var(--heading);
 
     border: 1px solid rgba(20, 33, 61, 0.15);
 
     border-radius: var(--radius-pill);
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     font-family: "Lato", sans-serif;
 
@@ -3918,7 +3972,7 @@ button:hover {
 
     display: inline-block;
 
-    font-size: 10px;
+    font-size: 0.625rem;
 
     transition: transform 0.2s ease;
 
@@ -4038,9 +4092,9 @@ button:hover {
 
     margin-top: 18px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     font-weight: 700;
 
@@ -4073,9 +4127,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 40px;
+    font-size: 2.5rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     margin: 6px 0 16px;
 
@@ -4099,7 +4153,7 @@ button:hover {
 .admin-detail-card,
 .admin-all-accounts {
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border-top: 4px solid var(--gold);
 
@@ -4119,9 +4173,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 22px;
+    font-size: 1.375rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     margin: 0 0 18px;
 
@@ -4149,11 +4203,11 @@ button:hover {
 
 #account-email {
 
-    font-size: 20px;
+    font-size: 1.25rem;
 
     font-weight: 700;
 
-    color: var(--navy);
+    color: var(--heading);
 
     margin: 0 0 8px;
 
@@ -4179,7 +4233,7 @@ button:hover {
 
     border-radius: var(--radius-pill);
 
-    font-size: 12px;
+    font-size: 0.75rem;
 
     letter-spacing: 0.3px;
 
@@ -4207,7 +4261,7 @@ button:hover {
 
     background-color: var(--gold-light);
 
-    color: var(--navy);
+    color: var(--heading);
 
     border-color: var(--gold);
 
@@ -4229,7 +4283,7 @@ button:hover {
 
     margin: 6px 0 0;
 
-    font-size: 12px;
+    font-size: 0.75rem;
 
     color: var(--text-muted);
 
@@ -4259,7 +4313,7 @@ button:hover {
 
     padding: 18px;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border-top: 4px solid var(--gold);
 
@@ -4276,16 +4330,16 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 26px;
+    font-size: 1.625rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
 
 .admin-stat-tile span {
 
-    font-size: 11px;
+    font-size: 0.6875rem;
 
     text-transform: uppercase;
 
@@ -4324,7 +4378,7 @@ button:hover {
 
     padding: 8px 18px;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
 }
 
@@ -4368,9 +4422,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 17px;
+    font-size: 1.0625rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     margin: 0 0 12px;
 
@@ -4394,7 +4448,7 @@ button:hover {
 
     margin: 0;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
     color: var(--text-muted);
 
@@ -4409,7 +4463,7 @@ button:hover {
 
     padding: 10px 22px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
 }
 
@@ -4418,7 +4472,7 @@ button:hover {
 
     margin: 12px 0 0;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     color: var(--text-muted);
 
@@ -4457,16 +4511,16 @@ button:hover {
 
     flex: 1;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
 
 .admin-lesson-status {
 
-    font-size: 12px;
+    font-size: 0.75rem;
 
     color: var(--text-muted);
 
@@ -4488,7 +4542,7 @@ button:hover {
 
     padding: 6px 16px;
 
-    font-size: 12px;
+    font-size: 0.75rem;
 
 }
 
@@ -4534,9 +4588,9 @@ button:hover {
 
     flex: 1;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -4545,7 +4599,7 @@ button:hover {
 
     flex-shrink: 0;
 
-    font-size: 12px;
+    font-size: 0.75rem;
 
     color: var(--text-muted);
 
@@ -4560,13 +4614,13 @@ button:hover {
 
     border-radius: 8px;
 
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--border-soft);
 
-    background: var(--white);
+    background: var(--surface);
 
     font-family: "Lato", sans-serif;
 
-    font-size: 12px;
+    font-size: 0.75rem;
 
 }
 
@@ -4577,7 +4631,7 @@ button:hover {
 
     padding: 6px 16px;
 
-    font-size: 12px;
+    font-size: 0.75rem;
 
 }
 
@@ -4591,7 +4645,7 @@ button:hover {
 
 .admin-danger-button {
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     color: #a8574a;
 
@@ -4636,13 +4690,13 @@ button:hover {
 
     background-color: var(--cream);
 
-    color: var(--navy);
+    color: var(--heading);
 
     border: 1px solid rgba(20, 33, 61, 0.1);
 
     border-radius: 12px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
     text-align: left;
 
@@ -4655,7 +4709,7 @@ button:hover {
 
     border-color: var(--gold);
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
 }
 
@@ -4724,9 +4778,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 40px;
+    font-size: 2.5rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     margin: 6px 0 16px;
 
@@ -4769,7 +4823,7 @@ button:hover {
 
     padding: 25px;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border-top: 4px solid var(--gold);
 
@@ -4786,16 +4840,16 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 34px;
+    font-size: 2.125rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
 
 .progress-summary-stat span {
 
-    font-size: 12px;
+    font-size: 0.75rem;
 
     text-transform: uppercase;
 
@@ -4817,9 +4871,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 24px;
+    font-size: 1.5rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     margin-bottom: 18px;
 
@@ -4847,7 +4901,7 @@ button:hover {
 
     padding: 16px 20px;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border-radius: var(--radius-large);
 
@@ -4862,11 +4916,11 @@ button:hover {
 
     min-width: 120px;
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
     font-weight: 700;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -4897,7 +4951,7 @@ button:hover {
 
     flex-shrink: 0;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     color: var(--text-muted);
 
@@ -4921,11 +4975,11 @@ button:hover {
 
     flex-shrink: 0;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     font-weight: 700;
 
-    color: var(--navy);
+    color: var(--heading);
 
     text-decoration: none;
 
@@ -5011,9 +5065,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 40px;
+    font-size: 2.5rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     margin: 6px 0 16px;
 
@@ -5037,7 +5091,7 @@ button:hover {
 
     margin-bottom: 24px;
 
-    background-color: var(--white);
+    background-color: var(--surface);
 
     border-top: 4px solid var(--gold);
 
@@ -5052,9 +5106,9 @@ button:hover {
 
     font-family: "Playfair Display", serif;
 
-    font-size: 20px;
+    font-size: 1.25rem;
 
-    color: var(--navy);
+    color: var(--heading);
 
     margin: 0 0 18px;
 
@@ -5065,7 +5119,7 @@ button:hover {
 
     margin: 0 0 18px;
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
     color: var(--text-muted);
 
@@ -5076,7 +5130,7 @@ button:hover {
 
 .settings-current-value {
 
-    font-size: 14px;
+    font-size: 0.875rem;
 
     color: var(--text-muted);
 
@@ -5085,7 +5139,7 @@ button:hover {
 
 .settings-current-value strong {
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -5103,11 +5157,11 @@ button:hover {
 
     margin-bottom: 6px;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     font-weight: 700;
 
-    color: var(--navy);
+    color: var(--heading);
 
 }
 
@@ -5120,13 +5174,13 @@ button:hover {
 
     padding: 14px 16px;
 
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--border-soft);
 
     border-radius: 12px;
 
     background: var(--cream);
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 
     font-family: "Lato", sans-serif;
 
@@ -5153,7 +5207,7 @@ button:hover {
 
     margin: 14px 0 0;
 
-    font-size: 13px;
+    font-size: 0.8125rem;
 
     color: #4d7c5f;
 
@@ -5194,7 +5248,7 @@ button:hover {
 
     justify-content: center;
 
-    font-size: 20px;
+    font-size: 1.25rem;
 
     background: var(--cream);
 
@@ -5209,7 +5263,7 @@ button:hover {
 
 .avatar-option:hover {
 
-    border-color: rgba(0, 0, 0, 0.12);
+    border-color: var(--border-soft);
 
 }
 
@@ -5218,7 +5272,7 @@ button:hover {
 
     border-color: var(--gold);
 
-    background: var(--white);
+    background: var(--surface);
 
 }
 
@@ -5287,6 +5341,295 @@ button:hover {
 
         padding: 45px 20px 70px;
 
+    }
+
+}
+
+
+/* ===========================
+   CHOICE PICKER (theme / font size / playback speed)
+=========================== */
+
+.choice-picker {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+}
+
+
+.choice-option {
+
+    box-sizing: border-box;
+
+    padding: 10px 18px;
+
+    font-size: 0.875rem;
+
+    font-family: "Lato", sans-serif;
+
+    background: var(--cream);
+
+    color: var(--text-dark);
+
+    border: 2px solid transparent;
+
+    border-radius: var(--radius-pill);
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+
+}
+
+
+.choice-option:hover {
+
+    border-color: var(--border-soft);
+
+}
+
+
+.choice-option.choice-option-selected {
+
+    background: var(--navy);
+
+    border-color: var(--navy);
+
+    color: var(--white);
+
+}
+
+
+/* ===========================
+   TOGGLE SWITCH
+=========================== */
+
+.settings-toggle-row {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 14px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.settings-toggle-copy strong {
+
+    display: block;
+
+    font-size: 0.875rem;
+
+    color: var(--heading);
+
+    margin-bottom: 2px;
+
+}
+
+
+.settings-toggle-copy p {
+
+    margin: 0;
+
+    font-size: 0.8125rem;
+
+    color: var(--text-muted);
+
+    line-height: 1.5;
+
+    max-width: none;
+
+    text-align: left;
+
+}
+
+
+.toggle-switch {
+
+    position: relative;
+
+    flex-shrink: 0;
+
+    width: 44px;
+
+    height: 26px;
+
+    cursor: pointer;
+
+}
+
+
+.toggle-switch input {
+
+    position: absolute;
+
+    opacity: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    margin: 0;
+
+    cursor: pointer;
+
+}
+
+
+.toggle-track {
+
+    position: absolute;
+
+    inset: 0;
+
+    background: var(--border-soft);
+
+    border-radius: var(--radius-pill);
+
+    transition: background-color 0.2s ease;
+
+}
+
+
+.toggle-track::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 3px;
+
+    left: 3px;
+
+    width: 20px;
+
+    height: 20px;
+
+    background: var(--white);
+
+    border-radius: 50%;
+
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+
+    transition: transform 0.2s ease;
+
+}
+
+
+.toggle-switch input:checked + .toggle-track {
+    background: var(--gold);
+}
+
+
+.toggle-switch input:checked + .toggle-track::before {
+    transform: translateX(18px);
+}
+
+
+.toggle-switch input:focus-visible + .toggle-track {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
+
+/* ===========================
+   COMPACT MODE
+=========================== */
+/* Tightens the highest-impact spacing rules site-wide — container
+   padding, card padding, and the big gaps between sections — without
+   touching layout structure. */
+
+body.compact-mode .container {
+    padding: 40px 25px;
+}
+
+body.compact-mode .dashboard-container,
+body.compact-mode .lesson-container,
+body.compact-mode .settings-container {
+    padding-top: 35px;
+    padding-bottom: 50px;
+}
+
+body.compact-mode .dashboard-welcome,
+body.compact-mode .daily-practice,
+body.compact-mode .lessons-section,
+body.compact-mode .admin-panel,
+body.compact-mode .testing-access {
+    margin-bottom: 40px;
+}
+
+body.compact-mode .lesson-card,
+body.compact-mode .settings-card,
+body.compact-mode .completion-section {
+    padding: 18px;
+}
+
+body.compact-mode .progress-row {
+    padding: 14px 18px;
+}
+
+body.compact-mode .settings-field {
+    margin-bottom: 10px;
+}
+
+
+/* ===========================
+   CELEBRATION CONFETTI
+=========================== */
+
+#confetti-layer {
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    overflow: hidden;
+
+    z-index: 3000;
+
+}
+
+
+.confetti-piece {
+
+    position: absolute;
+
+    top: -20px;
+
+    left: var(--confetti-left);
+
+    width: 9px;
+
+    height: 14px;
+
+    background: var(--confetti-color);
+
+    border-radius: 2px;
+
+    animation: confetti-fall var(--confetti-duration) var(--confetti-delay) ease-in forwards;
+
+}
+
+
+@keyframes confetti-fall {
+
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(var(--confetti-drift), 105vh) rotate(var(--confetti-rotate));
+        opacity: 0.9;
     }
 
 }

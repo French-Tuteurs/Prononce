@@ -10,6 +10,7 @@
 // account can update another user's document at all.
 
 import { auth, db } from "./firebase.js";
+import { applyAllPreferences } from "./preferences.js";
 
 import {
     onAuthStateChanged,
@@ -101,6 +102,8 @@ onAuthStateChanged(auth, async function (user) {
             return;
 
         }
+
+        applyAllPreferences(selfSnapshot.data());
 
         hidePageLoader();
         loadAllAccounts();

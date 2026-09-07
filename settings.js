@@ -27,7 +27,14 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 import { db } from "./firebase.js";
-import { applyAccentTheme } from "./theme.js";
+import {
+    applyAllPreferences,
+    applyAccentTheme,
+    applyDisplayTheme,
+    applyFontSize,
+    applyCompactMode,
+    celebrate
+} from "./preferences.js";
 
 
 function hidePageLoader() {
@@ -94,7 +101,13 @@ onAuthStateChanged(auth, async function (user) {
         document.getElementById("settings-motto").value = profile.motto || "";
         setSelectedAvatar(profile.avatarEmoji || "");
         setSelectedAccent(profile.accentColor || "gold");
-        applyAccentTheme(profile.accentColor);
+        setSelectedTheme(profile.theme || "light");
+        setSelectedFontSize(profile.fontSize || "medium");
+        setSelectedSpeed(profile.playbackSpeed || 1);
+        setToggleState("autoplay-toggle", profile.autoplayAudio === true);
+        setToggleState("compact-mode-toggle", profile.compactMode === true);
+        setToggleState("celebration-toggle", profile.celebrationEffects !== false);
+        applyAllPreferences(profile);
 
     } catch (error) {
 
@@ -376,6 +389,174 @@ if (saveMottoButton) {
 
         const motto = document.getElementById("settings-motto").value.trim();
         savePersonalization({ motto: motto });
+
+    });
+
+}
+
+
+// ===========================
+// DISPLAY & PLAYBACK PREFERENCES
+// ===========================
+//
+// Same "saves itself the moment you pick something" pattern as the
+// personalization card above — theme, font size, and playback speed
+// are single-choice picker rows; autoplay, compact mode, and
+// celebration effects are on/off toggles.
+
+function setSelectedTheme(themeKey) {
+
+    document.querySelectorAll("#theme-picker .choice-option").forEach(function (button) {
+        button.classList.toggle("choice-option-selected", button.dataset.theme === themeKey);
+    });
+
+}
+
+function setSelectedFontSize(sizeKey) {
+
+    document.querySelectorAll("#font-size-picker .choice-option").forEach(function (button) {
+        button.classList.toggle("choice-option-selected", button.dataset.fontSize === sizeKey);
+    });
+
+}
+
+function setSelectedSpeed(speed) {
+
+    document.querySelectorAll("#speed-picker .choice-option").forEach(function (button) {
+        button.classList.toggle("choice-option-selected", Number(button.dataset.speed) === Number(speed));
+    });
+
+}
+
+function setToggleState(elId, isOn) {
+
+    const el = document.getElementById(elId);
+
+    if (el) {
+        el.checked = isOn;
+    }
+
+}
+
+async function saveDisplayPreference(fields) {
+
+    if (!currentUser) {
+        return;
+    }
+
+    try {
+
+        await updateDoc(doc(db, "users", currentUser.uid), fields);
+        showStatus("display-status", "Saved.", false);
+
+    } catch (error) {
+
+        console.error(error);
+        showStatus("display-status", "Couldn't save that. Please try again.", true);
+
+    }
+
+}
+
+const themePicker = document.getElementById("theme-picker");
+
+if (themePicker) {
+
+    themePicker.addEventListener("click", function (event) {
+
+        const button = event.target.closest(".choice-option");
+
+        if (!button) {
+            return;
+        }
+
+        const themeKey = button.dataset.theme;
+
+        setSelectedTheme(themeKey);
+        applyDisplayTheme(themeKey);
+        saveDisplayPreference({ theme: themeKey });
+
+    });
+
+}
+
+const fontSizePicker = document.getElementById("font-size-picker");
+
+if (fontSizePicker) {
+
+    fontSizePicker.addEventListener("click", function (event) {
+
+        const button = event.target.closest(".choice-option");
+
+        if (!button) {
+            return;
+        }
+
+        const sizeKey = button.dataset.fontSize;
+
+        setSelectedFontSize(sizeKey);
+        applyFontSize(sizeKey);
+        saveDisplayPreference({ fontSize: sizeKey });
+
+    });
+
+}
+
+const speedPicker = document.getElementById("speed-picker");
+
+if (speedPicker) {
+
+    speedPicker.addEventListener("click", function (event) {
+
+        const button = event.target.closest(".choice-option");
+
+        if (!button) {
+            return;
+        }
+
+        const speed = Number(button.dataset.speed);
+
+        setSelectedSpeed(speed);
+        saveDisplayPreference({ playbackSpeed: speed });
+
+    });
+
+}
+
+const autoplayToggle = document.getElementById("autoplay-toggle");
+
+if (autoplayToggle) {
+
+    autoplayToggle.addEventListener("change", function () {
+        saveDisplayPreference({ autoplayAudio: autoplayToggle.checked });
+    });
+
+}
+
+const compactModeToggle = document.getElementById("compact-mode-toggle");
+
+if (compactModeToggle) {
+
+    compactModeToggle.addEventListener("change", function () {
+
+        applyCompactMode(compactModeToggle.checked);
+        saveDisplayPreference({ compactMode: compactModeToggle.checked });
+
+    });
+
+}
+
+const celebrationToggle = document.getElementById("celebration-toggle");
+
+if (celebrationToggle) {
+
+    celebrationToggle.addEventListener("change", function () {
+
+        saveDisplayPreference({ celebrationEffects: celebrationToggle.checked });
+
+        if (celebrationToggle.checked) {
+            celebrate();
+        }
 
     });
 
