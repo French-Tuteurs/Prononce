@@ -3,7 +3,12 @@
 // ===========================
 
 import { auth, db } from "./firebase.js";
-import { applyAccentTheme } from "./theme.js";
+import {
+    applyAllPreferences,
+    getPlaybackRate,
+    shouldAutoplay,
+    celebrateIfEnabled
+} from "./preferences.js";
 
 import {
     createUserWithEmailAndPassword,
@@ -48,6 +53,8 @@ const isProgressPage =
 
 let currentUserId = null;
 let currentUserProfile = null;
+let currentPlaybackRate = 1;
+let audioAutoplayEnabled = false;
 
 
 // ===========================
@@ -109,7 +116,9 @@ onAuthStateChanged(auth, async function (user) {
 
         }
 
-        applyAccentTheme(currentUserProfile && currentUserProfile.accentColor);
+        applyAllPreferences(currentUserProfile);
+        currentPlaybackRate = getPlaybackRate(currentUserProfile);
+        audioAutoplayEnabled = shouldAutoplay(currentUserProfile);
 
         // If already logged in and on the welcome page,
         // send them directly to the dashboard. Leave the loader up —
@@ -139,6 +148,16 @@ onAuthStateChanged(auth, async function (user) {
         }
 
         enforcePracticeLevelAccess();
+
+        // The first question/section on a lesson or practice page is
+        // already shown by the time this callback resolves (that
+        // setup runs synchronously at parse time, before the profile
+        // — and audioAutoplayEnabled — is known). Catch it up here so
+        // autoplay covers the very first card too, not just ones
+        // reached by clicking Next afterward.
+
+        autoplayListenButtonWithin(document.querySelector(".question-card:not(.hidden)"));
+        autoplayListenButtonWithin(document.querySelector(".lesson-section:not(.hidden)"));
 
         hidePageLoader();
 
@@ -1212,6 +1231,12 @@ function showLessonSection(sectionNumber) {
                 markLessonComplete(lessonId);
             }
 
+            celebrateIfEnabled(currentUserProfile);
+
+        } else {
+
+            autoplayListenButtonWithin(nextSection);
+
         }
 
         window.scrollTo({
@@ -1417,6 +1442,8 @@ practiceStages.forEach(function (stage) {
         nextButton.textContent =
             index === cards.length - 1 ? "See My Score" : "Next Question →";
 
+        autoplayListenButtonWithin(cards[index]);
+
     }
 
     showQuestion(0);
@@ -1473,6 +1500,8 @@ practiceStages.forEach(function (stage) {
             summary.classList.remove("hidden");
 
         }
+
+        celebrateIfEnabled(currentUserProfile);
 
         const practiceId = document.body.dataset.practiceId;
         const totalLevels = Number(document.body.dataset.totalLevels);
@@ -1858,7 +1887,7 @@ function speakFrench(text, onStart, onEnd) {
     const utterance = new SpeechSynthesisUtterance(text);
 
     utterance.lang = "fr-FR";
-    utterance.rate = 0.9;
+    utterance.rate = 0.9 * currentPlaybackRate;
 
     const voice = pickFrenchVoice();
 
@@ -1917,89 +1946,53 @@ function setListenButtonPlaying(button, isPlaying) {
 }
 
 
-listenButtons.forEach(function (button) {
+function playListenButton(button) {
 
-    button.addEventListener(
-        "click",
-        function () {
+    const alreadyPlaying = button.classList.contains("playing");
 
-            const alreadyPlaying = button.classList.contains("playing");
+    if (stopCurrentlyPlaying) {
+        stopCurrentlyPlaying();
+    }
 
-            if (stopCurrentlyPlaying) {
-                stopCurrentlyPlaying();
-            }
+    if (alreadyPlaying) {
+        return;
+    }
 
-            if (alreadyPlaying) {
+    const audioSrc = button.dataset.audioSrc;
+    const text = button.dataset.say;
+
+    // If a real recording is listed, try that first. If it hasn't
+    // been added yet (or fails to load), fall back to the browser's
+    // French voice instead of staying silent.
+
+    if (audioSrc) {
+
+        const clip = new Audio(audioSrc);
+        clip.playbackRate = currentPlaybackRate;
+        let fellBackAlready = false;
+
+        stopCurrentlyPlaying = function () {
+            clip.pause();
+            setListenButtonPlaying(button, false);
+            stopCurrentlyPlaying = null;
+        };
+
+        clip.addEventListener("playing", function () {
+            setListenButtonPlaying(button, true);
+        });
+
+        clip.addEventListener("ended", function () {
+            setListenButtonPlaying(button, false);
+            stopCurrentlyPlaying = null;
+        });
+
+        function fallBackToSpeech() {
+
+            if (fellBackAlready) {
                 return;
             }
 
-            const audioSrc = button.dataset.audioSrc;
-            const text = button.dataset.say;
-
-            // If a real recording is listed, try that first. If it
-            // hasn't been added yet (or fails to load), fall back to
-            // the browser's French voice instead of staying silent.
-
-            if (audioSrc) {
-
-                const clip = new Audio(audioSrc);
-                let fellBackAlready = false;
-
-                stopCurrentlyPlaying = function () {
-                    clip.pause();
-                    setListenButtonPlaying(button, false);
-                    stopCurrentlyPlaying = null;
-                };
-
-                clip.addEventListener("playing", function () {
-                    setListenButtonPlaying(button, true);
-                });
-
-                clip.addEventListener("ended", function () {
-                    setListenButtonPlaying(button, false);
-                    stopCurrentlyPlaying = null;
-                });
-
-                function fallBackToSpeech() {
-
-                    if (fellBackAlready) {
-                        return;
-                    }
-
-                    fellBackAlready = true;
-
-                    if (text) {
-
-                        stopCurrentlyPlaying = function () {
-                            window.speechSynthesis.cancel();
-                            setListenButtonPlaying(button, false);
-                            stopCurrentlyPlaying = null;
-                        };
-
-                        speakFrench(
-                            text,
-                            function () { setListenButtonPlaying(button, true); },
-                            function () {
-                                setListenButtonPlaying(button, false);
-                                stopCurrentlyPlaying = null;
-                            }
-                        );
-
-                    } else {
-
-                        setListenButtonPlaying(button, false);
-                        stopCurrentlyPlaying = null;
-
-                    }
-
-                }
-
-                clip.addEventListener("error", fallBackToSpeech);
-                clip.play().catch(fallBackToSpeech);
-
-                return;
-
-            }
+            fellBackAlready = true;
 
             if (text) {
 
@@ -2018,12 +2011,66 @@ listenButtons.forEach(function (button) {
                     }
                 );
 
+            } else {
+
+                setListenButtonPlaying(button, false);
+                stopCurrentlyPlaying = null;
+
             }
 
         }
-    );
 
+        clip.addEventListener("error", fallBackToSpeech);
+        clip.play().catch(fallBackToSpeech);
+
+        return;
+
+    }
+
+    if (text) {
+
+        stopCurrentlyPlaying = function () {
+            window.speechSynthesis.cancel();
+            setListenButtonPlaying(button, false);
+            stopCurrentlyPlaying = null;
+        };
+
+        speakFrench(
+            text,
+            function () { setListenButtonPlaying(button, true); },
+            function () {
+                setListenButtonPlaying(button, false);
+                stopCurrentlyPlaying = null;
+            }
+        );
+
+    }
+
+}
+
+
+listenButtons.forEach(function (button) {
+    button.addEventListener("click", function () { playListenButton(button); });
 });
+
+
+// Autoplay: when enabled, automatically plays the Listen button
+// found inside a given container (a freshly revealed question card
+// or lesson section) — same playback path as clicking it by hand.
+
+function autoplayListenButtonWithin(container) {
+
+    if (!audioAutoplayEnabled || !container) {
+        return;
+    }
+
+    const button = container.querySelector(".listen-button");
+
+    if (button) {
+        playListenButton(button);
+    }
+
+}
 // ===========================
 // PRACTICE: RECORD & BASIC VOICE FEEDBACK
 // ===========================

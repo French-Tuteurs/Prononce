@@ -145,6 +145,81 @@
 
         <section class="settings-card">
 
+            <h2>Display &amp; playback</h2>
+
+            <p>
+                Tune how the site looks and how audio plays while you
+                practice.
+            </p>
+
+            <div class="settings-field">
+                <label>Theme</label>
+                <div class="choice-picker" id="theme-picker">
+                    <button type="button" class="choice-option" data-theme="light">☀️ Light</button>
+                    <button type="button" class="choice-option" data-theme="dark">🌙 Dark</button>
+                    <button type="button" class="choice-option" data-theme="system">🖥️ System</button>
+                </div>
+            </div>
+
+            <div class="settings-field">
+                <label>Font Size</label>
+                <div class="choice-picker" id="font-size-picker">
+                    <button type="button" class="choice-option" data-font-size="small">Small</button>
+                    <button type="button" class="choice-option" data-font-size="medium">Medium</button>
+                    <button type="button" class="choice-option" data-font-size="large">Large</button>
+                </div>
+            </div>
+
+            <div class="settings-field">
+                <label>Playback Speed</label>
+                <div class="choice-picker" id="speed-picker">
+                    <button type="button" class="choice-option" data-speed="0.75">0.75×</button>
+                    <button type="button" class="choice-option" data-speed="1">1×</button>
+                    <button type="button" class="choice-option" data-speed="1.25">1.25×</button>
+                    <button type="button" class="choice-option" data-speed="1.5">1.5×</button>
+                </div>
+            </div>
+
+            <div class="settings-toggle-row">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="autoplay-toggle">
+                    <span class="toggle-track"></span>
+                </label>
+                <div class="settings-toggle-copy">
+                    <strong>Autoplay audio</strong>
+                    <p>Automatically play the Listen audio for each new question.</p>
+                </div>
+            </div>
+
+            <div class="settings-toggle-row">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="compact-mode-toggle">
+                    <span class="toggle-track"></span>
+                </label>
+                <div class="settings-toggle-copy">
+                    <strong>Compact mode</strong>
+                    <p>Tighter spacing, so more fits on screen at once.</p>
+                </div>
+            </div>
+
+            <div class="settings-toggle-row">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="celebration-toggle">
+                    <span class="toggle-track"></span>
+                </label>
+                <div class="settings-toggle-copy">
+                    <strong>Celebration effects</strong>
+                    <p>A little confetti when you finish a lesson or a level.</p>
+                </div>
+            </div>
+
+            <p class="settings-status" id="display-status" hidden></p>
+
+        </section>
+
+
+        <section class="settings-card">
+
             <h2>Email address</h2>
 
             <p class="settings-current-value">
