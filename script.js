@@ -5,10 +5,18 @@
 import { auth, db } from "./firebase.js";
 import {
     applyAllPreferences,
+    applyAccentTheme,
+    applySeasonalTheme,
     getPlaybackRate,
     shouldAutoplay,
     celebrateIfEnabled
 } from "./preferences.js";
+
+// Not a user preference, so it doesn't wait on sign-in — the
+// seasonal banner/colors should show for every visitor, even on the
+// signed-out welcome page.
+applySeasonalTheme();
+applyAccentTheme();
 
 import {
     createUserWithEmailAndPassword,

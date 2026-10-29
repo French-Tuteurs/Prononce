@@ -4663,6 +4663,25 @@ button:hover {
 }
 
 
+/* The owner-account "can't be deleted here" state swaps in a much
+   longer label, which wraps inside the default pill shape and looks
+   cramped — give disabled danger buttons a gentler shape instead. */
+
+.admin-danger-button:disabled {
+
+    border-radius: var(--radius-large);
+
+    font-size: 0.875rem;
+
+    padding: 14px 24px;
+
+    opacity: 0.8;
+
+    cursor: not-allowed;
+
+}
+
+
 .admin-account-list {
 
     display: flex;
@@ -5630,6 +5649,62 @@ body.compact-mode .settings-field {
     100% {
         transform: translate(var(--confetti-drift), 105vh) rotate(var(--confetti-rotate));
         opacity: 0.9;
+    }
+
+}
+
+
+/* ===========================
+   SEASONAL THEME (Halloween)
+=========================== */
+/* Not a toggle — active for everyone from October 1 through October
+   31 every year, driven purely by the visitor's local date in
+   preferences.js (applySeasonalTheme / isHalloweenSeason). The
+   accent color itself (pumpkin orange) is handled by overriding
+   --gold in JS, which the whole site already keys almost every
+   button, border, and highlight off of — this file only adds the
+   banner and a couple of small decorative touches. */
+
+#seasonal-banner {
+
+    box-sizing: border-box;
+
+    width: 100%;
+
+    padding: 10px 20px;
+
+    background: linear-gradient(90deg, #2e1a47, #d9731a);
+
+    color: var(--white);
+
+    font-family: "Lato", sans-serif;
+
+    font-size: 0.875rem;
+
+    font-weight: bold;
+
+    letter-spacing: 0.5px;
+
+    text-align: center;
+
+}
+
+
+html[data-season="halloween"] .logo::after {
+    content: " 🎃";
+}
+
+
+html[data-season="halloween"] .eyebrow::after {
+    content: " 👻";
+}
+
+
+@media (max-width: 600px) {
+
+    #seasonal-banner {
+        font-size: 0.75rem;
+        padding: 8px 14px;
     }
 
 }

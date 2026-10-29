@@ -20,12 +20,58 @@ const ACCENT_THEMES = {
 const FONT_SIZES = ["small", "medium", "large"];
 const PLAYBACK_SPEEDS = [0.75, 1, 1.25, 1.5];
 
+const HALLOWEEN_ACCENT = { accent: "#d9731a", accentLight: "#f4b465" };
+
+// Not a preference — nobody can turn this off. Active for the whole
+// month of October every year (local calendar date), gone again on
+// November 1st, no stored setting and no per-visitor opt-out.
+function isHalloweenSeason(date) {
+    const d = date || new Date();
+    return d.getMonth() === 9;
+}
+
 function applyAccentTheme(colorKey) {
 
-    const theme = ACCENT_THEMES[colorKey] || ACCENT_THEMES.gold;
+    const theme = isHalloweenSeason()
+        ? HALLOWEEN_ACCENT
+        : (ACCENT_THEMES[colorKey] || ACCENT_THEMES.gold);
 
     document.documentElement.style.setProperty("--gold", theme.accent);
     document.documentElement.style.setProperty("--gold-light", theme.accentLight);
+
+}
+
+
+function applySeasonalTheme() {
+
+    const active = isHalloweenSeason();
+
+    if (active) {
+        document.documentElement.dataset.season = "halloween";
+    } else {
+        delete document.documentElement.dataset.season;
+    }
+
+    const existingBanner = document.getElementById("seasonal-banner");
+
+    if (!active) {
+
+        if (existingBanner) {
+            existingBanner.remove();
+        }
+
+        return;
+
+    }
+
+    if (existingBanner || !document.body) {
+        return;
+    }
+
+    const banner = document.createElement("div");
+    banner.id = "seasonal-banner";
+    banner.textContent = "🎃 Happy Halloween from Prononce — Joyeux Halloween ! 👻";
+    document.body.insertBefore(banner, document.body.firstChild);
 
 }
 
@@ -176,5 +222,7 @@ export {
     shouldAutoplay,
     celebrationsEnabled,
     celebrate,
-    celebrateIfEnabled
+    celebrateIfEnabled,
+    isHalloweenSeason,
+    applySeasonalTheme
 };

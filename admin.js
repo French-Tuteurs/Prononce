@@ -10,7 +10,10 @@
 // account can update another user's document at all.
 
 import { auth, db } from "./firebase.js";
-import { applyAllPreferences } from "./preferences.js";
+import { applyAllPreferences, applyAccentTheme, applySeasonalTheme } from "./preferences.js";
+
+applySeasonalTheme();
+applyAccentTheme();
 
 import {
     onAuthStateChanged,
