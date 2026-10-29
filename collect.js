@@ -17,7 +17,10 @@
 // recordings can be matched to a speaker later.
 
 import { auth, db } from "./firebase.js";
-import { applyAllPreferences } from "./preferences.js";
+import { applyAllPreferences, applyAccentTheme, applySeasonalTheme } from "./preferences.js";
+
+applySeasonalTheme();
+applyAccentTheme();
 
 import {
     onAuthStateChanged,

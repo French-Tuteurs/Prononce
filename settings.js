@@ -33,8 +33,12 @@ import {
     applyDisplayTheme,
     applyFontSize,
     applyCompactMode,
-    celebrate
+    celebrate,
+    applySeasonalTheme
 } from "./preferences.js";
+
+applySeasonalTheme();
+applyAccentTheme();
 
 
 function hidePageLoader() {
