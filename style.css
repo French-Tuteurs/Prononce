@@ -641,11 +641,207 @@ button:hover {
 }
 
 
-.logout-button {
+/* ===========================
+   USER MENU (account icon + dropdown)
+=========================== */
+/* Replaces the separate "Settings" nav link and "Log Out" button with
+   a single icon whose dropdown holds both — opens on hover for mouse
+   users (only where hover actually exists, so it doesn't stick open
+   on touch), and on tap/click everywhere via user-menu-open, toggled
+   in preferences.js so every page gets the same behavior for free. */
 
-    padding: 10px 22px;
+.user-menu {
 
-    font-size: 0.875rem;
+    position: relative;
+
+}
+
+
+.user-menu-trigger {
+
+    box-sizing: border-box;
+
+    width: 44px;
+
+    height: 44px;
+
+    padding: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background-color: var(--navy);
+
+    border: 2px solid var(--navy);
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+}
+
+
+.user-menu-trigger:hover {
+
+    background-color: transparent;
+
+    transform: none;
+
+    box-shadow: none;
+
+}
+
+
+.user-menu-icon {
+
+    width: 20px;
+
+    height: 20px;
+
+    fill: none;
+
+    stroke: var(--white);
+
+    stroke-width: 2;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
+.user-menu-trigger:hover .user-menu-icon {
+
+    stroke: var(--navy);
+
+}
+
+
+.user-menu-dropdown {
+
+    position: absolute;
+
+    top: calc(100% + 10px);
+
+    right: 0;
+
+    min-width: 190px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border-soft);
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--soft-shadow);
+
+    padding: 8px;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform: translateY(-6px);
+
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+
+    z-index: 500;
+
+}
+
+
+@media (hover: hover) {
+
+    .user-menu:hover .user-menu-dropdown {
+
+        opacity: 1;
+
+        visibility: visible;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+
+.user-menu.user-menu-open .user-menu-dropdown {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateY(0);
+
+}
+
+
+.user-menu-item {
+
+    box-sizing: border-box;
+
+    display: block;
+
+    width: 100%;
+
+    text-align: left;
+
+    padding: 12px 14px;
+
+    font-size: 0.9375rem;
+
+    font-family: "Lato", sans-serif;
+
+    font-weight: normal;
+
+    letter-spacing: normal;
+
+    color: var(--text-dark);
+
+    background: none;
+
+    border: none;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+}
+
+
+.user-menu-item:hover {
+
+    background: var(--cream);
+
+    color: var(--text-dark);
+
+    transform: none;
+
+    box-shadow: none;
+
+}
+
+
+.user-menu-logout {
+
+    color: #a8574a;
+
+}
+
+
+@media (max-width: 600px) {
+
+    .user-menu-dropdown {
+
+        right: -10px;
+
+    }
 
 }
 
