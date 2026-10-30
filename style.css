@@ -684,7 +684,8 @@ button:hover {
 }
 
 
-.user-menu-trigger:hover {
+.user-menu:hover .user-menu-trigger,
+.user-menu.user-menu-open .user-menu-trigger {
 
     background-color: transparent;
 
@@ -714,7 +715,8 @@ button:hover {
 }
 
 
-.user-menu-trigger:hover .user-menu-icon {
+.user-menu:hover .user-menu-icon,
+.user-menu.user-menu-open .user-menu-icon {
 
     stroke: var(--navy);
 
@@ -1390,6 +1392,37 @@ button:hover {
     color: var(--white);
 
     transform: none;
+
+}
+
+
+/* Same "Coming Soon" look as a disabled <button>, but for the
+   practice links/rows that are temporarily locked — those stay <a>
+   elements (so re-enabling later is just flipping PRACTICE_ENABLED
+   back in script.js) but can't use the :disabled pseudo-class
+   since anchors don't support it. */
+
+.lesson-card-button-disabled,
+.progress-row-link-disabled {
+
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    pointer-events: none;
+
+}
+
+
+.lesson-card-button-disabled:hover {
+
+    background-color: var(--navy);
+
+    color: var(--white);
+
+    transform: none;
+
+    box-shadow: none;
 
 }
 
@@ -5902,5 +5935,18 @@ html[data-season="halloween"] .eyebrow::after {
         font-size: 0.75rem;
         padding: 8px 14px;
     }
+
+}
+
+
+/* ===========================
+   IPA SECTION (owner-only dashboard track)
+=========================== */
+
+.ipa-section-intro {
+
+    max-width: none;
+
+    margin: 0 0 30px;
 
 }

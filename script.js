@@ -64,6 +64,13 @@ let currentUserProfile = null;
 let currentPlaybackRate = 1;
 let audioAutoplayEnabled = false;
 
+// Practice is temporarily locked site-wide — every practice entry
+// point (dashboard buttons, progress-page rows, and direct level
+// URLs) shows/acts as "Coming Soon" while this is false. Flip it
+// back to true to bring practice back exactly as it was; nothing
+// else needs to change.
+const PRACTICE_ENABLED = false;
+
 
 // ===========================
 // PAGE LOADER
@@ -146,6 +153,7 @@ onAuthStateChanged(auth, async function (user) {
             renderPracticeProgress();
             renderTesterAccessCard();
             renderOwnerAdminPanel();
+            renderIpaSection();
 
         }
 
@@ -374,6 +382,21 @@ function renderPracticeProgress() {
         return;
     }
 
+    if (!PRACTICE_ENABLED) {
+
+        document.querySelectorAll(".practice-button-link[data-practice-id]").forEach(function (link) {
+
+            link.textContent = "Coming Soon";
+            link.removeAttribute("href");
+            link.classList.add("lesson-card-button-disabled");
+            link.setAttribute("aria-disabled", "true");
+
+        });
+
+        return;
+
+    }
+
     const progress = currentUserProfile.progress || {};
     const practiceLevels = progress.practiceLevels || {};
 
@@ -419,7 +442,16 @@ function enforcePracticeLevelAccess() {
     const practiceId = document.body.dataset.practiceId;
     const level = Number(document.body.dataset.level);
 
-    if (!practiceId || !level || !currentUserProfile) {
+    if (!practiceId || !level) {
+        return;
+    }
+
+    if (!PRACTICE_ENABLED) {
+        window.location.href = "../../dashboard.html";
+        return;
+    }
+
+    if (!currentUserProfile) {
         return;
     }
 
@@ -480,9 +512,22 @@ function renderProgressPage() {
         const linkEl = row.querySelector(".progress-row-link");
 
         if (linkEl) {
-            const topic = practiceId.replace("practice-", "");
-            const openLevel = completed ? 1 : Math.max(1, currentLevel);
-            linkEl.href = "practice/" + topic + "/level-" + openLevel + ".html";
+
+            if (PRACTICE_ENABLED) {
+
+                const topic = practiceId.replace("practice-", "");
+                const openLevel = completed ? 1 : Math.max(1, currentLevel);
+                linkEl.href = "practice/" + topic + "/level-" + openLevel + ".html";
+
+            } else {
+
+                linkEl.textContent = "Coming Soon";
+                linkEl.removeAttribute("href");
+                linkEl.classList.add("progress-row-link-disabled");
+                linkEl.setAttribute("aria-disabled", "true");
+
+            }
+
         }
 
         const levelsForThisPractice = completed ? 10 : Math.max(0, currentLevel - 1);
@@ -494,13 +539,15 @@ function renderProgressPage() {
 
         if (statusEl) {
 
-            statusEl.textContent = completed
-                ? "All 10 Levels Complete"
-                : currentLevel > 1
-                    ? "Level " + currentLevel + " of 10"
-                    : "Not Started";
+            statusEl.textContent = !PRACTICE_ENABLED
+                ? "Coming Soon"
+                : completed
+                    ? "All 10 Levels Complete"
+                    : currentLevel > 1
+                        ? "Level " + currentLevel + " of 10"
+                        : "Not Started";
 
-            statusEl.classList.toggle("progress-row-status-done", completed);
+            statusEl.classList.toggle("progress-row-status-done", completed && PRACTICE_ENABLED);
 
         }
 
@@ -633,6 +680,29 @@ function renderOwnerAdminPanel() {
 
         toggle.classList.remove("hidden");
 
+    }
+
+}
+
+
+// The IPA track is a separate, owner-only content set (see
+// lessons/ipa-*.html) — not ready for every visitor yet, so its
+// dashboard section stays hidden unless the signed-in account is the
+// owner. Progress on these lessons still uses the exact same
+// .lesson-card[data-lesson-id] machinery as the regular lessons
+// (renderDashboardLessonProgress, markLessonComplete), so nothing
+// else needs to change when it's time to make this public.
+
+function renderIpaSection() {
+
+    if (!currentUserProfile || currentUserProfile.isOwner !== true) {
+        return;
+    }
+
+    const section = document.getElementById("ipa-section");
+
+    if (section) {
+        section.classList.remove("hidden");
     }
 
 }

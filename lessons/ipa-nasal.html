@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Nasal Vowels | Prononce</title>
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="lesson-page ipa-lesson-page" data-lesson-id="ipa-nasal">
+
+    <div class="page-loader" id="page-loader">
+        <img src="../favicon.svg" alt="" class="page-loader-mark">
+        <div class="page-loader-spinner"></div>
+    </div>
+
+
+    <header class="site-header">
+
+        <a href="../dashboard.html" class="logo">Prononce</a>
+
+        <nav class="main-nav">
+            <a href="../dashboard.html">Dashboard</a>
+            <a href="#" class="active" title="Coming soon">Practice</a>
+            <a href="../progress.html">Progress</a>
+        </nav>
+
+        <div class="user-menu" id="user-menu">
+            <button
+                type="button"
+                class="user-menu-trigger"
+                id="user-menu-trigger"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-label="Account menu"
+            >
+                <svg class="user-menu-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+                </svg>
+            </button>
+            <div class="user-menu-dropdown" id="user-menu-dropdown">
+                <a href="../settings.html" class="user-menu-item">Account Settings</a>
+                <button type="button" class="user-menu-item user-menu-logout" id="logout-button">Log Out</button>
+            </div>
+        </div>
+
+    </header>
+
+
+    <main class="lesson-container">
+
+        <a href="../dashboard.html" class="back-link">← Back to Dashboard</a>
+
+        <section class="lesson-intro">
+
+            <p class="eyebrow">IPA &middot; Lesson 3</p>
+
+            <h1>Nasal Vowels</h1>
+
+            <p>French uses four nasal vowels that don&rsquo;t exist in English as distinct sounds. Learn to hear and spot them &mdash; they change meaning, not just accent.</p>
+
+        </section>
+
+
+        <div class="lesson-progress">
+            <div class="lesson-progress-top">
+                <span>Lesson Progress</span>
+                <span id="lesson-progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="lesson-progress-fill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+
+        <section class="lesson-section" data-section="1">
+
+            <p class="eyebrow">01 &middot; Learn</p>
+
+            <h2>What makes a vowel nasal.</h2>
+
+
+            <p>
+                For an oral vowel, air flows out through your mouth
+                only. For a <strong>nasal vowel</strong>, the soft
+                palate drops and lets air flow through your nose at
+                the same time &mdash; the vowel keeps its basic
+                tongue position but takes on a distinct, resonant
+                quality. English doesn&rsquo;t use this contrastively
+                at all (English vowels before <em>n</em> or
+                <em>m</em> can sound slightly nasal, but swapping
+                that nasality never changes the word&rsquo;s meaning
+                the way it does in French).
+            </p>
+
+            <p>
+                French has four nasal vowels, and getting them right
+                matters: <em>vin</em> (wine) and <em>vingt</em>
+                (twenty) are distinguished almost entirely by vowel
+                quality, and mixing up <em>bon</em> (good) with
+                <em>banc</em> (bench) is a classic learner slip.
+            </p>
+        
+
+            <button class="lesson-next" data-next="2">Continue</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="2">
+
+            <p class="eyebrow">02 &middot; Learn</p>
+
+            <h2>The four nasal vowel symbols.</h2>
+
+
+            <p>
+                Each nasal vowel pairs with an oral vowel you already
+                know &mdash; same tongue position, air redirected
+                through the nose.
+            </p>
+        
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[ɑ̃]</span>
+
+            <div>
+
+                <h3><em>dans</em> &mdash; in</h3>
+
+                <p>Related to oral [ɑ]. The most open of the four nasal vowels.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="dans" aria-label="Listen: an">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[ɛ̃]</span>
+
+            <div>
+
+                <h3><em>vin</em> &mdash; wine</h3>
+
+                <p>Related to oral [ɛ]. Spelled many ways &mdash; in, im, ain, ein, yn, ym all land here.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="vin" aria-label="Listen: in">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[ɔ̃]</span>
+
+            <div>
+
+                <h3><em>bon</em> &mdash; good</h3>
+
+                <p>Related to oral [ɔ]. Rounded lips, air through the nose.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="bon" aria-label="Listen: on">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[œ̃]</span>
+
+            <div>
+
+                <h3><em>un</em> &mdash; a, one</h3>
+
+                <p>Related to oral [œ]. The rarest of the four &mdash; many French speakers today merge it into [ɛ̃], so hearing <em>un</em> and <em>in</em> sound identical is common and not a mistake on their part.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="un" aria-label="Listen: un">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+
+            <button class="lesson-next" data-next="3">Continue</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="3">
+
+            <p class="eyebrow">03 &middot; Learn</p>
+
+            <h2>Spelling clues: how to spot a nasal vowel in print.</h2>
+
+
+            <p>
+                You can usually predict nasalization from spelling: a
+                vowel letter followed by <strong>n</strong> or
+                <strong>m</strong>, when that <em>n</em>/<em>m</em>
+                is <em>not</em> followed by another vowel or doubled,
+                signals a nasal vowel &mdash; and the
+                <em>n</em>/<em>m</em> itself is not pronounced as a
+                separate consonant sound.
+            </p>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">ɑ̃</span>
+                <div>
+                    <h3>an / en / am / em</h3>
+                    <p>
+                        <em>dans</em>, <em>enfant</em>,
+                        <em>chambre</em>, <em>temps</em>
+                    </p>
+                </div>
+            </div>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">ɛ̃</span>
+                <div>
+                    <h3>in / im / ain / ein / yn / ym</h3>
+                    <p>
+                        <em>vin</em>, <em>important</em>,
+                        <em>pain</em>, <em>plein</em>, <em>syndicat</em>
+                    </p>
+                </div>
+            </div>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">ɔ̃</span>
+                <div>
+                    <h3>on / om</h3>
+                    <p>
+                        <em>bon</em>, <em>nombre</em>
+                    </p>
+                </div>
+            </div>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">œ̃</span>
+                <div>
+                    <h3>un / um</h3>
+                    <p>
+                        <em>un</em>, <em>parfum</em>
+                    </p>
+                </div>
+            </div>
+
+            <p>
+                The key exception: when <em>n</em>/<em>m</em> is
+                doubled, or followed by a vowel, nasalization usually
+                disappears and it&rsquo;s pronounced as a normal
+                consonant instead &mdash; compare the nasal vowel in
+                <em>bon</em> to the fully oral, non-nasal vowel in
+                <em>bonne</em> (the final <em>e</em> after the
+                doubled <em>nn</em> breaks the nasalization).
+            </p>
+        
+
+            <button class="lesson-next" data-next="4">Continue</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="4">
+
+            <p class="eyebrow">04 &middot; Learn</p>
+
+            <h2>Classic contrasts to listen for.</h2>
+
+
+            <p>
+                A handful of word pairs differ by nasal vowel alone
+                &mdash; a great way to train your ear.
+            </p>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">ɔ̃ / a</span>
+                <div>
+                    <h3><em>bon</em> vs. <em>banc</em></h3>
+                    <p>good vs. bench &mdash; [bɔ̃] vs. [bɑ̃]</p>
+                    <div class="practice-buttons">
+                        <button class="audio-button listen-button" data-say="bon" aria-label="Listen: bon">▶ bon</button>
+                        <button class="audio-button listen-button" data-say="banc" aria-label="Listen: banc">▶ banc</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">ɛ̃ / ɑ̃</span>
+                <div>
+                    <h3><em>vin</em> vs. <em>vent</em></h3>
+                    <p>wine vs. wind &mdash; [vɛ̃] vs. [vɑ̃]</p>
+                    <div class="practice-buttons">
+                        <button class="audio-button listen-button" data-say="vin" aria-label="Listen: vin">▶ vin</button>
+                        <button class="audio-button listen-button" data-say="vent" aria-label="Listen: vent">▶ vent</button>
+                    </div>
+                </div>
+            </div>
+
+            <p>
+                A well-known mnemonic phrase packs all four nasal
+                vowels into one sentence: <strong>&ldquo;un bon vin
+                blanc&rdquo;</strong> (a good white wine) runs
+                through [œ̃], [ɔ̃], [ɛ̃], and [ɑ̃] in order &mdash;
+                worth saying slowly a few times.
+            </p>
+        
+
+            <button class="lesson-next" data-next="5">Continue to Quick Check</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="5">
+
+            <p class="eyebrow">05 &middot; Quick Check</p>
+
+            <h2>What did you learn?</h2>
+
+
+            <div class="question-card">
+                <h3>What physically happens to produce a nasal vowel?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">The tongue touches the roof of the mouth</button>
+                    <button class="answer-option" data-correct="true">Air flows through the nose as well as the mouth</button>
+                    <button class="answer-option">The vowel is said louder</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>Which symbol represents the vowel in <em>vin</em>?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">[ɔ̃]</button>
+                    <button class="answer-option" data-correct="true">[ɛ̃]</button>
+                    <button class="answer-option">[ɑ̃]</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>Why is <em>bon</em> nasal but <em>bonne</em> is not?</h3>
+                <div class="answer-options">
+                    <button class="answer-option"><em>Bonne</em> is a different word entirely</button>
+                    <button class="answer-option" data-correct="true">The doubled <em>nn</em> followed by a vowel breaks the nasalization</button>
+                    <button class="answer-option">Nasal vowels only appear at the start of a word</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>Which spelling pattern usually signals [ɔ̃]?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">in / im</button>
+                    <button class="answer-option" data-correct="true">on / om</button>
+                    <button class="answer-option">un / um</button>
+                </div>
+            </div>
+
+
+            <div class="lesson-nav-buttons">
+                <button class="lesson-back" data-back="4">← Back</button>
+                <button class="lesson-next" data-next="6">Finish Lesson</button>
+            </div>
+
+        </section>
+
+
+        <section class="lesson-section completion-section hidden" data-section="6">
+
+            <p class="eyebrow">Lesson Complete</p>
+
+            <div class="completion-icon">✓</div>
+
+            <h2>Très bien !</h2>
+
+            <p>You can now recognize all four nasal vowels and spot them in spelling. Next: the semi-vowels.</p>
+
+            <div class="completion-stats">
+                <div class="completion-score">
+                    <span>Lesson Progress</span>
+                    <strong>100%</strong>
+                </div>
+                <div class="completion-score">
+                    <span>Quick Check Score</span>
+                    <strong id="completion-quiz-score">—</strong>
+                </div>
+            </div>
+
+            <a href="../dashboard.html" class="dashboard-link">Return to Dashboard</a>
+
+        </section>
+
+    </main>
+
+
+    <script type="module" src="../script.js"></script>
+
+</body>
+
+</html>
