@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Consonants | Prononce</title>
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="lesson-page ipa-lesson-page" data-lesson-id="ipa-consonants">
+
+    <div class="page-loader" id="page-loader">
+        <img src="../favicon.svg" alt="" class="page-loader-mark">
+        <div class="page-loader-spinner"></div>
+    </div>
+
+
+    <header class="site-header">
+
+        <a href="../dashboard.html" class="logo">Prononce</a>
+
+        <nav class="main-nav">
+            <a href="../dashboard.html">Dashboard</a>
+            <a href="#" class="active" title="Coming soon">Practice</a>
+            <a href="../progress.html">Progress</a>
+        </nav>
+
+        <div class="user-menu" id="user-menu">
+            <button
+                type="button"
+                class="user-menu-trigger"
+                id="user-menu-trigger"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-label="Account menu"
+            >
+                <svg class="user-menu-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+                </svg>
+            </button>
+            <div class="user-menu-dropdown" id="user-menu-dropdown">
+                <a href="../settings.html" class="user-menu-item">Account Settings</a>
+                <button type="button" class="user-menu-item user-menu-logout" id="logout-button">Log Out</button>
+            </div>
+        </div>
+
+    </header>
+
+
+    <main class="lesson-container">
+
+        <a href="../dashboard.html" class="back-link">← Back to Dashboard</a>
+
+        <section class="lesson-intro">
+
+            <p class="eyebrow">IPA &middot; Lesson 5</p>
+
+            <h1>Consonants</h1>
+
+            <p>Most French consonants are exactly what they look like. This lesson focuses on the handful &mdash; especially [ʁ], the French R &mdash; that aren&rsquo;t.</p>
+
+        </section>
+
+
+        <div class="lesson-progress">
+            <div class="lesson-progress-top">
+                <span>Lesson Progress</span>
+                <span id="lesson-progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="lesson-progress-fill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+
+        <section class="lesson-section" data-section="1">
+
+            <p class="eyebrow">01 &middot; Learn</p>
+
+            <h2>Most consonants are exactly what you&rsquo;d expect.</h2>
+
+
+            <p>
+                Good news first: most French consonants map directly
+                onto familiar English sounds and symbols &mdash;
+                <strong>p, b, t, d, k, ɡ, f, v, s, z, m, n, l</strong>
+                all work almost exactly as you&rsquo;d guess from
+                their letters. A few spelling quirks are worth
+                flagging, though:
+            </p>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">s / z</span>
+                <div>
+                    <h3>A single <em>s</em> between vowels is [z]</h3>
+                    <p>
+                        <em>maison</em> is [mɛzɔ̃], not [mɛsɔ̃]
+                        &mdash; a single <em>s</em> surrounded by
+                        vowels is voiced. Double it (<em>ss</em>) to
+                        get the voiceless [s] back, as in
+                        <em>poisson</em>.
+                    </p>
+                    <div class="practice-buttons">
+                        <button class="audio-button listen-button" data-say="maison" aria-label="Listen: maison">▶ maison</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">k</span>
+                <div>
+                    <h3>[k] hides behind several spellings</h3>
+                    <p>
+                        <em>c</em> before a/o/u, <em>qu</em>, and
+                        <em>k</em> itself all land on the same sound:
+                        <em>cave</em>, <em>qui</em>, and
+                        <em>kilo</em> all start with [k].
+                    </p>
+                </div>
+            </div>
+        
+
+            <button class="lesson-next" data-next="2">Continue</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="2">
+
+            <p class="eyebrow">02 &middot; Learn</p>
+
+            <h2>The sounds that trip up English speakers.</h2>
+
+
+            <p>
+                These are the consonants worth real attention &mdash;
+                either because English doesn&rsquo;t have them, or
+                because the instinct from English spelling leads you
+                astray.
+            </p>
+        
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[ʁ]</span>
+
+            <div>
+
+                <h3><em>rouge</em> &mdash; red</h3>
+
+                <p>The French R &mdash; made in the back of the throat, not with the tip of the tongue the way English R is. The single most distinctive sound in French pronunciation, and the subject of its own full lesson on this site.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="rouge" aria-label="Listen: rouge">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[ʃ]</span>
+
+            <div>
+
+                <h3><em>chat</em> &mdash; cat</h3>
+
+                <p>The &ldquo;sh&rdquo; sound, always spelled <em>ch</em> in French &mdash; never pronounced like English &ldquo;ch&rdquo; in &ldquo;chip.&rdquo;</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="chat" aria-label="Listen: chat">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[ʒ]</span>
+
+            <div>
+
+                <h3><em>je</em> &mdash; I</h3>
+
+                <p>The voiced twin of [ʃ] &mdash; like the <em>s</em> in English &ldquo;measure.&rdquo; Spelled <em>j</em>, or <em>g</em> before e/i/y.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="je" aria-label="Listen: je">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[ɲ]</span>
+
+            <div>
+
+                <h3><em>montagne</em> &mdash; mountain</h3>
+
+                <p>A single consonant &mdash; tongue flat against the roof of the mouth &mdash; close to the <em>ny</em> in English &ldquo;canyon,&rdquo; always spelled <em>gn</em>.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="montagne" aria-label="Listen: montagne">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+
+            <button class="lesson-next" data-next="3">Continue</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="3">
+
+            <p class="eyebrow">03 &middot; Learn</p>
+
+            <h2>One more borrowed sound, and the full picture.</h2>
+
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">ŋ</span>
+                <div>
+                    <h3><em>camping</em> &mdash; campsite</h3>
+                    <p>
+                        The &ldquo;ng&rdquo; sound in English
+                        &ldquo;sing.&rdquo; Not native to French, but
+                        common in words borrowed from English like
+                        <em>parking</em> and <em>camping</em>.
+                    </p>
+                    <div class="practice-buttons">
+                        <button class="audio-button listen-button" data-say="camping" aria-label="Listen: camping">▶ Listen</button>
+                    </div>
+                </div>
+            </div>
+
+            <p>
+                Put together with the familiar set from the first
+                section, that&rsquo;s the full French consonant
+                inventory: <strong>p, b, t, d, k, ɡ, f, v, s, z, ʃ,
+                ʒ, m, n, ɲ, ŋ, l, ʁ</strong> &mdash; eighteen sounds
+                in total, the overwhelming majority of them familiar
+                the moment you hear them.
+            </p>
+        
+
+            <button class="lesson-next" data-next="4">Continue to Quick Check</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="4">
+
+            <p class="eyebrow">04 &middot; Quick Check</p>
+
+            <h2>What did you learn?</h2>
+
+
+            <div class="question-card">
+                <h3>How is a single <em>s</em> between two vowels pronounced, as in <em>maison</em>?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">[s]</button>
+                    <button class="answer-option" data-correct="true">[z]</button>
+                    <button class="answer-option">[ʃ]</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>What&rsquo;s different about the French [ʁ] compared to the English R?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">It&rsquo;s silent</button>
+                    <button class="answer-option" data-correct="true">It&rsquo;s made in the back of the throat, not with the tongue tip</button>
+                    <button class="answer-option">It only appears at the end of words</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>Which symbol represents the sound spelled <em>gn</em>, as in <em>montagne</em>?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">[ŋ]</button>
+                    <button class="answer-option" data-correct="true">[ɲ]</button>
+                    <button class="answer-option">[ʒ]</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>[ʒ], as in <em>je</em>, is best described as&hellip;</h3>
+                <div class="answer-options">
+                    <button class="answer-option" data-correct="true">The voiced twin of [ʃ]</button>
+                    <button class="answer-option">Identical to English &ldquo;j&rdquo; in &ldquo;jump&rdquo;</button>
+                    <button class="answer-option">A nasal consonant</button>
+                </div>
+            </div>
+
+
+            <div class="lesson-nav-buttons">
+                <button class="lesson-back" data-back="3">← Back</button>
+                <button class="lesson-next" data-next="5">Finish Lesson</button>
+            </div>
+
+        </section>
+
+
+        <section class="lesson-section completion-section hidden" data-section="5">
+
+            <p class="eyebrow">Lesson Complete</p>
+
+            <div class="completion-icon">✓</div>
+
+            <h2>Très bien !</h2>
+
+            <p>You now have the full French consonant inventory. Last stop: reading full transcriptions.</p>
+
+            <div class="completion-stats">
+                <div class="completion-score">
+                    <span>Lesson Progress</span>
+                    <strong>100%</strong>
+                </div>
+                <div class="completion-score">
+                    <span>Quick Check Score</span>
+                    <strong id="completion-quiz-score">—</strong>
+                </div>
+            </div>
+
+            <a href="../dashboard.html" class="dashboard-link">Return to Dashboard</a>
+
+        </section>
+
+    </main>
+
+
+    <script type="module" src="../script.js"></script>
+
+</body>
+
+</html>

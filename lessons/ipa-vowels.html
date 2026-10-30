@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Oral Vowels | Prononce</title>
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="lesson-page ipa-lesson-page" data-lesson-id="ipa-vowels">
+
+    <div class="page-loader" id="page-loader">
+        <img src="../favicon.svg" alt="" class="page-loader-mark">
+        <div class="page-loader-spinner"></div>
+    </div>
+
+
+    <header class="site-header">
+
+        <a href="../dashboard.html" class="logo">Prononce</a>
+
+        <nav class="main-nav">
+            <a href="../dashboard.html">Dashboard</a>
+            <a href="#" class="active" title="Coming soon">Practice</a>
+            <a href="../progress.html">Progress</a>
+        </nav>
+
+        <div class="user-menu" id="user-menu">
+            <button
+                type="button"
+                class="user-menu-trigger"
+                id="user-menu-trigger"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-label="Account menu"
+            >
+                <svg class="user-menu-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+                </svg>
+            </button>
+            <div class="user-menu-dropdown" id="user-menu-dropdown">
+                <a href="../settings.html" class="user-menu-item">Account Settings</a>
+                <button type="button" class="user-menu-item user-menu-logout" id="logout-button">Log Out</button>
+            </div>
+        </div>
+
+    </header>
+
+
+    <main class="lesson-container">
+
+        <a href="../dashboard.html" class="back-link">← Back to Dashboard</a>
+
+        <section class="lesson-intro">
+
+            <p class="eyebrow">IPA &middot; Lesson 2</p>
+
+            <h1>Oral Vowels</h1>
+
+            <p>French has twelve distinct oral vowels &mdash; more than twice as many as English. Learn each symbol, grouped by family, with a real word to anchor it to.</p>
+
+        </section>
+
+
+        <div class="lesson-progress">
+            <div class="lesson-progress-top">
+                <span>Lesson Progress</span>
+                <span id="lesson-progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="lesson-progress-fill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+
+        <section class="lesson-section" data-section="1">
+
+            <p class="eyebrow">01 &middot; Learn</p>
+
+            <h2>Three things change between vowels.</h2>
+
+
+            <p>
+                Every oral vowel in French comes down to three
+                things: how <strong>high</strong> the tongue sits,
+                how far <strong>forward or back</strong> it is, and
+                whether the <strong>lips are rounded</strong>. This
+                lesson groups the twelve vowels by family so the
+                pattern is easier to hear, starting with the ones
+                closest to English.
+            </p>
+        
+
+            <button class="lesson-next" data-next="2">Continue</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="2">
+
+            <p class="eyebrow">02 &middot; Learn</p>
+
+            <h2>Front unrounded vowels.</h2>
+
+
+            <p>
+                These four sit at the front of the mouth with the
+                lips spread, not rounded &mdash; the closest family
+                to English vowel sounds.
+            </p>
+        
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[i]</span>
+
+            <div>
+
+                <h3><em>si</em> &mdash; if</h3>
+
+                <p>High, front, spread lips &mdash; tense and bright, like the <em>ee</em> in &ldquo;see&rdquo; but shorter and crisper.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="si" aria-label="Listen: i">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[e]</span>
+
+            <div>
+
+                <h3><em>été</em> &mdash; summer</h3>
+
+                <p>High-mid, front, spread lips. No real English equivalent &mdash; closer to the vowel in &ldquo;say&rdquo; but without the glide at the end.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="été" aria-label="Listen: e">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[ɛ]</span>
+
+            <div>
+
+                <h3><em>fête</em> &mdash; party</h3>
+
+                <p>Lower-mid, front, spread lips. Close to the <em>e</em> in &ldquo;bed,&rdquo; a bit more open than [e].</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="fête" aria-label="Listen: ɛ">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[a]</span>
+
+            <div>
+
+                <h3><em>chat</em> &mdash; cat</h3>
+
+                <p>Low, front, spread lips &mdash; the most open vowel in this group, close to the <em>a</em> in &ldquo;cat.&rdquo;</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="chat" aria-label="Listen: a">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+
+            <button class="lesson-next" data-next="3">Continue</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="3">
+
+            <p class="eyebrow">03 &middot; Learn</p>
+
+            <h2>Front rounded vowels.</h2>
+
+
+            <p>
+                These three use the exact same tongue positions as
+                [i], [e], and [ɛ] above &mdash; the only difference
+                is rounded lips. None of them exist in English, which
+                is exactly why they trip learners up: your tongue
+                already knows what to do, your lips just have to
+                catch up.
+            </p>
+        
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[y]</span>
+
+            <div>
+
+                <h3><em>tu</em> &mdash; you</h3>
+
+                <p>Same tongue position as [i] &mdash; high and forward &mdash; but with lips tightly rounded, as if starting to whistle.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="tu" aria-label="Listen: y">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[ø]</span>
+
+            <div>
+
+                <h3><em>peu</em> &mdash; a little</h3>
+
+                <p>Same tongue position as [e], lips rounded. Say [e], then round your lips without moving your tongue.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="peu" aria-label="Listen: eu">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[œ]</span>
+
+            <div>
+
+                <h3><em>sœur</em> &mdash; sister</h3>
+
+                <p>Same tongue position as [ɛ], lips rounded &mdash; a touch more open than [ø].</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="sœur" aria-label="Listen: eu">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+
+            <button class="lesson-next" data-next="4">Continue</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="4">
+
+            <p class="eyebrow">04 &middot; Learn</p>
+
+            <h2>Back vowels and the schwa.</h2>
+
+
+            <p>
+                The back vowels are produced with the tongue pulled
+                toward the back of the mouth and the lips rounded.
+                The schwa [ə] is the odd one out: short, central, and
+                often dropped entirely in casual speech.
+            </p>
+        
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[ɑ]</span>
+
+            <div>
+
+                <h3><em>pâte</em> &mdash; dough/pasta</h3>
+
+                <p>Low and further back than [a], lips relaxed rather than rounded. In most of France today this has largely merged with [a] &mdash; worth knowing it exists, but don&rsquo;t worry about distinguishing it by ear yet.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="pâte" aria-label="Listen: ɑ">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[ɔ]</span>
+
+            <div>
+
+                <h3><em>comme</em> &mdash; like, as</h3>
+
+                <p>Low-mid, back, rounded. Close to the <em>o</em> in British &ldquo;hot.&rdquo;</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="comme" aria-label="Listen: ɔ">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[o]</span>
+
+            <div>
+
+                <h3><em>eau</em> &mdash; water</h3>
+
+                <p>High-mid, back, rounded &mdash; closer to the vowel in &ldquo;go,&rdquo; but held steady instead of gliding into a <em>w</em> sound.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="eau" aria-label="Listen: o">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[u]</span>
+
+            <div>
+
+                <h3><em>loup</em> &mdash; wolf</h3>
+
+                <p>High and back, tightly rounded lips &mdash; close to &ldquo;oo&rdquo; in &ldquo;food.&rdquo; Not the same symbol as [y] &mdash; [u] is rounded-and-back, [y] is rounded-and-front.</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="loup" aria-label="Listen: ou">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="sound-card ipa-sound-card">
+
+            <span class="sound-symbol">[ə]</span>
+
+            <div>
+
+                <h3><em>le</em> &mdash; the</h3>
+
+                <p>Short, central, relaxed &mdash; the &ldquo;uh&rdquo; sound. Frequently dropped in fast speech: <em>je ne sais pas</em> is often said more like &ldquo;j&rsquo;n&rsquo;sais pas.&rdquo;</p>
+
+                <div class="practice-buttons">
+                    <button class="audio-button listen-button" data-say="le" aria-label="Listen: schwa">▶ Listen</button>
+                </div>
+
+            </div>
+
+        </div>
+
+
+            <button class="lesson-next" data-next="5">Continue to Quick Check</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="5">
+
+            <p class="eyebrow">05 &middot; Quick Check</p>
+
+            <h2>What did you learn?</h2>
+
+
+            <div class="question-card">
+                <h3>What are the three things that distinguish one French vowel from another?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">Volume, speed, and pitch</button>
+                    <button class="answer-option" data-correct="true">Tongue height, tongue front/back position, and lip rounding</button>
+                    <button class="answer-option">Which syllable gets stressed</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>What&rsquo;s the only difference between [i] and [y]?</h3>
+                <div class="answer-options">
+                    <button class="answer-option" data-correct="true">Lip rounding &mdash; [y] adds rounded lips to the same tongue position</button>
+                    <button class="answer-option">Tongue height</button>
+                    <button class="answer-option">They&rsquo;re unrelated sounds</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>Which symbol represents the vowel in <em>tu</em>?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">[u] as in <em>loup</em></button>
+                    <button class="answer-option" data-correct="true">[y] as in <em>tu</em></button>
+                    <button class="answer-option">[ø] as in <em>peu</em></button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>The schwa [ə], as in <em>le</em>, is often&hellip;</h3>
+                <div class="answer-options">
+                    <button class="answer-option">Stressed heavily</button>
+                    <button class="answer-option" data-correct="true">Dropped entirely in fast speech</button>
+                    <button class="answer-option">Pronounced like [a]</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>Which word contains a back, rounded, high vowel ([u])?</h3>
+                <div class="answer-options">
+                    <button class="answer-option"><em>si</em></button>
+                    <button class="answer-option" data-correct="true"><em>loup</em></button>
+                    <button class="answer-option"><em>fête</em></button>
+                </div>
+            </div>
+
+
+            <div class="lesson-nav-buttons">
+                <button class="lesson-back" data-back="4">← Back</button>
+                <button class="lesson-next" data-next="6">Finish Lesson</button>
+            </div>
+
+        </section>
+
+
+        <section class="lesson-section completion-section hidden" data-section="6">
+
+            <p class="eyebrow">Lesson Complete</p>
+
+            <div class="completion-icon">✓</div>
+
+            <h2>Très bien !</h2>
+
+            <p>You&rsquo;ve covered all twelve oral vowel symbols. Next: the four nasal vowels.</p>
+
+            <div class="completion-stats">
+                <div class="completion-score">
+                    <span>Lesson Progress</span>
+                    <strong>100%</strong>
+                </div>
+                <div class="completion-score">
+                    <span>Quick Check Score</span>
+                    <strong id="completion-quiz-score">—</strong>
+                </div>
+            </div>
+
+            <a href="../dashboard.html" class="dashboard-link">Return to Dashboard</a>
+
+        </section>
+
+    </main>
+
+
+    <script type="module" src="../script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Introduction to the IPA | Prononce</title>
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="lesson-page ipa-lesson-page" data-lesson-id="ipa-intro">
+
+    <div class="page-loader" id="page-loader">
+        <img src="../favicon.svg" alt="" class="page-loader-mark">
+        <div class="page-loader-spinner"></div>
+    </div>
+
+
+    <header class="site-header">
+
+        <a href="../dashboard.html" class="logo">Prononce</a>
+
+        <nav class="main-nav">
+            <a href="../dashboard.html">Dashboard</a>
+            <a href="#" class="active" title="Coming soon">Practice</a>
+            <a href="../progress.html">Progress</a>
+        </nav>
+
+        <div class="user-menu" id="user-menu">
+            <button
+                type="button"
+                class="user-menu-trigger"
+                id="user-menu-trigger"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-label="Account menu"
+            >
+                <svg class="user-menu-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+                </svg>
+            </button>
+            <div class="user-menu-dropdown" id="user-menu-dropdown">
+                <a href="../settings.html" class="user-menu-item">Account Settings</a>
+                <button type="button" class="user-menu-item user-menu-logout" id="logout-button">Log Out</button>
+            </div>
+        </div>
+
+    </header>
+
+
+    <main class="lesson-container">
+
+        <a href="../dashboard.html" class="back-link">← Back to Dashboard</a>
+
+        <section class="lesson-intro">
+
+            <p class="eyebrow">IPA &middot; Lesson 1</p>
+
+            <h1>Introduction to the IPA</h1>
+
+            <p>Before diving into individual sounds, learn what the IPA is, how to read it, and why it turns French pronunciation from guesswork into something precise.</p>
+
+        </section>
+
+
+        <div class="lesson-progress">
+            <div class="lesson-progress-top">
+                <span>Lesson Progress</span>
+                <span id="lesson-progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="lesson-progress-fill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+
+        <section class="lesson-section" data-section="1">
+
+            <p class="eyebrow">01 &middot; Learn</p>
+
+            <h2>French spelling lies to you &mdash; the IPA doesn&rsquo;t.</h2>
+
+
+            <p>
+                French has roughly 36 distinct sounds, but only 26
+                letters to write them with &mdash; and those letters
+                get combined, dropped, and recycled in ways that
+                rarely match how a word actually sounds.
+                <strong>eau</strong>, <strong>au</strong>, and
+                <strong>o</strong> can all represent the exact same
+                vowel. The letter <strong>s</strong> can be silent,
+                voiced like a <em>z</em>, or voiceless like an
+                <em>s</em>, depending entirely on what&rsquo;s around
+                it.
+            </p>
+
+            <p>
+                The <strong>International Phonetic Alphabet (IPA)</strong>
+                fixes this by giving every distinct sound in human
+                language its own dedicated symbol. One symbol, one
+                sound, always &mdash; no exceptions, no silent
+                letters, no guessing. Once you can read IPA, you can
+                look up any French word and know <em>exactly</em> how
+                it&rsquo;s pronounced, with zero ambiguity.
+            </p>
+        
+
+            <button class="lesson-next" data-next="2">Continue</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="2">
+
+            <p class="eyebrow">02 &middot; Learn</p>
+
+            <h2>Reading the notation.</h2>
+
+
+            <p>
+                IPA transcriptions are written between slashes or
+                square brackets, like <strong>/ʃa/</strong> for the
+                French word <em>chat</em> (cat). Each symbol between
+                the slashes corresponds to exactly one sound &mdash;
+                here, <strong>ʃ</strong> (the &ldquo;sh&rdquo; sound)
+                followed by <strong>a</strong>. Two sounds, two
+                symbols, nothing silent.
+            </p>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">/ʃa/</span>
+                <div>
+                    <h3><em>chat</em> &mdash; cat</h3>
+                    <p>
+                        Written with 4 letters (c-h-a-t), but only 2
+                        sounds: <strong>ʃ</strong> and
+                        <strong>a</strong>. The final <em>t</em> is
+                        silent &mdash; and the IPA simply doesn&rsquo;t
+                        write it, because there&rsquo;s no sound
+                        there to represent.
+                    </p>
+                    <div class="practice-buttons">
+                        <button class="audio-button listen-button" data-say="chat" aria-label="Listen: chat">▶ Listen</button>
+                    </div>
+                </div>
+            </div>
+
+            <p>
+                You&rsquo;ll sometimes see square brackets
+                <strong>[ ]</strong> instead of slashes <strong>/ /</strong>
+                in more technical texts &mdash; brackets mark the
+                precise, physical sound a speaker actually made,
+                while slashes mark the sound&rsquo;s abstract role in
+                the language. For learning pronunciation, you can
+                treat them the same way.
+            </p>
+        
+
+            <button class="lesson-next" data-next="3">Continue</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="3">
+
+            <p class="eyebrow">03 &middot; Learn</p>
+
+            <h2>The French sound system, at a glance.</h2>
+
+
+            <p>
+                French sounds fall into four families, and the rest
+                of this track covers each one in turn:
+            </p>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">12</span>
+                <div>
+                    <h3>Oral vowels</h3>
+                    <p>
+                        <strong>i, e, ɛ, a, ɑ, ɔ, o, u, y, ø, œ, ə</strong>
+                        &mdash; more than twice as many as English,
+                        including several with no real English
+                        equivalent.
+                    </p>
+                </div>
+            </div>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">4</span>
+                <div>
+                    <h3>Nasal vowels</h3>
+                    <p>
+                        <strong>ɑ̃, ɛ̃, ɔ̃, œ̃</strong> &mdash; vowels
+                        pronounced with air flowing through the nose.
+                        English doesn&rsquo;t have these at all as
+                        distinct sounds.
+                    </p>
+                </div>
+            </div>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">3</span>
+                <div>
+                    <h3>Semi-vowels</h3>
+                    <p>
+                        <strong>j, ɥ, w</strong> &mdash; quick glides
+                        between a vowel and a consonant, as in
+                        <em>yeux</em>, <em>huit</em>, and
+                        <em>oui</em>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">17</span>
+                <div>
+                    <h3>Consonants</h3>
+                    <p>
+                        Mostly familiar, but a handful &mdash;
+                        especially <strong>ʁ</strong>, the French R
+                        &mdash; behave nothing like their English
+                        namesakes.
+                    </p>
+                </div>
+            </div>
+        
+
+            <button class="lesson-next" data-next="4">Continue to Quick Check</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="4">
+
+            <p class="eyebrow">04 &middot; Quick Check</p>
+
+            <h2>What did you learn?</h2>
+
+
+            <div class="question-card">
+                <h3>What is the main advantage of the IPA over normal spelling?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">It&rsquo;s faster to write by hand</button>
+                    <button class="answer-option" data-correct="true">Each symbol always represents exactly one sound, with no exceptions</button>
+                    <button class="answer-option">It only works for French</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>How many sounds does the IPA transcription <strong>/ʃa/</strong> (<em>chat</em>) represent?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">4, matching the 4 letters</button>
+                    <button class="answer-option">3</button>
+                    <button class="answer-option" data-correct="true">2</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>Roughly how many oral vowel sounds does French have?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">5, same as English</button>
+                    <button class="answer-option" data-correct="true">12</button>
+                    <button class="answer-option">26</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>What makes a nasal vowel different from an oral one?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">It&rsquo;s pronounced louder</button>
+                    <button class="answer-option" data-correct="true">Air flows through the nose as well as the mouth</button>
+                    <button class="answer-option">It&rsquo;s always at the end of a word</button>
+                </div>
+            </div>
+
+
+            <div class="lesson-nav-buttons">
+                <button class="lesson-back" data-back="3">← Back</button>
+                <button class="lesson-next" data-next="5">Finish Lesson</button>
+            </div>
+
+        </section>
+
+
+        <section class="lesson-section completion-section hidden" data-section="5">
+
+            <p class="eyebrow">Lesson Complete</p>
+
+            <div class="completion-icon">✓</div>
+
+            <h2>Très bien !</h2>
+
+            <p>You can now read IPA notation and know what&rsquo;s coming in the rest of this track. Next up: the oral vowels.</p>
+
+            <div class="completion-stats">
+                <div class="completion-score">
+                    <span>Lesson Progress</span>
+                    <strong>100%</strong>
+                </div>
+                <div class="completion-score">
+                    <span>Quick Check Score</span>
+                    <strong id="completion-quiz-score">—</strong>
+                </div>
+            </div>
+
+            <a href="../dashboard.html" class="dashboard-link">Return to Dashboard</a>
+
+        </section>
+
+    </main>
+
+
+    <script type="module" src="../script.js"></script>
+
+</body>
+
+</html>

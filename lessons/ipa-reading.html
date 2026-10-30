@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Reading Full Transcriptions | Prononce</title>
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="lesson-page ipa-lesson-page" data-lesson-id="ipa-reading">
+
+    <div class="page-loader" id="page-loader">
+        <img src="../favicon.svg" alt="" class="page-loader-mark">
+        <div class="page-loader-spinner"></div>
+    </div>
+
+
+    <header class="site-header">
+
+        <a href="../dashboard.html" class="logo">Prononce</a>
+
+        <nav class="main-nav">
+            <a href="../dashboard.html">Dashboard</a>
+            <a href="#" class="active" title="Coming soon">Practice</a>
+            <a href="../progress.html">Progress</a>
+        </nav>
+
+        <div class="user-menu" id="user-menu">
+            <button
+                type="button"
+                class="user-menu-trigger"
+                id="user-menu-trigger"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-label="Account menu"
+            >
+                <svg class="user-menu-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+                </svg>
+            </button>
+            <div class="user-menu-dropdown" id="user-menu-dropdown">
+                <a href="../settings.html" class="user-menu-item">Account Settings</a>
+                <button type="button" class="user-menu-item user-menu-logout" id="logout-button">Log Out</button>
+            </div>
+        </div>
+
+    </header>
+
+
+    <main class="lesson-container">
+
+        <a href="../dashboard.html" class="back-link">← Back to Dashboard</a>
+
+        <section class="lesson-intro">
+
+            <p class="eyebrow">IPA &middot; Lesson 6</p>
+
+            <h1>Reading Full Transcriptions</h1>
+
+            <p>The capstone lesson: combine everything from this track to read complete IPA transcriptions of real French words and phrases, liaison and elision included.</p>
+
+        </section>
+
+
+        <div class="lesson-progress">
+            <div class="lesson-progress-top">
+                <span>Lesson Progress</span>
+                <span id="lesson-progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="lesson-progress-fill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+
+        <section class="lesson-section" data-section="1">
+
+            <p class="eyebrow">01 &middot; Learn</p>
+
+            <h2>Putting symbols together.</h2>
+
+
+            <p>
+                A full transcription is just the symbols from the
+                last four lessons, strung together with nothing
+                extra added &mdash; no silent letters, no spelling
+                quirks, just the sounds in order.
+            </p>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">/bɔ̃ʒuʁ/</span>
+                <div>
+                    <h3><em>bonjour</em> &mdash; hello</h3>
+                    <p>
+                        <strong>b</strong> + <strong>ɔ̃</strong>
+                        (nasal) + <strong>ʒ</strong> + <strong>u</strong>
+                        + <strong>ʁ</strong>. Five sounds, five
+                        symbols, and the final <em>r</em> really is
+                        pronounced here &mdash; compare that to a
+                        silent final consonant you&rsquo;ll see next.
+                    </p>
+                    <div class="practice-buttons">
+                        <button class="audio-button listen-button" data-say="bonjour" aria-label="Listen: bonjour">▶ Listen</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">/pəti/</span>
+                <div>
+                    <h3><em>petit</em> &mdash; small</h3>
+                    <p>
+                        <strong>p</strong> + <strong>ə</strong>
+                        (schwa) + <strong>t</strong> + <strong>i</strong>.
+                        The final <em>t</em> is silent in this
+                        masculine form, so it&rsquo;s simply absent
+                        from the transcription &mdash; nothing marks
+                        it, because there&rsquo;s no sound there.
+                    </p>
+                    <div class="practice-buttons">
+                        <button class="audio-button listen-button" data-say="petit" aria-label="Listen: petit">▶ Listen</button>
+                    </div>
+                </div>
+            </div>
+        
+
+            <button class="lesson-next" data-next="2">Continue</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="2">
+
+            <p class="eyebrow">02 &middot; Learn</p>
+
+            <h2>Marking liaison and elision.</h2>
+
+
+            <p>
+                Two things worth flagging when you see them in a
+                transcription:
+            </p>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">‿</span>
+                <div>
+                    <h3>Liaison</h3>
+                    <p>
+                        A small tie mark (‿) between two words shows
+                        a liaison &mdash; a consonant that&rsquo;s
+                        silent on its own but gets pronounced because
+                        the next word starts with a vowel sound.
+                        <em>les amis</em> is transcribed
+                        <strong>/le‿z‿ami/</strong>: the normally
+                        silent <em>s</em> surfaces as [z] because
+                        <em>amis</em> starts with a vowel.
+                    </p>
+                </div>
+            </div>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">&rsquo;</span>
+                <div>
+                    <h3>Elision</h3>
+                    <p>
+                        When a word ending in a vowel (often
+                        <em>e</em>) is followed by a word starting
+                        with a vowel sound, the first vowel is often
+                        dropped entirely in speech &mdash; written
+                        with an apostrophe in normal French spelling
+                        (<em>le</em> + <em>ami</em> &rarr;
+                        <em>l&rsquo;ami</em>), and simply left out of
+                        the transcription: <strong>/lami/</strong>.
+                    </p>
+                </div>
+            </div>
+        
+
+            <button class="lesson-next" data-next="3">Continue</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="3">
+
+            <p class="eyebrow">03 &middot; Learn</p>
+
+            <h2>Reading practice: match the transcription.</h2>
+
+
+            <p>
+                A few more full transcriptions to read through before
+                the quiz. Say each one aloud from the symbols alone,
+                then press Listen to check yourself.
+            </p>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">/mɛʁsi/</span>
+                <div>
+                    <h3><em>merci</em> &mdash; thank you</h3>
+                    <p>m + ɛ + ʁ + s + i</p>
+                    <div class="practice-buttons">
+                        <button class="audio-button listen-button" data-say="merci" aria-label="Listen: merci">▶ Listen</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">/savabjɛ̃/</span>
+                <div>
+                    <h3><em>ça va bien</em> &mdash; it&rsquo;s going well</h3>
+                    <p>
+                        s + a + v + a + b + j (glide) + ɛ̃ (nasal).
+                        Notice the glide [j] gliding into the nasal
+                        vowel [ɛ̃] at the end &mdash; exactly the
+                        pattern from the semi-vowels lesson.
+                    </p>
+                    <div class="practice-buttons">
+                        <button class="audio-button listen-button" data-say="ça va bien" aria-label="Listen: ça va bien">▶ Listen</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sound-card ipa-sound-card">
+                <span class="sound-symbol">/œ̃bɔ̃vɛ̃blɑ̃/</span>
+                <div>
+                    <h3><em>un bon vin blanc</em> &mdash; a good white wine</h3>
+                    <p>
+                        All four nasal vowels in one phrase, back from
+                        the nasal vowels lesson: œ̃, ɔ̃, ɛ̃, ɑ̃ &mdash;
+                        in that order.
+                    </p>
+                    <div class="practice-buttons">
+                        <button class="audio-button listen-button" data-say="un bon vin blanc" aria-label="Listen: un bon vin blanc">▶ Listen</button>
+                    </div>
+                </div>
+            </div>
+        
+
+            <button class="lesson-next" data-next="4">Continue to Quick Check</button>
+
+        </section>
+
+
+        <section class="lesson-section hidden" data-section="4">
+
+            <p class="eyebrow">04 &middot; Quick Check</p>
+
+            <h2>What did you learn?</h2>
+
+
+            <div class="question-card">
+                <h3>What does a tie mark (‿) between two words in a transcription indicate?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">A stressed syllable</button>
+                    <button class="answer-option" data-correct="true">A liaison &mdash; a silent consonant pronounced before a following vowel sound</button>
+                    <button class="answer-option">A nasal vowel</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>In <strong>/pəti/</strong> for <em>petit</em>, why isn&rsquo;t the final <em>t</em> written?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">It&rsquo;s a typo</button>
+                    <button class="answer-option" data-correct="true">Because it&rsquo;s silent in this form &mdash; there&rsquo;s no sound to transcribe</button>
+                    <button class="answer-option">The IPA never includes the letter t</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3><em>les amis</em> is transcribed /le‿z‿ami/. Where does that [z] sound come from?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">It replaces the <em>l</em></button>
+                    <button class="answer-option" data-correct="true">A liaison &mdash; the normally silent <em>s</em> of <em>les</em> surfaces before a word starting with a vowel sound</button>
+                    <button class="answer-option">It&rsquo;s always there, liaison or not</button>
+                </div>
+            </div>
+
+
+            <div class="question-card">
+                <h3>What is elision?</h3>
+                <div class="answer-options">
+                    <button class="answer-option">Adding an extra vowel between two consonants</button>
+                    <button class="answer-option" data-correct="true">Dropping a word-final vowel before a following word that starts with a vowel sound</button>
+                    <button class="answer-option">Another name for a nasal vowel</button>
+                </div>
+            </div>
+
+
+            <div class="lesson-nav-buttons">
+                <button class="lesson-back" data-back="3">← Back</button>
+                <button class="lesson-next" data-next="5">Finish Lesson</button>
+            </div>
+
+        </section>
+
+
+        <section class="lesson-section completion-section hidden" data-section="5">
+
+            <p class="eyebrow">Lesson Complete</p>
+
+            <div class="completion-icon">✓</div>
+
+            <h2>Très bien !</h2>
+
+            <p>You&rsquo;ve completed the full IPA track &mdash; you can now read a French IPA transcription from scratch, liaison, elision, and all.</p>
+
+            <div class="completion-stats">
+                <div class="completion-score">
+                    <span>Lesson Progress</span>
+                    <strong>100%</strong>
+                </div>
+                <div class="completion-score">
+                    <span>Quick Check Score</span>
+                    <strong id="completion-quiz-score">—</strong>
+                </div>
+            </div>
+
+            <a href="../dashboard.html" class="dashboard-link">Return to Dashboard</a>
+
+        </section>
+
+    </main>
+
+
+    <script type="module" src="../script.js"></script>
+
+</body>
+
+</html>
