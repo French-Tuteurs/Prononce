@@ -641,6 +641,65 @@ button:hover {
 }
 
 
+/* Instant "Coming Soon" tooltip on the Practice nav link — deliberately
+   no transition at all, so it appears the moment the cursor lands
+   instead of waiting on a native title tooltip's OS delay. */
+
+.main-nav a[data-tooltip] {
+
+    position: relative;
+
+}
+
+
+.main-nav a[data-tooltip]::after {
+
+    content: attr(data-tooltip);
+
+    position: absolute;
+
+    top: calc(100% + 10px);
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background: var(--navy);
+
+    color: var(--white);
+
+    font-size: 0.75rem;
+
+    font-weight: bold;
+
+    letter-spacing: 0.3px;
+
+    white-space: nowrap;
+
+    padding: 6px 12px;
+
+    border-radius: 8px;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    z-index: 400;
+
+}
+
+
+.main-nav a[data-tooltip]:hover::after {
+
+    opacity: 1;
+
+    visibility: visible;
+
+}
+
+
 /* ===========================
    USER MENU (account icon + dropdown)
 =========================== */
@@ -752,6 +811,28 @@ button:hover {
     transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
 
     z-index: 500;
+
+}
+
+
+/* Invisible bridge over the visual gap between the trigger icon and
+   the dropdown box — without it, the cursor passing through that gap
+   briefly leaves .user-menu entirely, breaking :hover for a frame and
+   making the trigger's active color flicker on the way down. */
+
+.user-menu-dropdown::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: -10px;
+
+    left: 0;
+
+    right: 0;
+
+    height: 10px;
 
 }
 
@@ -5950,3 +6031,25 @@ html[data-season="halloween"] .eyebrow::after {
     margin: 0 0 30px;
 
 }
+
+
+/* Each IPA card's description runs a different length, which left
+   the "Start Lesson" button sitting at a different height card to
+   card. Flex column + margin-top: auto keeps every button flush to
+   the bottom, regardless of how much text sits above it. */
+
+.ipa-section .lesson-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+.ipa-section .lesson-card .lesson-card-button {
+
+    margin-top: auto;
+
+}
+

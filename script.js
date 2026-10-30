@@ -386,7 +386,7 @@ function renderPracticeProgress() {
 
         document.querySelectorAll(".practice-button-link[data-practice-id]").forEach(function (link) {
 
-            link.textContent = "Coming Soon";
+            link.textContent = "Practice Coming Soon";
             link.removeAttribute("href");
             link.classList.add("lesson-card-button-disabled");
             link.setAttribute("aria-disabled", "true");
@@ -521,7 +521,7 @@ function renderProgressPage() {
 
             } else {
 
-                linkEl.textContent = "Coming Soon";
+                linkEl.textContent = "Practice Coming Soon";
                 linkEl.removeAttribute("href");
                 linkEl.classList.add("progress-row-link-disabled");
                 linkEl.setAttribute("aria-disabled", "true");

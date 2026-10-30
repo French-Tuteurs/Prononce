@@ -279,6 +279,27 @@ function initUserMenu() {
 initUserMenu();
 
 
+// ===========================
+// BFCACHE GUARD
+// ===========================
+//
+// After signing out, pressing the browser's Back button can restore
+// the previous authenticated page straight from the browser's
+// back/forward cache — a snapshot of the DOM as it looked while still
+// signed in, with none of script.js's JS re-running. That would show
+// a signed-out visitor their old dashboard. Forcing a reload whenever
+// a page is restored this way re-runs the real auth check, which
+// then correctly bounces them to the welcome page.
+
+window.addEventListener("pageshow", function (event) {
+
+    if (event.persisted) {
+        window.location.reload();
+    }
+
+});
+
+
 export {
     ACCENT_THEMES,
     FONT_SIZES,
