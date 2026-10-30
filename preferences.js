@@ -71,7 +71,18 @@ function applySeasonalTheme() {
     const banner = document.createElement("div");
     banner.id = "seasonal-banner";
     banner.textContent = "🎃 Happy Halloween from Prononce — Joyeux Halloween ! 👻";
-    document.body.insertBefore(banner, document.body.firstChild);
+
+    // Below the header/nav bar, not above it — sitting above
+    // everything (including the header) was getting clipped by
+    // mobile browser chrome on some devices. Pages without a header
+    // (just the signed-out welcome page) fall back to the top of body.
+    const header = document.querySelector(".site-header");
+
+    if (header && header.parentNode) {
+        header.insertAdjacentElement("afterend", banner);
+    } else {
+        document.body.insertBefore(banner, document.body.firstChild);
+    }
 
 }
 
@@ -207,6 +218,65 @@ function celebrateIfEnabled(profile) {
     }
 
 }
+
+
+// ===========================
+// USER MENU (account icon + dropdown)
+// ===========================
+//
+// Every page shares the same header markup — a #user-menu trigger
+// button with a #user-menu-dropdown holding "Account Settings" and
+// "Log Out" — so wiring it up once here, called automatically as
+// soon as this module loads, covers every page for free instead of
+// repeating the same listener setup in script.js/settings.js/
+// admin.js/collect.js individually.
+
+function initUserMenu() {
+
+    const menu = document.getElementById("user-menu");
+    const trigger = document.getElementById("user-menu-trigger");
+
+    if (!menu || !trigger) {
+        return;
+    }
+
+    function closeMenu() {
+        menu.classList.remove("user-menu-open");
+        trigger.setAttribute("aria-expanded", "false");
+    }
+
+    function toggleMenu() {
+        const isOpen = menu.classList.toggle("user-menu-open");
+        trigger.setAttribute("aria-expanded", String(isOpen));
+    }
+
+    trigger.addEventListener("click", function (event) {
+        event.stopPropagation();
+        toggleMenu();
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!menu.contains(event.target)) {
+            closeMenu();
+        }
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            closeMenu();
+        }
+    });
+
+    // A click on "Account Settings" or "Log Out" should close the
+    // menu right away rather than leaving it open while the page
+    // navigates or the sign-out request is in flight.
+    menu.querySelectorAll(".user-menu-item").forEach(function (item) {
+        item.addEventListener("click", closeMenu);
+    });
+
+}
+
+initUserMenu();
 
 
 export {
