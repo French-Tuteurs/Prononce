@@ -199,7 +199,11 @@ introContinue.addEventListener("click", function () {
 });
 
 
-wireListenButton(teachListenButton);
+// Not wired here on purpose: #ipa-level-teach-listen exists in the
+// static HTML (unlike the dynamically-created "more examples"
+// buttons below), so script.js's own .listen-button snapshot already
+// binds it — wiring it a second time here would fire two competing
+// click handlers and two overlapping speech attempts per click.
 
 teachContinue.addEventListener("click", async function () {
 

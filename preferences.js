@@ -316,6 +316,12 @@ function playTapSound() {
     playTone(720, 0, 0.05, "sine", 0.06);
 }
 
+function playHoverSound() {
+    // Quieter and softer than the tap sound, so moving the mouse
+    // across the page doesn't compete with an actual click.
+    playTone(900, 0, 0.025, "sine", 0.025);
+}
+
 function playCorrectSound() {
     playTone(587.33, 0, 0.1, "sine", 0.1);   // D5
     playTone(880, 0.07, 0.16, "sine", 0.1);  // A5
@@ -341,6 +347,20 @@ function feedbackTap(profile) {
 
     vibrate(10);
     playTapSound();
+
+}
+
+
+function feedbackHover(profile) {
+
+    // No vibration here — hover has no real meaning on a touchscreen
+    // (haptics are a mobile-only concern anyway), this is sound only.
+
+    if (!feedbackEffectsEnabled(profile)) {
+        return;
+    }
+
+    playHoverSound();
 
 }
 
@@ -477,6 +497,7 @@ export {
     celebrateIfEnabled,
     feedbackEffectsEnabled,
     feedbackTap,
+    feedbackHover,
     feedbackCorrect,
     feedbackIncorrect,
     feedbackCelebrate,

@@ -13,7 +13,8 @@ import {
     feedbackCorrect,
     feedbackIncorrect,
     feedbackCelebrate,
-    feedbackTap
+    feedbackTap,
+    feedbackHover
 } from "./preferences.js";
 
 // Not a user preference, so it doesn't wait on sign-in — the
@@ -34,11 +35,7 @@ import {
     doc,
     getDoc,
     setDoc,
-    updateDoc,
-    collection,
-    query,
-    where,
-    getDocs
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
@@ -155,10 +152,18 @@ onAuthStateChanged(auth, async function (user) {
             renderWelcomeName(user);
             renderDashboardLessonProgress();
             renderPracticeProgress();
-            renderTesterAccessCard();
-            renderOwnerAdminPanel();
 
         }
+
+        // Independent of isDashboardPage: the Recording nav link and
+        // the Owner Tools dropdown item live in the header, which is
+        // shared by every "hub" page (dashboard, progress, settings,
+        // the IPA Path, plus admin.html/collect.html's own menu) —
+        // not just the dashboard. Both functions already no-op
+        // harmlessly on a page whose header doesn't have these
+        // elements (session pages dropped the header entirely).
+        renderTesterAccessCard();
+        renderOwnerAdminPanel();
 
         if (isProgressPage) {
 
@@ -302,6 +307,31 @@ async function markPracticeLevel(practiceId, level) {
 }
 
 
+// Morning/afternoon/evening/night, each with its own French greeting
+// — a small, low-stakes touch of "this app is alive right now" rather
+// than the same static word every single visit.
+
+function timeOfDayGreeting() {
+
+    const hour = new Date().getHours();
+
+    if (hour >= 5 && hour < 12) {
+        return "Bon Matin";
+    }
+
+    if (hour >= 12 && hour < 18) {
+        return "Bonjour";
+    }
+
+    if (hour >= 18 && hour < 22) {
+        return "Bonsoir";
+    }
+
+    return "Bienvenue";
+
+}
+
+
 function renderWelcomeName(user) {
 
     const eyebrow = document.getElementById("welcome-eyebrow");
@@ -314,7 +344,9 @@ function renderWelcomeName(user) {
         ? user.displayName.trim().split(/\s+/)[0]
         : null;
 
-    eyebrow.textContent = firstName ? "Bienvenue, " + firstName : "Bienvenue";
+    const greeting = timeOfDayGreeting();
+
+    eyebrow.textContent = firstName ? greeting + ", " + firstName : greeting;
 
     const avatarEl = document.getElementById("welcome-avatar");
     const avatarEmoji = currentUserProfile && currentUserProfile.avatarEmoji;
@@ -623,7 +655,7 @@ function renderProgressPage() {
 
 
 // ===========================
-// TESTER ACCESS CARD (dashboard)
+// TESTER ACCESS (nav link)
 // ===========================
 
 function renderTesterAccessCard() {
@@ -635,73 +667,31 @@ function renderTesterAccessCard() {
     // isTester is its own gate, independent of isOwner — being the
     // owner does not automatically grant recording access. If an
     // owner also wants to record, grant their own account isTester
-    // from the admin panel like any other tester.
+    // from Owner Tools like any other tester.
 
     const canAccessTesting =
         currentUserProfile.isTester === true;
 
-    const testingSection =
-        document.getElementById("testing-access-section");
+    const recordingNavLink =
+        document.getElementById("nav-recording-link");
 
-    const testingToggle =
-        document.getElementById("testing-toggle");
+    if (recordingNavLink) {
 
-    if (testingSection) {
-
-        testingSection.classList.toggle("hidden", !canAccessTesting);
+        recordingNavLink.classList.toggle("hidden", !canAccessTesting);
 
     }
-
-    if (testingToggle) {
-
-        testingToggle.classList.toggle("hidden", !canAccessTesting);
-
-    }
-
-}
-
-
-const openTestingButton =
-    document.getElementById("open-testing-button");
-
-if (openTestingButton) {
-
-    openTestingButton.addEventListener("click", function () {
-
-        window.location.href = "collect.html";
-
-    });
-
-}
-
-
-const testingToggleButton =
-    document.getElementById("testing-toggle");
-
-if (testingToggleButton) {
-
-    testingToggleButton.addEventListener("click", function () {
-
-        testingToggleButton.classList.toggle("open");
-
-        const section = document.getElementById("testing-access-section");
-
-        if (section) {
-            section.classList.toggle("collapsed");
-        }
-
-    });
 
 }
 
 
 // ===========================
-// OWNER ADMIN PANEL (dashboard)
+// OWNER TOOLS (dropdown item)
 // ===========================
 //
 // Only ever shown when currentUserProfile.isOwner is true — and
-// even then, every action below still has to pass the Firestore
-// rules above, so a tampered client can't grant access on its own.
+// even then, every action on admin.html still has to pass the
+// Firestore rules, so a tampered client can't grant access on its
+// own.
 
 function renderOwnerAdminPanel() {
 
@@ -709,176 +699,14 @@ function renderOwnerAdminPanel() {
         return;
     }
 
-    const panel = document.getElementById("admin-panel");
-    const toggle = document.getElementById("admin-toggle");
+    const ownerToolsLink =
+        document.getElementById("user-menu-owner-tools");
 
-    if (panel) {
+    if (ownerToolsLink) {
 
-        panel.classList.remove("hidden");
-        loadTesterList();
-
-    }
-
-    if (toggle) {
-
-        toggle.classList.remove("hidden");
+        ownerToolsLink.classList.remove("hidden");
 
     }
-
-}
-
-
-const adminToggleButton =
-    document.getElementById("admin-toggle");
-
-if (adminToggleButton) {
-
-    adminToggleButton.addEventListener("click", function () {
-
-        adminToggleButton.classList.toggle("open");
-
-        const panel = document.getElementById("admin-panel");
-
-        if (panel) {
-            panel.classList.toggle("collapsed");
-        }
-
-    });
-
-}
-
-
-async function loadTesterList() {
-
-    const listEl = document.getElementById("admin-tester-list");
-
-    if (!listEl) {
-        return;
-    }
-
-    listEl.textContent = "Loading…";
-
-    try {
-
-        const snapshot = await getDocs(
-            query(collection(db, "users"), where("isTester", "==", true))
-        );
-
-        if (snapshot.empty) {
-
-            listEl.innerHTML = '<p class="admin-empty">No testers yet.</p>';
-            return;
-
-        }
-
-        listEl.innerHTML = "";
-
-        snapshot.forEach(function (docSnap) {
-
-            const data = docSnap.data();
-            const row = document.createElement("div");
-
-            row.className = "admin-tester-row";
-
-            const emailSpan = document.createElement("span");
-            emailSpan.textContent = data.email || docSnap.id;
-
-            const revokeButton = document.createElement("button");
-            revokeButton.className = "admin-revoke-button";
-            revokeButton.type = "button";
-            revokeButton.textContent = "Revoke";
-            revokeButton.dataset.uid = docSnap.id;
-
-            revokeButton.addEventListener("click", async function () {
-
-                revokeButton.disabled = true;
-
-                try {
-                    await updateDoc(doc(db, "users", docSnap.id), { isTester: false });
-                    loadTesterList();
-                } catch (error) {
-                    console.error(error);
-                    revokeButton.disabled = false;
-                }
-
-            });
-
-            row.appendChild(emailSpan);
-            row.appendChild(revokeButton);
-            listEl.appendChild(row);
-
-        });
-
-    } catch (error) {
-
-        console.error(error);
-        listEl.innerHTML = '<p class="admin-empty">Couldn\'t load the tester list.</p>';
-
-    }
-
-}
-
-
-const adminGrantButton =
-    document.getElementById("admin-grant-button");
-
-const adminGrantEmail =
-    document.getElementById("admin-grant-email");
-
-const adminError =
-    document.getElementById("admin-error");
-
-
-if (adminGrantButton) {
-
-    adminGrantButton.addEventListener("click", async function () {
-
-        const email = adminGrantEmail.value.trim();
-
-        if (!email) {
-            return;
-        }
-
-        adminError.hidden = true;
-        adminGrantButton.disabled = true;
-
-        try {
-
-            const snapshot = await getDocs(
-                query(collection(db, "users"), where("email", "==", email))
-            );
-
-            if (snapshot.empty) {
-
-                adminError.textContent =
-                    "No account found with that email. They need to sign up for Prononce first.";
-                adminError.hidden = false;
-
-            } else {
-
-                const targetDoc = snapshot.docs[0];
-
-                await updateDoc(doc(db, "users", targetDoc.id), { isTester: true });
-
-                adminGrantEmail.value = "";
-                loadTesterList();
-
-            }
-
-        } catch (error) {
-
-            console.error(error);
-
-            adminError.textContent = "Something went wrong granting access.";
-            adminError.hidden = false;
-
-        } finally {
-
-            adminGrantButton.disabled = false;
-
-        }
-
-    });
 
 }
 
@@ -2462,30 +2290,57 @@ async function recordAndAnalyze(button, feedbackEl) {
 
 
 // ===========================
-// TAP FEEDBACK (primary action buttons, site-wide)
+// TAP + HOVER FEEDBACK (buttons, site-wide)
 // ===========================
 //
-// A light buzz/click on the main "move forward" buttons — Continue,
-// Start Lesson, Start Practicing, and so on — so navigating through
-// the app has a bit of the tactile feel a native app has for free.
-// Deliberately not on every clickable thing (nav links, the user
-// menu) — just the buttons that carry the user from one screen to
-// the next, where it reads as responsive rather than noisy. Quiz
-// answers already get their own distinct correct/incorrect feedback
-// (see the Quick Check and ipa-quiz-runner.js wiring) so they're left
-// out here to avoid a double buzz.
+// A light buzz/click on every button, and a softer blip on hovering
+// one with a real mouse — the kind of constant tactile/audio feedback
+// a native app gives for free. Quiz answers are excluded from the tap
+// sound (".answer-option") since they already get their own distinct
+// correct/incorrect sound immediately after — adding the generic tap
+// on top would just be a second, redundant blip in the same instant.
+
+const TAP_FEEDBACK_SELECTOR =
+    "button:not(.answer-option), a.lesson-card-button, a.daily-card-link, " +
+    "a.dashboard-link, a.progress-row-link, a.user-menu-item, .main-nav a, " +
+    "a.back-link, a.ipa-path-node, a.practice-button-link, " +
+    ".session-exit-button, .session-exit-cancel, .session-exit-confirm";
 
 document.addEventListener("click", function (event) {
 
-    const tappable = event.target.closest(
-        ".lesson-next, .lesson-back, .lesson-card-button, .daily-card-link, .practice-next-question, .dashboard-link"
-    );
+    const tappable = event.target.closest(TAP_FEEDBACK_SELECTOR);
 
     if (tappable) {
         feedbackTap(currentUserProfile);
     }
 
 });
+
+
+// mouseover (not mouseenter) so a single delegated listener on
+// document can catch it; matchMedia guards against touchscreens,
+// which otherwise fire a synthetic mouseover right before their
+// click — without it, every tap on mobile would double up as a
+// hover-then-tap sound instead of just a tap.
+
+if (window.matchMedia && window.matchMedia("(hover: hover)").matches) {
+
+    let lastHovered = null;
+
+    document.addEventListener("mouseover", function (event) {
+
+        const hovered = event.target.closest(TAP_FEEDBACK_SELECTOR);
+
+        if (hovered && hovered !== lastHovered) {
+            lastHovered = hovered;
+            feedbackHover(currentUserProfile);
+        } else if (!hovered) {
+            lastHovered = null;
+        }
+
+    });
+
+}
 
 
 const recordButtons =
@@ -2515,3 +2370,59 @@ recordButtons.forEach(function (button) {
     );
 
 });
+
+
+// ===========================
+// SESSION EXIT (lesson/practice/IPA Path pages)
+// ===========================
+//
+// These pages dropped the full nav header in favor of a small corner
+// X — see the .session-exit-button CSS — so this builds the confirm
+// modal once, on demand, rather than duplicating its markup across
+// every one of those pages.
+
+const sessionExitButton = document.getElementById("session-exit-button");
+
+if (sessionExitButton) {
+
+    const modal = document.createElement("div");
+    modal.className = "session-exit-modal hidden";
+    modal.id = "session-exit-modal";
+    modal.innerHTML =
+        '<div class="session-exit-modal-box">' +
+        "<h2>Do you want to exit?</h2>" +
+        "<p>Your progress up to this point is already saved.</p>" +
+        '<div class="session-exit-modal-buttons">' +
+        '<button type="button" class="session-exit-cancel">Cancel</button>' +
+        '<a href="' + (sessionExitButton.dataset.exitHref || "dashboard.html") + '" class="session-exit-confirm">Exit</a>' +
+        "</div>" +
+        "</div>";
+
+    document.body.appendChild(modal);
+
+    const cancelButton = modal.querySelector(".session-exit-cancel");
+
+    function openExitModal() {
+        modal.classList.remove("hidden");
+    }
+
+    function closeExitModal() {
+        modal.classList.add("hidden");
+    }
+
+    sessionExitButton.addEventListener("click", openExitModal);
+    cancelButton.addEventListener("click", closeExitModal);
+
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            closeExitModal();
+        }
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !modal.classList.contains("hidden")) {
+            closeExitModal();
+        }
+    });
+
+}
