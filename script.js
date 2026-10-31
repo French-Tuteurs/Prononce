@@ -361,6 +361,7 @@ function renderDashboardLessonProgress() {
 
         const statusValue = card.querySelector(".progress-info span:last-child");
         const button = card.querySelector(".lesson-card-button");
+        const fillEl = card.querySelector(".progress-fill");
 
         if (statusValue) {
             statusValue.textContent = "Lesson Completed";
@@ -368,6 +369,14 @@ function renderDashboardLessonProgress() {
 
         if (button) {
             button.textContent = "Learn Again";
+        }
+
+        // Lesson cards ship with a static width:0% fill in the HTML —
+        // completion is binary (no per-lesson partial progress is
+        // tracked), so a completed lesson's bar should read 100%, not
+        // sit stuck at empty forever.
+        if (fillEl) {
+            fillEl.style.width = "100%";
         }
 
     });

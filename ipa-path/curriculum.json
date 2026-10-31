@@ -18,9 +18,20 @@
         "word": "si",
         "gloss": "if",
         "description": "High, front, spread lips — tense and bright, like the ee in “see” but shorter and crisper.",
-        "say": "si"
+        "say": "si",
+        "category": "Oral Vowel",
+        "more": [
+          {
+            "word": "lit",
+            "gloss": "bed"
+          },
+          {
+            "word": "vie",
+            "gloss": "life"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "i"
       ],
@@ -30,7 +41,7 @@
       "type": "drill",
       "symbol": "i",
       "title": "Practice i",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "i"
       ],
@@ -44,9 +55,20 @@
         "word": "été",
         "gloss": "summer",
         "description": "High-mid, front, spread lips. No real English equivalent — closer to the vowel in “say” but without the glide at the end.",
-        "say": "été"
+        "say": "été",
+        "category": "Oral Vowel",
+        "more": [
+          {
+            "word": "nez",
+            "gloss": "nose"
+          },
+          {
+            "word": "thé",
+            "gloss": "tea"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "e"
       ],
@@ -56,7 +78,7 @@
       "type": "drill",
       "symbol": "e",
       "title": "Practice e",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "e"
       ],
@@ -70,9 +92,20 @@
         "word": "fête",
         "gloss": "party",
         "description": "Lower-mid, front, spread lips. Close to the e in “bed,” a bit more open than [e].",
-        "say": "fête"
+        "say": "fête",
+        "category": "Oral Vowel",
+        "more": [
+          {
+            "word": "tête",
+            "gloss": "head"
+          },
+          {
+            "word": "même",
+            "gloss": "same"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ɛ"
       ],
@@ -82,7 +115,7 @@
       "type": "drill",
       "symbol": "ɛ",
       "title": "Practice ɛ",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ɛ"
       ],
@@ -96,9 +129,20 @@
         "word": "chat",
         "gloss": "cat",
         "description": "Low, front, spread lips — the most open vowel in this group, close to the a in “cat.”",
-        "say": "chat"
+        "say": "chat",
+        "category": "Oral Vowel",
+        "more": [
+          {
+            "word": "sac",
+            "gloss": "bag"
+          },
+          {
+            "word": "patte",
+            "gloss": "paw"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "a"
       ],
@@ -108,7 +152,7 @@
       "type": "drill",
       "symbol": "a",
       "title": "Practice a",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "a"
       ],
@@ -117,7 +161,7 @@
     {
       "type": "review",
       "title": "Review",
-      "count": 8,
+      "count": 12,
       "symbols": [
         "i",
         "e",
@@ -134,9 +178,20 @@
         "word": "tu",
         "gloss": "you",
         "description": "Same tongue position as [i] — high and forward — but with lips tightly rounded, as if starting to whistle.",
-        "say": "tu"
+        "say": "tu",
+        "category": "Oral Vowel",
+        "more": [
+          {
+            "word": "rue",
+            "gloss": "street"
+          },
+          {
+            "word": "vue",
+            "gloss": "view"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "y"
       ],
@@ -146,7 +201,7 @@
       "type": "drill",
       "symbol": "y",
       "title": "Practice y",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "y"
       ],
@@ -160,9 +215,20 @@
         "word": "peu",
         "gloss": "a little",
         "description": "Same tongue position as [e], lips rounded. Say [e], then round your lips without moving your tongue.",
-        "say": "peu"
+        "say": "peu",
+        "category": "Oral Vowel",
+        "more": [
+          {
+            "word": "deux",
+            "gloss": "two"
+          },
+          {
+            "word": "bleu",
+            "gloss": "blue"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ø"
       ],
@@ -172,7 +238,7 @@
       "type": "drill",
       "symbol": "ø",
       "title": "Practice ø",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ø"
       ],
@@ -186,9 +252,20 @@
         "word": "sœur",
         "gloss": "sister",
         "description": "Same tongue position as [ɛ], lips rounded — a touch more open than [ø].",
-        "say": "sœur"
+        "say": "sœur",
+        "category": "Oral Vowel",
+        "more": [
+          {
+            "word": "soeur",
+            "gloss": "sister"
+          },
+          {
+            "word": "coeur",
+            "gloss": "heart"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "œ"
       ],
@@ -198,7 +275,7 @@
       "type": "drill",
       "symbol": "œ",
       "title": "Practice œ",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "œ"
       ],
@@ -212,9 +289,20 @@
         "word": "pâte",
         "gloss": "dough/pasta",
         "description": "Low and further back than [a], lips relaxed rather than rounded. In most of France today this has largely merged with [a] — worth knowing it exists, but don’t worry about distinguishing it by ear yet.",
-        "say": "pâte"
+        "say": "pâte",
+        "category": "Oral Vowel",
+        "more": [
+          {
+            "word": "âme",
+            "gloss": "soul"
+          },
+          {
+            "word": "âge",
+            "gloss": "age"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ɑ"
       ],
@@ -224,7 +312,7 @@
       "type": "drill",
       "symbol": "ɑ",
       "title": "Practice ɑ",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ɑ"
       ],
@@ -233,7 +321,7 @@
     {
       "type": "review",
       "title": "Review",
-      "count": 8,
+      "count": 12,
       "symbols": [
         "y",
         "ø",
@@ -250,9 +338,20 @@
         "word": "comme",
         "gloss": "like, as",
         "description": "Low-mid, back, rounded. Close to the o in British “hot.”",
-        "say": "comme"
+        "say": "comme",
+        "category": "Oral Vowel",
+        "more": [
+          {
+            "word": "porte",
+            "gloss": "door"
+          },
+          {
+            "word": "robe",
+            "gloss": "dress"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ɔ"
       ],
@@ -262,7 +361,7 @@
       "type": "drill",
       "symbol": "ɔ",
       "title": "Practice ɔ",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ɔ"
       ],
@@ -276,9 +375,20 @@
         "word": "eau",
         "gloss": "water",
         "description": "High-mid, back, rounded — closer to the vowel in “go,” but held steady instead of gliding into a w sound.",
-        "say": "eau"
+        "say": "eau",
+        "category": "Oral Vowel",
+        "more": [
+          {
+            "word": "mot",
+            "gloss": "word"
+          },
+          {
+            "word": "chaud",
+            "gloss": "hot"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "o"
       ],
@@ -288,7 +398,7 @@
       "type": "drill",
       "symbol": "o",
       "title": "Practice o",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "o"
       ],
@@ -302,9 +412,20 @@
         "word": "loup",
         "gloss": "wolf",
         "description": "High and back, tightly rounded lips — close to “oo” in “food.” Not the same symbol as [y] — [u] is rounded-and-back, [y] is rounded-and-front.",
-        "say": "loup"
+        "say": "loup",
+        "category": "Oral Vowel",
+        "more": [
+          {
+            "word": "vous",
+            "gloss": "you"
+          },
+          {
+            "word": "nous",
+            "gloss": "we"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "u"
       ],
@@ -314,7 +435,7 @@
       "type": "drill",
       "symbol": "u",
       "title": "Practice u",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "u"
       ],
@@ -328,9 +449,20 @@
         "word": "le",
         "gloss": "the",
         "description": "Short, central, relaxed — the “uh” sound. Frequently dropped in fast speech: je ne sais pas is often said more like “j’n’sais pas.”",
-        "say": "le"
+        "say": "le",
+        "category": "Oral Vowel",
+        "more": [
+          {
+            "word": "je",
+            "gloss": "I"
+          },
+          {
+            "word": "ce",
+            "gloss": "this"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ə"
       ],
@@ -340,7 +472,7 @@
       "type": "drill",
       "symbol": "ə",
       "title": "Practice ə",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ə"
       ],
@@ -349,7 +481,7 @@
     {
       "type": "milestone",
       "title": "Oral Vowels Mastery",
-      "count": 12,
+      "count": 16,
       "symbols": [
         "i",
         "e",
@@ -374,9 +506,20 @@
         "word": "dans",
         "gloss": "in",
         "description": "Related to oral [ɑ]. The most open of the four nasal vowels.",
-        "say": "dans"
+        "say": "dans",
+        "category": "Nasal Vowel",
+        "more": [
+          {
+            "word": "blanc",
+            "gloss": "white"
+          },
+          {
+            "word": "grand",
+            "gloss": "big"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ɑ̃"
       ],
@@ -386,7 +529,7 @@
       "type": "drill",
       "symbol": "ɑ̃",
       "title": "Practice ɑ̃",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ɑ̃"
       ],
@@ -400,9 +543,20 @@
         "word": "vin",
         "gloss": "wine",
         "description": "Related to oral [ɛ]. Spelled many ways — in, im, ain, ein, yn, ym all land here.",
-        "say": "vin"
+        "say": "vin",
+        "category": "Nasal Vowel",
+        "more": [
+          {
+            "word": "pain",
+            "gloss": "bread"
+          },
+          {
+            "word": "main",
+            "gloss": "hand"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ɛ̃"
       ],
@@ -412,7 +566,7 @@
       "type": "drill",
       "symbol": "ɛ̃",
       "title": "Practice ɛ̃",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ɛ̃"
       ],
@@ -426,9 +580,20 @@
         "word": "bon",
         "gloss": "good",
         "description": "Related to oral [ɔ]. Rounded lips, air through the nose.",
-        "say": "bon"
+        "say": "bon",
+        "category": "Nasal Vowel",
+        "more": [
+          {
+            "word": "nom",
+            "gloss": "name"
+          },
+          {
+            "word": "son",
+            "gloss": "sound"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ɔ̃"
       ],
@@ -438,7 +603,7 @@
       "type": "drill",
       "symbol": "ɔ̃",
       "title": "Practice ɔ̃",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ɔ̃"
       ],
@@ -452,9 +617,20 @@
         "word": "un",
         "gloss": "a, one",
         "description": "Related to oral [œ]. The rarest of the four — many French speakers today merge it into [ɛ̃], so hearing un and in sound identical is common and not a mistake on their part.",
-        "say": "un"
+        "say": "un",
+        "category": "Nasal Vowel",
+        "more": [
+          {
+            "word": "brun",
+            "gloss": "brown"
+          },
+          {
+            "word": "lundi",
+            "gloss": "Monday"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "œ̃"
       ],
@@ -464,7 +640,7 @@
       "type": "drill",
       "symbol": "œ̃",
       "title": "Practice œ̃",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "œ̃"
       ],
@@ -473,7 +649,7 @@
     {
       "type": "milestone",
       "title": "Nasal Vowels Mastery",
-      "count": 12,
+      "count": 16,
       "symbols": [
         "ɑ̃",
         "ɛ̃",
@@ -496,9 +672,20 @@
         "word": "yeux",
         "gloss": "eyes",
         "description": "Identical to English y in “yes.” Also appears spelled -ill- and -il, as in fille and travail.",
-        "say": "yeux"
+        "say": "yeux",
+        "category": "Semivowel",
+        "more": [
+          {
+            "word": "fille",
+            "gloss": "daughter"
+          },
+          {
+            "word": "famille",
+            "gloss": "family"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "j"
       ],
@@ -508,7 +695,7 @@
       "type": "drill",
       "symbol": "j",
       "title": "Practice j",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "j"
       ],
@@ -522,9 +709,20 @@
         "word": "huit",
         "gloss": "eight",
         "description": "The one with no English equivalent: round your lips as if for [y] (the vowel in tu), then glide immediately into the next vowel. Almost always spelled u before another vowel.",
-        "say": "huit"
+        "say": "huit",
+        "category": "Semivowel",
+        "more": [
+          {
+            "word": "lui",
+            "gloss": "him"
+          },
+          {
+            "word": "nuit",
+            "gloss": "night"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ɥ"
       ],
@@ -534,7 +732,7 @@
       "type": "drill",
       "symbol": "ɥ",
       "title": "Practice ɥ",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ɥ"
       ],
@@ -548,9 +746,20 @@
         "word": "oui",
         "gloss": "yes",
         "description": "Identical to English w in “west.” Usually spelled oi or ou before a vowel.",
-        "say": "oui"
+        "say": "oui",
+        "category": "Semivowel",
+        "more": [
+          {
+            "word": "moi",
+            "gloss": "me"
+          },
+          {
+            "word": "toi",
+            "gloss": "you"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "w"
       ],
@@ -560,7 +769,7 @@
       "type": "drill",
       "symbol": "w",
       "title": "Practice w",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "w"
       ],
@@ -569,7 +778,7 @@
     {
       "type": "milestone",
       "title": "Semivowels Mastery",
-      "count": 12,
+      "count": 16,
       "symbols": [
         "j",
         "ɥ",
@@ -591,9 +800,20 @@
         "word": "pain",
         "gloss": "bread",
         "description": "Voiceless, lips together, no puff of air on release — crisper and softer than English p.",
-        "say": "pain"
+        "say": "pain",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "pomme",
+            "gloss": "apple"
+          },
+          {
+            "word": "porte",
+            "gloss": "door"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "p"
       ],
@@ -603,7 +823,7 @@
       "type": "drill",
       "symbol": "p",
       "title": "Practice p",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "p"
       ],
@@ -617,9 +837,20 @@
         "word": "beau",
         "gloss": "beautiful",
         "description": "The voiced twin of [p] — lips together, vocal cords buzzing throughout. Essentially identical to English b.",
-        "say": "beau"
+        "say": "beau",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "bleu",
+            "gloss": "blue"
+          },
+          {
+            "word": "bas",
+            "gloss": "low"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "b"
       ],
@@ -629,7 +860,7 @@
       "type": "drill",
       "symbol": "b",
       "title": "Practice b",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "b"
       ],
@@ -643,9 +874,20 @@
         "word": "tasse",
         "gloss": "cup",
         "description": "Voiceless, but dental — tongue touches the back of the upper teeth, not the ridge behind them the way English t does. No puff of air.",
-        "say": "tasse"
+        "say": "tasse",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "table",
+            "gloss": "table"
+          },
+          {
+            "word": "temps",
+            "gloss": "time"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "t"
       ],
@@ -655,7 +897,7 @@
       "type": "drill",
       "symbol": "t",
       "title": "Practice t",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "t"
       ],
@@ -669,9 +911,20 @@
         "word": "dos",
         "gloss": "back",
         "description": "The voiced twin of [t] — same dental tongue position, vocal cords buzzing. Close to English d.",
-        "say": "dos"
+        "say": "dos",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "danse",
+            "gloss": "dance"
+          },
+          {
+            "word": "demain",
+            "gloss": "tomorrow"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "d"
       ],
@@ -681,7 +934,7 @@
       "type": "drill",
       "symbol": "d",
       "title": "Practice d",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "d"
       ],
@@ -690,7 +943,7 @@
     {
       "type": "review",
       "title": "Review",
-      "count": 8,
+      "count": 12,
       "symbols": [
         "p",
         "b",
@@ -707,9 +960,20 @@
         "word": "cave",
         "gloss": "cellar",
         "description": "Voiceless, back of the tongue against the soft palate. Hides behind several spellings: c before a/o/u, qu, and k itself all land here — cave, qui, and kilo all start with [k].",
-        "say": "cave"
+        "say": "cave",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "carte",
+            "gloss": "map"
+          },
+          {
+            "word": "comme",
+            "gloss": "like"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "k"
       ],
@@ -719,7 +983,7 @@
       "type": "drill",
       "symbol": "k",
       "title": "Practice k",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "k"
       ],
@@ -733,9 +997,20 @@
         "word": "gare",
         "gloss": "station",
         "description": "The voiced twin of [k]. Spelled g before a/o/u, or gu before e/i/y to keep the hard sound — compare gare to guide.",
-        "say": "gare"
+        "say": "gare",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "gros",
+            "gloss": "big"
+          },
+          {
+            "word": "grand",
+            "gloss": "big"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ɡ"
       ],
@@ -745,7 +1020,7 @@
       "type": "drill",
       "symbol": "ɡ",
       "title": "Practice ɡ",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ɡ"
       ],
@@ -754,7 +1029,7 @@
     {
       "type": "milestone",
       "title": "Stops Mastery",
-      "count": 12,
+      "count": 16,
       "symbols": [
         "p",
         "b",
@@ -779,9 +1054,20 @@
         "word": "fête",
         "gloss": "party",
         "description": "Voiceless, top teeth on bottom lip — identical to English f. Spelled f or ph.",
-        "say": "fête"
+        "say": "fête",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "fleur",
+            "gloss": "flower"
+          },
+          {
+            "word": "famille",
+            "gloss": "family"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "f"
       ],
@@ -791,7 +1077,7 @@
       "type": "drill",
       "symbol": "f",
       "title": "Practice f",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "f"
       ],
@@ -805,9 +1091,20 @@
         "word": "vous",
         "gloss": "you",
         "description": "The voiced twin of [f] — identical to English v.",
-        "say": "vous"
+        "say": "vous",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "vue",
+            "gloss": "view"
+          },
+          {
+            "word": "vin",
+            "gloss": "wine"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "v"
       ],
@@ -817,7 +1114,7 @@
       "type": "drill",
       "symbol": "v",
       "title": "Practice v",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "v"
       ],
@@ -831,9 +1128,20 @@
         "word": "sac",
         "gloss": "bag",
         "description": "Voiceless, like English s. Spelled s at the start of a word or next to a consonant, ss between vowels, or c/ç before e/i/y.",
-        "say": "sac"
+        "say": "sac",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "salade",
+            "gloss": "salad"
+          },
+          {
+            "word": "sur",
+            "gloss": "on"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "s"
       ],
@@ -843,7 +1151,7 @@
       "type": "drill",
       "symbol": "s",
       "title": "Practice s",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "s"
       ],
@@ -857,9 +1165,20 @@
         "word": "zéro",
         "gloss": "zero",
         "description": "The voiced twin of [s]. The spelling trap: a single s between vowels is also [z] — maison is [mɛzɔ̃], not [mɛsɔ̃]. Double it (ss) to get [s] back, as in poisson.",
-        "say": "maison"
+        "say": "maison",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "maison",
+            "gloss": "house"
+          },
+          {
+            "word": "zone",
+            "gloss": "zone"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "z"
       ],
@@ -869,7 +1188,7 @@
       "type": "drill",
       "symbol": "z",
       "title": "Practice z",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "z"
       ],
@@ -878,7 +1197,7 @@
     {
       "type": "review",
       "title": "Review",
-      "count": 8,
+      "count": 12,
       "symbols": [
         "f",
         "v",
@@ -895,9 +1214,20 @@
         "word": "chat",
         "gloss": "cat",
         "description": "The “sh” sound, always spelled ch in French — never pronounced like English “ch” in “chip.”",
-        "say": "chat"
+        "say": "chat",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "chaud",
+            "gloss": "hot"
+          },
+          {
+            "word": "chambre",
+            "gloss": "room"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ʃ"
       ],
@@ -907,7 +1237,7 @@
       "type": "drill",
       "symbol": "ʃ",
       "title": "Practice ʃ",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ʃ"
       ],
@@ -921,9 +1251,20 @@
         "word": "je",
         "gloss": "I",
         "description": "The voiced twin of [ʃ] — like the s in English “measure.” Spelled j, or g before e/i/y.",
-        "say": "je"
+        "say": "je",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "jour",
+            "gloss": "day"
+          },
+          {
+            "word": "jeune",
+            "gloss": "young"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ʒ"
       ],
@@ -933,7 +1274,7 @@
       "type": "drill",
       "symbol": "ʒ",
       "title": "Practice ʒ",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ʒ"
       ],
@@ -942,7 +1283,7 @@
     {
       "type": "milestone",
       "title": "Fricatives Mastery",
-      "count": 12,
+      "count": 16,
       "symbols": [
         "f",
         "v",
@@ -967,9 +1308,20 @@
         "word": "merci",
         "gloss": "thank you",
         "description": "Lips together, air through the nose — identical to English m.",
-        "say": "merci"
+        "say": "merci",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "maison",
+            "gloss": "house"
+          },
+          {
+            "word": "main",
+            "gloss": "hand"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "m"
       ],
@@ -979,7 +1331,7 @@
       "type": "drill",
       "symbol": "m",
       "title": "Practice m",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "m"
       ],
@@ -993,9 +1345,20 @@
         "word": "nez",
         "gloss": "nose",
         "description": "Tongue tip against the teeth, air through the nose — identical to English n.",
-        "say": "nez"
+        "say": "nez",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "non",
+            "gloss": "no"
+          },
+          {
+            "word": "nous",
+            "gloss": "we"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "n"
       ],
@@ -1005,7 +1368,7 @@
       "type": "drill",
       "symbol": "n",
       "title": "Practice n",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "n"
       ],
@@ -1019,9 +1382,20 @@
         "word": "montagne",
         "gloss": "mountain",
         "description": "A single consonant — tongue flat against the roof of the mouth — close to the ny in English “canyon,” always spelled gn.",
-        "say": "montagne"
+        "say": "montagne",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "campagne",
+            "gloss": "countryside"
+          },
+          {
+            "word": "espagnol",
+            "gloss": "Spanish"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ɲ"
       ],
@@ -1031,7 +1405,7 @@
       "type": "drill",
       "symbol": "ɲ",
       "title": "Practice ɲ",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ɲ"
       ],
@@ -1045,9 +1419,20 @@
         "word": "camping",
         "gloss": "campsite",
         "description": "The “ng” sound in English “sing.” Not native to French, but common in words borrowed from English like parking and camping.",
-        "say": "camping"
+        "say": "camping",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "parking",
+            "gloss": "parking lot"
+          },
+          {
+            "word": "jogging",
+            "gloss": "jogging"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ŋ"
       ],
@@ -1057,7 +1442,7 @@
       "type": "drill",
       "symbol": "ŋ",
       "title": "Practice ŋ",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ŋ"
       ],
@@ -1066,7 +1451,7 @@
     {
       "type": "review",
       "title": "Review",
-      "count": 8,
+      "count": 12,
       "symbols": [
         "m",
         "n",
@@ -1083,9 +1468,20 @@
         "word": "lune",
         "gloss": "moon",
         "description": "Lighter and more forward than English l — tongue tip against the teeth the whole time, none of the “dark” back-of-mouth quality English l can have at the end of a word.",
-        "say": "lune"
+        "say": "lune",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "lait",
+            "gloss": "milk"
+          },
+          {
+            "word": "langue",
+            "gloss": "tongue"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "l"
       ],
@@ -1095,7 +1491,7 @@
       "type": "drill",
       "symbol": "l",
       "title": "Practice l",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "l"
       ],
@@ -1109,9 +1505,20 @@
         "word": "rouge",
         "gloss": "red",
         "description": "The French R — made in the back of the throat, not with the tip of the tongue the way English R is. The single most distinctive sound in French pronunciation, and the subject of its own full lesson on this site.",
-        "say": "rouge"
+        "say": "rouge",
+        "category": "Consonant",
+        "more": [
+          {
+            "word": "robe",
+            "gloss": "dress"
+          },
+          {
+            "word": "rue",
+            "gloss": "street"
+          }
+        ]
       },
-      "checkCount": 2,
+      "checkCount": 4,
       "symbols": [
         "ʁ"
       ],
@@ -1121,7 +1528,7 @@
       "type": "drill",
       "symbol": "ʁ",
       "title": "Practice ʁ",
-      "count": 6,
+      "count": 10,
       "symbols": [
         "ʁ"
       ],
@@ -1130,7 +1537,7 @@
     {
       "type": "milestone",
       "title": "Nasals, Liquids & R Mastery",
-      "count": 12,
+      "count": 16,
       "symbols": [
         "m",
         "n",
@@ -1150,7 +1557,7 @@
     {
       "type": "final",
       "title": "Final Review I",
-      "count": 15,
+      "count": 20,
       "symbols": [
         "i",
         "e",
@@ -1195,7 +1602,7 @@
     {
       "type": "final",
       "title": "Final Review II",
-      "count": 15,
+      "count": 20,
       "symbols": [
         "i",
         "e",

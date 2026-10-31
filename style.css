@@ -1041,6 +1041,8 @@ button:hover {
 
 .eyebrow {
 
+    max-width: none;
+
     margin: 0;
 
     color: var(--gold);
@@ -1354,6 +1356,8 @@ button:hover {
 
     border-radius: 20px;
 
+    transition: width 0.5s ease;
+
 }
 
 
@@ -1464,6 +1468,8 @@ button:hover {
     .site-header {
 
         display: flex;
+
+        justify-content: space-between;
 
         padding: 20px;
 
@@ -6282,6 +6288,71 @@ html[data-season="halloween"] .eyebrow::after {
 .ipa-path-container {
 
     max-width: 760px;
+
+}
+
+
+.ipa-teach-more-label {
+
+    margin: 25px 0 10px;
+
+    font-size: 0.875rem;
+
+    color: var(--text-muted);
+
+}
+
+
+.ipa-teach-more {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.ipa-teach-more-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 8px 10px 8px 16px;
+
+    border-radius: var(--radius-pill);
+
+    background-color: var(--surface);
+
+    border: 1px solid rgba(20, 33, 61, 0.08);
+
+    font-size: 0.875rem;
+
+    color: var(--text-dark);
+
+}
+
+
+.ipa-teach-more-item em {
+
+    color: var(--heading);
+
+}
+
+
+.ipa-teach-more-item .audio-button {
+
+    margin-bottom: 0;
+
+    padding: 5px 10px;
+
+    font-size: 0.75rem;
 
 }
 

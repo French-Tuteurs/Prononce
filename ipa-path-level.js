@@ -29,10 +29,12 @@ const introText = document.getElementById("ipa-level-intro-text");
 const introContinue = document.getElementById("ipa-level-intro-continue");
 
 const teachView = document.getElementById("ipa-level-teach-view");
+const teachCategoryEl = document.getElementById("ipa-level-teach-category");
 const teachSymbolEl = document.getElementById("ipa-level-teach-symbol");
 const teachHeadingEl = document.getElementById("ipa-level-teach-heading");
 const teachDescriptionEl = document.getElementById("ipa-level-teach-description");
 const teachListenButton = document.getElementById("ipa-level-teach-listen");
+const teachMoreEl = document.getElementById("ipa-level-teach-more");
 const teachContinue = document.getElementById("ipa-level-teach-continue");
 
 const quizView = document.getElementById("ipa-level-quiz-view");
@@ -74,7 +76,7 @@ function showView(viewEl) {
 const SHARD_FETCH_CAP = 10;
 
 
-async function startQuiz(symbols, count, weighted, skipShardCap) {
+async function startQuiz(symbols, count, weighted, skipShardCap, stepInfo) {
 
     showView(quizView);
 
@@ -92,7 +94,7 @@ async function startQuiz(symbols, count, weighted, skipShardCap) {
         ? drawWeightedQuestions(candidates, skillStats, count)
         : drawRandomQuestions(candidates, count);
 
-    runner.start(questions);
+    runner.start(questions, stepInfo);
 
 }
 
@@ -103,10 +105,34 @@ function renderTeachStep() {
 
     const teach = level.teach;
 
+    teachCategoryEl.textContent = teach.category || "";
     teachSymbolEl.textContent = "[" + level.symbol + "]";
     teachHeadingEl.innerHTML = "<em>" + teach.word + "</em> — " + teach.gloss;
     teachDescriptionEl.textContent = teach.description;
     teachListenButton.dataset.say = teach.say;
+
+    teachMoreEl.innerHTML = "";
+
+    (teach.more || []).forEach(function (example) {
+
+        const item = document.createElement("div");
+        item.className = "ipa-teach-more-item";
+
+        const text = document.createElement("span");
+        text.innerHTML = "<em>" + example.word + "</em> — " + example.gloss;
+        item.appendChild(text);
+
+        const listenButton = document.createElement("button");
+        listenButton.type = "button";
+        listenButton.className = "audio-button listen-button";
+        listenButton.textContent = "▶";
+        listenButton.dataset.say = example.word;
+        wireListenButton(listenButton);
+        item.appendChild(listenButton);
+
+        teachMoreEl.appendChild(item);
+
+    });
 
 }
 
@@ -122,7 +148,9 @@ async function startLevel() {
         introText.innerHTML = (level.paragraphs || []).map(function (p) {
             return "<p>" + p + "</p>";
         }).join("");
-        progressFillEl.style.width = "50%";
+        // A single-step level: empty until "Continue" is clicked, full
+        // once finishLevel runs (see finishLevel).
+        progressFillEl.style.width = "0%";
         progressTextEl.textContent = "Reading";
         return;
 
@@ -131,7 +159,11 @@ async function startLevel() {
     if (level.type === "teach") {
 
         renderTeachStep();
-        progressFillEl.style.width = "25%";
+        // Two-part level: reading, then the check quiz. 0% while
+        // reading; "Continue to Check" below fills the reading step's
+        // share and the quiz runner picks up smoothly from there,
+        // instead of each part resetting the bar to its own 0%.
+        progressFillEl.style.width = "0%";
         progressTextEl.textContent = "Reading";
         return;
 
@@ -139,11 +171,13 @@ async function startLevel() {
 
     progressTextEl.textContent = "In Progress";
 
-    // drill / review / milestone / final all go straight to a quiz.
-    // Final levels skip the shard-fetch cap (see startQuiz) — they're
-    // the capstone, visited only twice in the whole path, so a
-    // genuinely comprehensive all-37-symbol pull is worth the one-time
-    // cost there in a way it wouldn't be for a level hit every day.
+    // drill / review / milestone / final all go straight to a quiz,
+    // which is the level's only step (progress runs 0% to 100% across
+    // it alone). Final levels skip the shard-fetch cap (see
+    // startQuiz) — they're the capstone, visited only twice in the
+    // whole path, so a genuinely comprehensive all-37-symbol pull is
+    // worth the one-time cost there in a way it wouldn't be for a
+    // level hit every day.
     const weighted = level.type !== "drill";
     await startQuiz(level.symbols, level.count, weighted, level.type === "final");
 
@@ -158,8 +192,19 @@ introContinue.addEventListener("click", function () {
 wireListenButton(teachListenButton);
 
 teachContinue.addEventListener("click", async function () {
+
     progressTextEl.textContent = "In Progress";
-    await startQuiz([level.symbol], level.checkCount || 2, false);
+
+    const checkCount = level.checkCount || 2;
+    const totalSteps = 1 + checkCount; // reading + each check question
+
+    // Fills the reading step's own share immediately, so the bar
+    // visibly advances on this click rather than sitting still until
+    // the first check question is answered.
+    progressFillEl.style.width = Math.round((1 / totalSteps) * 100) + "%";
+
+    await startQuiz([level.symbol], checkCount, false, false, { completedSteps: 1, totalSteps: totalSteps });
+
 });
 
 
@@ -167,6 +212,7 @@ async function finishLevel(correctCount, total) {
 
     showView(summaryView);
     progressTextEl.textContent = "Complete";
+    progressFillEl.style.width = "100%";
 
     if (total > 0) {
         summaryText.textContent = "You answered " + correctCount + " of " + total + " correctly.";
