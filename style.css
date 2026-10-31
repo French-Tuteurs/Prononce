@@ -4303,6 +4303,49 @@ button:hover {
 }
 
 
+.page-loader-text {
+
+    margin: 6px 0 0;
+
+    font-family: "Lato", sans-serif;
+
+    font-size: 0.9375rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.3px;
+
+    color: var(--heading);
+
+}
+
+
+.page-loader-tip {
+
+    margin: 0;
+
+    max-width: 320px;
+
+    padding: 0 24px;
+
+    font-size: 0.8125rem;
+
+    line-height: 1.5;
+
+    text-align: center;
+
+    color: var(--text-muted);
+
+}
+
+
+.page-loader-tip strong {
+
+    color: var(--gold);
+
+}
+
+
 @keyframes page-loader-spin {
 
     to {
@@ -6489,9 +6532,19 @@ html[data-season="halloween"] .eyebrow::after {
 
     z-index: 60;
 
+    box-sizing: border-box;
+
     width: 42px;
 
     height: 42px;
+
+    padding: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
     border-radius: 50%;
 
