@@ -1,0 +1,224 @@
+{
+  "i": {
+    "word": "si",
+    "gloss": "if",
+    "description": "High, front, spread lips — tense and bright, like the ee in “see” but shorter and crisper.",
+    "say": "si"
+  },
+  "e": {
+    "word": "été",
+    "gloss": "summer",
+    "description": "High-mid, front, spread lips. No real English equivalent — closer to the vowel in “say” but without the glide at the end.",
+    "say": "été"
+  },
+  "ɛ": {
+    "word": "fête",
+    "gloss": "party",
+    "description": "Lower-mid, front, spread lips. Close to the e in “bed,” a bit more open than [e].",
+    "say": "fête"
+  },
+  "a": {
+    "word": "chat",
+    "gloss": "cat",
+    "description": "Low, front, spread lips — the most open vowel in this group, close to the a in “cat.”",
+    "say": "chat"
+  },
+  "y": {
+    "word": "tu",
+    "gloss": "you",
+    "description": "Same tongue position as [i] — high and forward — but with lips tightly rounded, as if starting to whistle.",
+    "say": "tu"
+  },
+  "ø": {
+    "word": "peu",
+    "gloss": "a little",
+    "description": "Same tongue position as [e], lips rounded. Say [e], then round your lips without moving your tongue.",
+    "say": "peu"
+  },
+  "œ": {
+    "word": "sœur",
+    "gloss": "sister",
+    "description": "Same tongue position as [ɛ], lips rounded — a touch more open than [ø].",
+    "say": "sœur"
+  },
+  "ɑ": {
+    "word": "pâte",
+    "gloss": "dough/pasta",
+    "description": "Low and further back than [a], lips relaxed rather than rounded. In most of France today this has largely merged with [a] — worth knowing it exists, but don’t worry about distinguishing it by ear yet.",
+    "say": "pâte"
+  },
+  "ɔ": {
+    "word": "comme",
+    "gloss": "like, as",
+    "description": "Low-mid, back, rounded. Close to the o in British “hot.”",
+    "say": "comme"
+  },
+  "o": {
+    "word": "eau",
+    "gloss": "water",
+    "description": "High-mid, back, rounded — closer to the vowel in “go,” but held steady instead of gliding into a w sound.",
+    "say": "eau"
+  },
+  "u": {
+    "word": "loup",
+    "gloss": "wolf",
+    "description": "High and back, tightly rounded lips — close to “oo” in “food.” Not the same symbol as [y] — [u] is rounded-and-back, [y] is rounded-and-front.",
+    "say": "loup"
+  },
+  "ə": {
+    "word": "le",
+    "gloss": "the",
+    "description": "Short, central, relaxed — the “uh” sound. Frequently dropped in fast speech: je ne sais pas is often said more like “j’n’sais pas.”",
+    "say": "le"
+  },
+  "ɑ̃": {
+    "word": "dans",
+    "gloss": "in",
+    "description": "Related to oral [ɑ]. The most open of the four nasal vowels.",
+    "say": "dans"
+  },
+  "ɛ̃": {
+    "word": "vin",
+    "gloss": "wine",
+    "description": "Related to oral [ɛ]. Spelled many ways — in, im, ain, ein, yn, ym all land here.",
+    "say": "vin"
+  },
+  "ɔ̃": {
+    "word": "bon",
+    "gloss": "good",
+    "description": "Related to oral [ɔ]. Rounded lips, air through the nose.",
+    "say": "bon"
+  },
+  "œ̃": {
+    "word": "un",
+    "gloss": "a, one",
+    "description": "Related to oral [œ]. The rarest of the four — many French speakers today merge it into [ɛ̃], so hearing un and in sound identical is common and not a mistake on their part.",
+    "say": "un"
+  },
+  "j": {
+    "word": "yeux",
+    "gloss": "eyes",
+    "description": "Identical to English y in “yes.” Also appears spelled -ill- and -il, as in fille and travail.",
+    "say": "yeux"
+  },
+  "w": {
+    "word": "oui",
+    "gloss": "yes",
+    "description": "Identical to English w in “west.” Usually spelled oi or ou before a vowel.",
+    "say": "oui"
+  },
+  "ɥ": {
+    "word": "huit",
+    "gloss": "eight",
+    "description": "The one with no English equivalent: round your lips as if for [y] (the vowel in tu), then glide immediately into the next vowel. Almost always spelled u before another vowel.",
+    "say": "huit"
+  },
+  "p": {
+    "word": "pain",
+    "gloss": "bread",
+    "description": "Voiceless, lips together, no puff of air on release — crisper and softer than English p.",
+    "say": "pain"
+  },
+  "b": {
+    "word": "beau",
+    "gloss": "beautiful",
+    "description": "The voiced twin of [p] — lips together, vocal cords buzzing throughout. Essentially identical to English b.",
+    "say": "beau"
+  },
+  "t": {
+    "word": "tasse",
+    "gloss": "cup",
+    "description": "Voiceless, but dental — tongue touches the back of the upper teeth, not the ridge behind them the way English t does. No puff of air.",
+    "say": "tasse"
+  },
+  "d": {
+    "word": "dos",
+    "gloss": "back",
+    "description": "The voiced twin of [t] — same dental tongue position, vocal cords buzzing. Close to English d.",
+    "say": "dos"
+  },
+  "k": {
+    "word": "cave",
+    "gloss": "cellar",
+    "description": "Voiceless, back of the tongue against the soft palate. Hides behind several spellings: c before a/o/u, qu, and k itself all land here — cave, qui, and kilo all start with [k].",
+    "say": "cave"
+  },
+  "ɡ": {
+    "word": "gare",
+    "gloss": "station",
+    "description": "The voiced twin of [k]. Spelled g before a/o/u, or gu before e/i/y to keep the hard sound — compare gare to guide.",
+    "say": "gare"
+  },
+  "f": {
+    "word": "fête",
+    "gloss": "party",
+    "description": "Voiceless, top teeth on bottom lip — identical to English f. Spelled f or ph.",
+    "say": "fête"
+  },
+  "v": {
+    "word": "vous",
+    "gloss": "you",
+    "description": "The voiced twin of [f] — identical to English v.",
+    "say": "vous"
+  },
+  "s": {
+    "word": "sac",
+    "gloss": "bag",
+    "description": "Voiceless, like English s. Spelled s at the start of a word or next to a consonant, ss between vowels, or c/ç before e/i/y.",
+    "say": "sac"
+  },
+  "z": {
+    "word": "zéro",
+    "gloss": "zero",
+    "description": "The voiced twin of [s]. The spelling trap: a single s between vowels is also [z] — maison is [mɛzɔ̃], not [mɛsɔ̃]. Double it (ss) to get [s] back, as in poisson.",
+    "say": "maison"
+  },
+  "ʃ": {
+    "word": "chat",
+    "gloss": "cat",
+    "description": "The “sh” sound, always spelled ch in French — never pronounced like English “ch” in “chip.”",
+    "say": "chat"
+  },
+  "ʒ": {
+    "word": "je",
+    "gloss": "I",
+    "description": "The voiced twin of [ʃ] — like the s in English “measure.” Spelled j, or g before e/i/y.",
+    "say": "je"
+  },
+  "m": {
+    "word": "merci",
+    "gloss": "thank you",
+    "description": "Lips together, air through the nose — identical to English m.",
+    "say": "merci"
+  },
+  "n": {
+    "word": "nez",
+    "gloss": "nose",
+    "description": "Tongue tip against the teeth, air through the nose — identical to English n.",
+    "say": "nez"
+  },
+  "ɲ": {
+    "word": "montagne",
+    "gloss": "mountain",
+    "description": "A single consonant — tongue flat against the roof of the mouth — close to the ny in English “canyon,” always spelled gn.",
+    "say": "montagne"
+  },
+  "ŋ": {
+    "word": "camping",
+    "gloss": "campsite",
+    "description": "The “ng” sound in English “sing.” Not native to French, but common in words borrowed from English like parking and camping.",
+    "say": "camping"
+  },
+  "l": {
+    "word": "lune",
+    "gloss": "moon",
+    "description": "Lighter and more forward than English l — tongue tip against the teeth the whole time, none of the “dark” back-of-mouth quality English l can have at the end of a word.",
+    "say": "lune"
+  },
+  "ʁ": {
+    "word": "rouge",
+    "gloss": "red",
+    "description": "The French R — made in the back of the throat, not with the tip of the tongue the way English R is. The single most distinctive sound in French pronunciation, and the subject of its own full lesson on this site.",
+    "say": "rouge"
+  }
+}

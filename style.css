@@ -6274,3 +6274,248 @@ html[data-season="halloween"] .eyebrow::after {
 
 }
 
+
+/* ===========================
+   IPA PATH (ipa-path.html, ipa-path-level.html)
+=========================== */
+
+.ipa-path-container {
+
+    max-width: 760px;
+
+}
+
+
+.ipa-path-loading {
+
+    color: var(--text-muted);
+
+    text-align: center;
+
+}
+
+
+.ipa-path-track {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 10px 0 60px;
+
+}
+
+
+.ipa-path-node {
+
+    text-decoration: none;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+}
+
+
+.ipa-path-circle {
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    width: 84px;
+
+    height: 84px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background-color: var(--surface);
+
+    border: 3px solid var(--navy);
+
+    box-shadow: var(--soft-shadow);
+
+    transition: transform 0.2s ease;
+
+}
+
+
+.ipa-path-circle:not(.ipa-path-offset-right) {
+
+    align-self: flex-start;
+
+    margin-left: 18%;
+
+}
+
+
+.ipa-path-circle.ipa-path-offset-right {
+
+    align-self: flex-end;
+
+    margin-right: 18%;
+
+}
+
+
+.ipa-path-circle.ipa-path-unlocked:hover {
+
+    transform: translateY(-4px);
+
+}
+
+
+.ipa-path-node-icon {
+
+    font-size: 1.75rem;
+
+    line-height: 1;
+
+}
+
+
+.ipa-path-circle .ipa-path-node-label {
+
+    margin-top: 4px;
+
+    font-size: 0.6875rem;
+
+    font-weight: bold;
+
+    color: var(--heading);
+
+    text-align: center;
+
+    max-width: 76px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+}
+
+
+.ipa-path-circle.ipa-path-locked {
+
+    border-color: var(--border-soft);
+
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+}
+
+
+.ipa-path-circle.ipa-path-completed {
+
+    background-color: var(--gold);
+
+    border-color: var(--gold);
+
+}
+
+
+.ipa-path-circle.ipa-path-completed .ipa-path-node-label {
+
+    color: var(--white);
+
+}
+
+
+.ipa-path-circle.ipa-path-current {
+
+    border-color: var(--gold);
+
+    box-shadow:
+        0 0 0 5px rgba(176, 141, 87, 0.25),
+        var(--soft-shadow);
+
+}
+
+
+.ipa-path-banner {
+
+    width: 100%;
+
+    max-width: 520px;
+
+    flex-direction: row;
+
+    justify-content: center;
+
+    padding: 18px 24px;
+
+    border-radius: var(--radius-large);
+
+    background-color: var(--navy);
+
+    box-shadow: var(--soft-shadow);
+
+}
+
+
+.ipa-path-banner .ipa-path-node-icon {
+
+    font-size: 1.5rem;
+
+}
+
+
+.ipa-path-banner .ipa-path-node-label {
+
+    color: var(--white);
+
+    font-weight: bold;
+
+    font-size: 1rem;
+
+    text-align: center;
+
+}
+
+
+.ipa-path-banner.ipa-path-locked {
+
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+    background-color: var(--text-muted);
+
+}
+
+
+.ipa-path-banner.ipa-path-completed {
+
+    background-color: var(--gold);
+
+}
+
+
+@media (max-width: 600px) {
+
+    .ipa-path-circle:not(.ipa-path-offset-right) {
+
+        margin-left: 6%;
+
+    }
+
+
+    .ipa-path-circle.ipa-path-offset-right {
+
+        margin-right: 6%;
+
+    }
+
+}
+

@@ -239,6 +239,20 @@ for cat, symbols in CATEGORIES.items():
 ALL_SYMBOLS = list(WORDS.keys())
 assert set(ALL_SYMBOLS) == set(SYMBOL_CATEGORY.keys()), "symbol/category mismatch"
 
+# Filesystem/URL-safe filenames for symbols that contain diacritics
+# (combining tilde, etc.) or would otherwise be awkward in a path.
+SLUGS = {
+    "i": "i", "e": "e", "ɛ": "eps", "a": "a", "y": "y", "ø": "oe-closed", "œ": "oe-open",
+    "ɑ": "a-back", "ɔ": "o-open", "o": "o", "u": "u", "ə": "schwa",
+    "ɑ̃": "an", "ɛ̃": "in", "ɔ̃": "on", "œ̃": "un",
+    "j": "j", "ɥ": "hw", "w": "w",
+    "p": "p", "b": "b", "t": "t", "d": "d", "k": "k", "ɡ": "g", "f": "f", "v": "v",
+    "s": "s", "z": "z", "ʃ": "sh", "ʒ": "zh", "m": "m", "n": "n", "ɲ": "gn", "ŋ": "ng",
+    "l": "l", "ʁ": "r",
+}
+assert set(SLUGS.keys()) == set(ALL_SYMBOLS), "slug map incomplete"
+assert len(set(SLUGS.values())) == len(SLUGS), "slug collision"
+
 # Sanity: every word referenced in WORDS must have a phoneme inventory,
 # and that inventory must actually contain the symbol it's filed under.
 for symbol, pairs in WORDS.items():
@@ -251,10 +265,13 @@ def family_pool(symbol):
     return CATEGORIES[SYMBOL_CATEGORY[symbol]]
 
 
-def gen_word_to_symbol(symbol, variations_per_word=7):
+def gen_word_to_symbol(symbol, variations_per_word=80):
     """'Which IPA symbol is the sound in <word>?' — distractors from the
     same phonetic family as the target symbol, excluding any symbol the
-    word also happens to contain."""
+    word also happens to contain. Small families (nasal vowels,
+    semivowels) naturally cap out well below variations_per_word — the
+    loop below exits once the pool of distinct distractor pairs is
+    exhausted, rather than erroring or duplicating."""
     items = []
     words = WORDS[symbol]
 
@@ -267,7 +284,7 @@ def gen_word_to_symbol(symbol, variations_per_word=7):
         seen_pairs = set()
         attempts = 0
         made = 0
-        while made < variations_per_word and attempts < variations_per_word * 8:
+        while made < variations_per_word and attempts < variations_per_word * 6:
             attempts += 1
             distractors = tuple(sorted(random.sample(pool, 2)))
             if distractors in seen_pairs:
@@ -281,7 +298,6 @@ def gen_word_to_symbol(symbol, variations_per_word=7):
 
             items.append({
                 "symbol": symbol,
-                "category": SYMBOL_CATEGORY[symbol],
                 "type": "word-to-symbol",
                 "prompt": f"Which IPA symbol represents the target sound in “{word}” ({gloss})?",
                 "options": [f"[{o}]" for o in options],
@@ -293,7 +309,10 @@ def gen_word_to_symbol(symbol, variations_per_word=7):
 def gen_symbol_to_word(symbol, variations_per_word=13):
     """'Which word contains the sound [symbol]?' — distractor words come
     from other symbols' lists, excluding any word that also happens to
-    contain the target symbol."""
+    contain the target symbol. This template has by far the largest
+    combinatorial headroom (the distractor pool is every other symbol's
+    word list), so it carries most of the volume needed to reach a
+    large per-symbol target for small phonetic families."""
     items = []
     distractor_pool = [
         (w, g, s) for s, pairs in WORDS.items() if s != symbol
@@ -304,7 +323,7 @@ def gen_symbol_to_word(symbol, variations_per_word=13):
         seen_pairs = set()
         attempts = 0
         made = 0
-        while made < variations_per_word and attempts < variations_per_word * 8:
+        while made < variations_per_word and attempts < variations_per_word * 6:
             attempts += 1
             d1, d2 = random.sample(distractor_pool, 2)
             if d1[0] == d2[0] or d1[0] == word or d2[0] == word:
@@ -321,7 +340,6 @@ def gen_symbol_to_word(symbol, variations_per_word=13):
 
             items.append({
                 "symbol": symbol,
-                "category": SYMBOL_CATEGORY[symbol],
                 "type": "symbol-to-word",
                 "prompt": f"Which word contains the sound [{symbol}]?",
                 "options": options,
@@ -330,57 +348,157 @@ def gen_symbol_to_word(symbol, variations_per_word=13):
     return items
 
 
-def main():
-    all_items = []
-    for symbol in ALL_SYMBOLS:
-        all_items.extend(gen_word_to_symbol(symbol))
-        all_items.extend(gen_symbol_to_word(symbol))
+def gen_odd_one_out(symbol, variations=400):
+    """'Which of these words does NOT contain [symbol]?' — two options
+    DO contain the target sound (drawn from the symbol's own word
+    list), one does NOT (drawn from the large cross-symbol pool that
+    provably lacks it). A different cognitive task from the other two
+    templates, not just a reshuffling of the same phrasing."""
+    items = []
+    own_words = WORDS[symbol]
+    non_containing_pool = [
+        (w, g) for s, pairs in WORDS.items() if s != symbol
+        for (w, g) in pairs if symbol not in WORD_SOUNDS[w]
+    ]
+    if len(own_words) < 2 or not non_containing_pool:
+        return items
 
-    random.shuffle(all_items)
+    seen = set()
+    attempts = 0
+    made = 0
+    while made < variations and attempts < variations * 6:
+        attempts += 1
+        w1, w2 = random.sample(own_words, 2)
+        w3 = random.choice(non_containing_pool)
+        if w3[0] == w1[0] or w3[0] == w2[0]:
+            continue
+        key = tuple(sorted([w1[0], w2[0], w3[0]]))
+        if key in seen:
+            continue
+        seen.add(key)
+        made += 1
 
-    target = 10000
-    if len(all_items) > target:
-        all_items = all_items[:target]
-    else:
-        extra = []
-        guard = 0
-        while len(all_items) + len(extra) < target and guard < 20:
-            guard += 1
-            for symbol in ALL_SYMBOLS:
-                extra.extend(gen_word_to_symbol(symbol, variations_per_word=3))
-                extra.extend(gen_symbol_to_word(symbol, variations_per_word=4))
-        random.shuffle(extra)
-        all_items.extend(extra[:max(0, target - len(all_items))])
+        options = [w1[0], w2[0], w3[0]]
+        random.shuffle(options)
+        correct_index = options.index(w3[0])
 
-    for i, item in enumerate(all_items):
-        item["id"] = f"ipa-{i + 1:05d}"
+        items.append({
+            "symbol": symbol,
+            "type": "odd-one-out",
+            "prompt": f"Which of these words does NOT contain the sound [{symbol}]?",
+            "options": options,
+            "correctIndex": correct_index,
+        })
+    return items
 
-    print("total items:", len(all_items))
-    by_symbol = {}
-    for item in all_items:
-        by_symbol[item["symbol"]] = by_symbol.get(item["symbol"], 0) + 1
-    print("symbols covered:", len(by_symbol), "/", len(ALL_SYMBOLS))
-    print("min per symbol:", min(by_symbol.values()), "max per symbol:", max(by_symbol.values()))
 
-    # Correctness self-check: for every generated item, verify exactly
-    # one option satisfies the question against WORD_SOUNDS.
-    bad = 0
-    for item in all_items:
+def generate_for_symbol(symbol, target_count):
+    """Combines all three templates to reach target_count items for one
+    symbol, leaning on symbol-to-word (the template with by far the
+    largest combinatorial headroom) to make up whatever the other two
+    templates' natural pool limits can't cover."""
+    w2s = gen_word_to_symbol(symbol, variations_per_word=80)
+    ooo = gen_odd_one_out(symbol, variations=400)
+
+    have = len(w2s) + len(ooo)
+    remaining = max(0, target_count - have)
+    word_count = len(WORDS[symbol])
+    vpw = max(1, -(-remaining // word_count)) if remaining else 1
+    s2w = gen_symbol_to_word(symbol, variations_per_word=vpw)
+
+    pool = w2s + ooo + s2w
+    random.shuffle(pool)
+
+    # symbol-to-word's headroom is enormous, so this should already
+    # meet target_count — top up defensively in case a symbol's own
+    # word list is unusually small.
+    guard = 0
+    while len(pool) < target_count and guard < 10:
+        guard += 1
+        vpw *= 2
+        pool = w2s + ooo + gen_symbol_to_word(symbol, variations_per_word=vpw)
+        random.shuffle(pool)
+
+    return pool[:target_count]
+
+
+def self_check(symbol, items):
+    """Every generated item must have exactly one option that satisfies
+    the question, verified against WORD_SOUNDS independently of
+    however the item was constructed."""
+    bad = []
+    for item in items:
         if item["type"] == "word-to-symbol":
             word = item["prompt"].split("“")[1].split("”")[0]
             sounds = WORD_SOUNDS[word]
             valid = [i for i, opt in enumerate(item["options"]) if opt.strip("[]") in sounds]
-        else:
-            target_symbol = item["symbol"]
-            valid = [i for i, opt in enumerate(item["options"]) if target_symbol in WORD_SOUNDS[opt]]
+        elif item["type"] == "symbol-to-word":
+            valid = [i for i, opt in enumerate(item["options"]) if symbol in WORD_SOUNDS[opt]]
+        else:  # odd-one-out
+            valid = [i for i, opt in enumerate(item["options"]) if symbol not in WORD_SOUNDS[opt]]
         if valid != [item["correctIndex"]]:
-            bad += 1
-            if bad <= 5:
-                print("AMBIGUOUS/WRONG:", item)
-    print("ambiguous or incorrect items:", bad)
+            bad.append(item)
+    return bad
 
-    with open("ipa_practice_questions.json", "w", encoding="utf-8") as f:
-        json.dump(all_items, f, ensure_ascii=False, indent=2)
+
+def main():
+    import os
+
+    TOTAL_TARGET = 110000
+    per_symbol_target = TOTAL_TARGET // len(ALL_SYMBOLS)
+
+    out_dir = "questions"
+    os.makedirs(out_dir, exist_ok=True)
+
+    total_written = 0
+    total_bad = 0
+    counts = {}
+    type_counts = {"word-to-symbol": 0, "symbol-to-word": 0, "odd-one-out": 0}
+
+    for symbol in ALL_SYMBOLS:
+        items = generate_for_symbol(symbol, per_symbol_target)
+
+        bad = self_check(symbol, items)
+        total_bad += len(bad)
+        if bad:
+            print(f"AMBIGUOUS/WRONG for {symbol!r}:", bad[:3])
+
+        for item in items:
+            type_counts[item["type"]] += 1
+
+        # Compact array format: [prompt, opt0, opt1, opt2, correctIndex].
+        # Symbol/category/type are all implied by the shard file itself
+        # (the client already needs a symbol→category lookup for the
+        # index, so repeating it per item would be pure waste at this
+        # scale — the earlier 10k-item run's objects-with-repeated-keys
+        # format would cost roughly 28MB total at 110k items instead of
+        # the ~14MB raw / much less gzipped this produces).
+        compact = [
+            [it["prompt"], it["options"][0], it["options"][1], it["options"][2], it["correctIndex"]]
+            for it in items
+        ]
+
+        slug = SLUGS[symbol]
+        with open(os.path.join(out_dir, f"{slug}.json"), "w", encoding="utf-8") as f:
+            json.dump(compact, f, ensure_ascii=False, separators=(",", ":"))
+
+        counts[symbol] = len(items)
+        total_written += len(items)
+
+    index = {
+        "categories": SYMBOL_CATEGORY,
+        "slugs": SLUGS,
+        "counts": counts,
+        "total": total_written,
+    }
+    with open(os.path.join(out_dir, "index.json"), "w", encoding="utf-8") as f:
+        json.dump(index, f, ensure_ascii=False, indent=2)
+
+    print("total items written:", total_written)
+    print("symbols covered:", len(counts), "/", len(ALL_SYMBOLS))
+    print("min per symbol:", min(counts.values()), "max per symbol:", max(counts.values()))
+    print("by type:", type_counts)
+    print("ambiguous or incorrect items:", total_bad)
 
 
 if __name__ == "__main__":
