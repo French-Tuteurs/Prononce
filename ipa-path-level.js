@@ -13,7 +13,7 @@ import { auth, db } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import { loadShards } from "./ipa-question-bank.js";
-import { loadSkillStats, recordSkillAttempts, drawWeightedQuestions, drawRandomQuestions } from "./ipa-skills.js";
+import { loadSkillStats, recordSkillAttempts, drawWeightedQuestions, drawRandomQuestions, shuffled } from "./ipa-skills.js";
 import { createQuizRunner } from "./ipa-quiz-runner.js";
 import { wireListenButton } from "./ipa-speak.js";
 
@@ -71,11 +71,22 @@ function showView(viewEl) {
 }
 
 
-async function startQuiz(symbols, count, weighted) {
+const SHARD_FETCH_CAP = 10;
+
+
+async function startQuiz(symbols, count, weighted, skipShardCap) {
 
     showView(quizView);
 
-    const candidates = await loadShards(symbols);
+    // Same reasoning as ipa-practice.js: each shard now holds tens of
+    // thousands of questions, so a wide review/milestone level only
+    // needs a random subset of shards fetched, not every one, to
+    // still give the session plenty of variety.
+    const fetchSymbols = (!skipShardCap && symbols.length > SHARD_FETCH_CAP)
+        ? shuffled(symbols).slice(0, SHARD_FETCH_CAP)
+        : symbols;
+
+    const candidates = await loadShards(fetchSymbols);
 
     const questions = weighted
         ? drawWeightedQuestions(candidates, skillStats, count)
@@ -129,8 +140,12 @@ async function startLevel() {
     progressTextEl.textContent = "In Progress";
 
     // drill / review / milestone / final all go straight to a quiz.
+    // Final levels skip the shard-fetch cap (see startQuiz) — they're
+    // the capstone, visited only twice in the whole path, so a
+    // genuinely comprehensive all-37-symbol pull is worth the one-time
+    // cost there in a way it wouldn't be for a level hit every day.
     const weighted = level.type !== "drill";
-    await startQuiz(level.symbols, level.count, weighted);
+    await startQuiz(level.symbols, level.count, weighted, level.type === "final");
 
 }
 

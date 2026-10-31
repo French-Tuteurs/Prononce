@@ -444,7 +444,7 @@ def self_check(symbol, items):
 def main():
     import os
 
-    TOTAL_TARGET = 110000
+    TOTAL_TARGET = 1110000
     per_symbol_target = TOTAL_TARGET // len(ALL_SYMBOLS)
 
     out_dir = "questions"
