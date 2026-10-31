@@ -11,11 +11,12 @@
 
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import { loadShards } from "./ipa-question-bank.js";
-import { loadSkillStats, recordSkillAttempts, drawWeightedQuestions, drawRandomQuestions, shuffled } from "./ipa-skills.js";
+import { loadUserProfile, recordSkillAttempts, drawWeightedQuestions, drawRandomQuestions, shuffled } from "./ipa-skills.js";
 import { createQuizRunner } from "./ipa-quiz-runner.js";
 import { wireListenButton } from "./ipa-speak.js";
+import { celebrateIfEnabled, feedbackCorrect, feedbackIncorrect, feedbackCelebrate } from "./preferences.js";
 
 const levelId = Number(new URLSearchParams(window.location.search).get("level"));
 
@@ -44,6 +45,7 @@ const summaryText = document.getElementById("ipa-level-summary-text");
 const nextLevelLink = document.getElementById("ipa-level-next-level");
 
 let currentUid = null;
+let currentUserProfile = {};
 let skillStats = {};
 let curriculum = null;
 let level = null;
@@ -58,7 +60,15 @@ const runner = createQuizRunner({
     totalEl: document.getElementById("ipa-level-total"),
     progressFillEl: progressFillEl,
     onAnswer: function (item, isCorrect) {
+
         sessionAttempts.push({ symbol: item.symbol, correct: isCorrect });
+
+        if (isCorrect) {
+            feedbackCorrect(currentUserProfile);
+        } else {
+            feedbackIncorrect(currentUserProfile);
+        }
+
     },
     onFinish: finishLevel
 });
@@ -220,6 +230,9 @@ async function finishLevel(correctCount, total) {
         summaryText.textContent = "Nice work.";
     }
 
+    celebrateIfEnabled(currentUserProfile);
+    feedbackCelebrate(currentUserProfile);
+
     if (currentUid && sessionAttempts.length > 0) {
         await recordSkillAttempts(currentUid, sessionAttempts);
     }
@@ -277,19 +290,12 @@ async function init() {
         }
 
         currentUid = user.uid;
-        skillStats = await loadSkillStats(currentUid);
+        currentUserProfile = await loadUserProfile(currentUid);
+        skillStats = currentUserProfile.ipaSkills || {};
 
-        try {
-
-            const snapshot = await getDoc(doc(db, "users", currentUid));
-
-            if (snapshot.exists() && snapshot.data().ipaPath) {
-                unlockedLevel = snapshot.data().ipaPath.unlockedLevel || 1;
-                completed = snapshot.data().ipaPath.completed || {};
-            }
-
-        } catch (error) {
-            console.error("Couldn't load IPA Path progress:", error);
+        if (currentUserProfile.ipaPath) {
+            unlockedLevel = currentUserProfile.ipaPath.unlockedLevel || 1;
+            completed = currentUserProfile.ipaPath.completed || {};
         }
 
         const alreadyCompleted = completed[String(level.id)] === true;

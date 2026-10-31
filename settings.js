@@ -34,6 +34,7 @@ import {
     applyFontSize,
     applyCompactMode,
     celebrate,
+    feedbackCorrect,
     applySeasonalTheme
 } from "./preferences.js";
 
@@ -111,6 +112,7 @@ onAuthStateChanged(auth, async function (user) {
         setToggleState("autoplay-toggle", profile.autoplayAudio === true);
         setToggleState("compact-mode-toggle", profile.compactMode === true);
         setToggleState("celebration-toggle", profile.celebrationEffects !== false);
+        setToggleState("haptics-sound-toggle", profile.hapticsSoundEffects !== false);
         applyAllPreferences(profile);
 
     } catch (error) {
@@ -560,6 +562,22 @@ if (celebrationToggle) {
 
         if (celebrationToggle.checked) {
             celebrate();
+        }
+
+    });
+
+}
+
+const hapticsSoundToggle = document.getElementById("haptics-sound-toggle");
+
+if (hapticsSoundToggle) {
+
+    hapticsSoundToggle.addEventListener("change", function () {
+
+        saveDisplayPreference({ hapticsSoundEffects: hapticsSoundToggle.checked });
+
+        if (hapticsSoundToggle.checked) {
+            feedbackCorrect({ hapticsSoundEffects: true });
         }
 
     });

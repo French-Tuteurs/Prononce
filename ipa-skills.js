@@ -19,6 +19,35 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
+// Fetches the full users/{uid} document once — callers that need
+// more than just ipaSkills from it (the signed-in profile, for
+// preference checks like feedbackEffectsEnabled) should call this
+// directly instead of loadSkillStats, to avoid two separate reads of
+// the same document on page load.
+
+export async function loadUserProfile(uid) {
+
+    if (!uid) {
+        return {};
+    }
+
+    try {
+
+        const snapshot = await getDoc(doc(db, "users", uid));
+
+        if (snapshot.exists()) {
+            return snapshot.data();
+        }
+
+    } catch (error) {
+        console.error("Couldn't load user profile:", error);
+    }
+
+    return {};
+
+}
+
+
 export async function loadSkillStats(uid) {
 
     if (!uid) {

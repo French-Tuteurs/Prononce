@@ -17,10 +17,12 @@
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import { loadIndex, loadShards } from "./ipa-question-bank.js";
-import { loadSkillStats, recordSkillAttempts, drawWeightedQuestions, drawRandomQuestions, shuffled } from "./ipa-skills.js";
+import { loadUserProfile, recordSkillAttempts, drawWeightedQuestions, drawRandomQuestions, shuffled } from "./ipa-skills.js";
 import { createQuizRunner } from "./ipa-quiz-runner.js";
+import { feedbackCorrect, feedbackIncorrect, feedbackCelebrate } from "./preferences.js";
 
 let currentUid = null;
+let currentUserProfile = {};
 let skillStats = {};
 
 onAuthStateChanged(auth, async function (user) {
@@ -30,7 +32,8 @@ onAuthStateChanged(auth, async function (user) {
     }
 
     currentUid = user.uid;
-    skillStats = await loadSkillStats(currentUid);
+    currentUserProfile = await loadUserProfile(currentUid);
+    skillStats = currentUserProfile.ipaSkills || {};
 
 });
 
@@ -56,7 +59,15 @@ const runner = createQuizRunner({
     scoreLiveEl: document.getElementById("ipa-practice-score-live"),
     progressFillEl: document.getElementById("ipa-practice-progress-fill"),
     onAnswer: function (item, isCorrect) {
+
         sessionAttempts.push({ symbol: item.symbol, correct: isCorrect });
+
+        if (isCorrect) {
+            feedbackCorrect(currentUserProfile);
+        } else {
+            feedbackIncorrect(currentUserProfile);
+        }
+
     },
     onFinish: function (correctCount, total) {
 
@@ -65,6 +76,8 @@ const runner = createQuizRunner({
 
         summaryText.textContent =
             "You answered " + correctCount + " of " + total + " correctly.";
+
+        feedbackCelebrate(currentUserProfile);
 
         if (currentUid && sessionAttempts.length > 0) {
             recordSkillAttempts(currentUid, sessionAttempts);

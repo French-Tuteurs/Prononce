@@ -9,7 +9,11 @@ import {
     applySeasonalTheme,
     getPlaybackRate,
     shouldAutoplay,
-    celebrateIfEnabled
+    celebrateIfEnabled,
+    feedbackCorrect,
+    feedbackIncorrect,
+    feedbackCelebrate,
+    feedbackTap
 } from "./preferences.js";
 
 // Not a user preference, so it doesn't wait on sign-in — the
@@ -1326,6 +1330,7 @@ function showLessonSection(sectionNumber) {
             }
 
             celebrateIfEnabled(currentUserProfile);
+            feedbackCelebrate(currentUserProfile);
 
         } else {
 
@@ -1445,10 +1450,12 @@ questionCards.forEach(function (card) {
                 if (isCorrect) {
 
                     option.classList.add("selected-correct");
+                    feedbackCorrect(currentUserProfile);
 
                 } else {
 
                     option.classList.add("selected-incorrect");
+                    feedbackIncorrect(currentUserProfile);
 
                     const correctOption =
                         card.querySelector('[data-correct="true"]');
@@ -1596,6 +1603,7 @@ practiceStages.forEach(function (stage) {
         }
 
         celebrateIfEnabled(currentUserProfile);
+        feedbackCelebrate(currentUserProfile);
 
         const practiceId = document.body.dataset.practiceId;
         const totalLevels = Number(document.body.dataset.totalLevels);
@@ -2451,6 +2459,33 @@ async function recordAndAnalyze(button, feedbackEl) {
     }
 
 }
+
+
+// ===========================
+// TAP FEEDBACK (primary action buttons, site-wide)
+// ===========================
+//
+// A light buzz/click on the main "move forward" buttons — Continue,
+// Start Lesson, Start Practicing, and so on — so navigating through
+// the app has a bit of the tactile feel a native app has for free.
+// Deliberately not on every clickable thing (nav links, the user
+// menu) — just the buttons that carry the user from one screen to
+// the next, where it reads as responsive rather than noisy. Quiz
+// answers already get their own distinct correct/incorrect feedback
+// (see the Quick Check and ipa-quiz-runner.js wiring) so they're left
+// out here to avoid a double buzz.
+
+document.addEventListener("click", function (event) {
+
+    const tappable = event.target.closest(
+        ".lesson-next, .lesson-back, .lesson-card-button, .daily-card-link, .practice-next-question, .dashboard-link"
+    );
+
+    if (tappable) {
+        feedbackTap(currentUserProfile);
+    }
+
+});
 
 
 const recordButtons =

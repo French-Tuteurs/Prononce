@@ -221,6 +221,167 @@ function celebrateIfEnabled(profile) {
 
 
 // ===========================
+// HAPTICS & SOUND EFFECTS
+// ===========================
+//
+// Short vibration + a synthesized tone on quiz answers and finishing
+// a lesson/level — the kind of tactile/audio feedback a native app
+// gives for free and a plain web page otherwise lacks entirely.
+// Vibration uses the Web Vibration API, which only Android browsers
+// implement (iOS Safari has never supported it, on any browser
+// there, since they all run on WebKit) — feature-detected below, so
+// it's simply a no-op rather than an error on unsupported browsers.
+// Sound is synthesized with the Web Audio API (short oscillator
+// tones with a fast attack/decay envelope) rather than shipped as
+// audio files, so there's nothing to fetch and nothing to license.
+
+function feedbackEffectsEnabled(profile) {
+    // Opt-out, not opt-in — same reasoning as celebrationsEnabled.
+    return !(profile && profile.hapticsSoundEffects === false);
+}
+
+
+function vibrate(pattern) {
+
+    if (navigator.vibrate) {
+
+        try {
+            navigator.vibrate(pattern);
+        } catch (error) {
+            // Some browsers throw if called outside a user gesture —
+            // fail silently rather than breaking the interaction it
+            // was meant to decorate.
+        }
+
+    }
+
+}
+
+
+let audioContext = null;
+
+function getAudioContext() {
+
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+
+    if (!Ctx) {
+        return null;
+    }
+
+    if (!audioContext) {
+        audioContext = new Ctx();
+    }
+
+    if (audioContext.state === "suspended") {
+        audioContext.resume();
+    }
+
+    return audioContext;
+
+}
+
+
+function playTone(frequency, startOffset, duration, waveform, peakVolume) {
+
+    const ctx = getAudioContext();
+
+    if (!ctx) {
+        return;
+    }
+
+    const oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    oscillator.type = waveform;
+    oscillator.frequency.value = frequency;
+
+    const startTime = ctx.currentTime + startOffset;
+
+    // Fast fade in (avoids a click), exponential fade out (sounds
+    // more natural than a linear cutoff for a short tone).
+    gain.gain.setValueAtTime(0, startTime);
+    gain.gain.linearRampToValueAtTime(peakVolume, startTime + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+
+    oscillator.start(startTime);
+    oscillator.stop(startTime + duration + 0.02);
+
+}
+
+
+function playTapSound() {
+    playTone(720, 0, 0.05, "sine", 0.06);
+}
+
+function playCorrectSound() {
+    playTone(587.33, 0, 0.1, "sine", 0.1);   // D5
+    playTone(880, 0.07, 0.16, "sine", 0.1);  // A5
+}
+
+function playIncorrectSound() {
+    playTone(220, 0, 0.18, "triangle", 0.08); // A3 — short, low, not harsh
+}
+
+function playCelebrationSound() {
+    // A short ascending arpeggio — C5, E5, G5, C6.
+    [523.25, 659.25, 783.99, 1046.5].forEach(function (frequency, i) {
+        playTone(frequency, i * 0.09, 0.22, "sine", 0.09);
+    });
+}
+
+
+function feedbackTap(profile) {
+
+    if (!feedbackEffectsEnabled(profile)) {
+        return;
+    }
+
+    vibrate(10);
+    playTapSound();
+
+}
+
+
+function feedbackCorrect(profile) {
+
+    if (!feedbackEffectsEnabled(profile)) {
+        return;
+    }
+
+    vibrate(15);
+    playCorrectSound();
+
+}
+
+
+function feedbackIncorrect(profile) {
+
+    if (!feedbackEffectsEnabled(profile)) {
+        return;
+    }
+
+    vibrate([20, 40, 20]);
+    playIncorrectSound();
+
+}
+
+
+function feedbackCelebrate(profile) {
+
+    if (!feedbackEffectsEnabled(profile)) {
+        return;
+    }
+
+    vibrate([30, 50, 30, 50, 60]);
+    playCelebrationSound();
+
+}
+
+
+// ===========================
 // USER MENU (account icon + dropdown)
 // ===========================
 //
@@ -314,6 +475,11 @@ export {
     celebrationsEnabled,
     celebrate,
     celebrateIfEnabled,
+    feedbackEffectsEnabled,
+    feedbackTap,
+    feedbackCorrect,
+    feedbackIncorrect,
+    feedbackCelebrate,
     isHalloweenSeason,
     applySeasonalTheme
 };
