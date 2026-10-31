@@ -265,6 +265,30 @@ def family_pool(symbol):
     return CATEGORIES[SYMBOL_CATEGORY[symbol]]
 
 
+WORD_TO_SYMBOL_PHRASINGS = [
+    "Which IPA symbol represents the target sound in “{word}” ({gloss})?",
+    "What’s the IPA symbol for the target sound in “{word}” ({gloss})?",
+    "In “{word}” ({gloss}), which symbol matches the target sound?",
+    "Which symbol captures the target sound in “{word}” ({gloss})?",
+]
+
+SYMBOL_TO_WORD_PHRASINGS = [
+    "Which word contains the sound [{symbol}]?",
+    "Which of these words has the sound [{symbol}]?",
+    "Which word includes the sound [{symbol}]?",
+    "Which option contains the [{symbol}] sound?",
+    "Pick the word that has the sound [{symbol}]:",
+]
+
+ODD_ONE_OUT_PHRASINGS = [
+    "Which of these words does NOT contain the sound [{symbol}]?",
+    "Which word is missing the sound [{symbol}]?",
+    "Which option does NOT include the [{symbol}] sound?",
+    "Find the word without the sound [{symbol}]:",
+    "Which of these words lacks the sound [{symbol}]?",
+]
+
+
 def gen_word_to_symbol(symbol, variations_per_word=80):
     """'Which IPA symbol is the sound in <word>?' — distractors from the
     same phonetic family as the target symbol, excluding any symbol the
@@ -296,10 +320,12 @@ def gen_word_to_symbol(symbol, variations_per_word=80):
             random.shuffle(options)
             correct_index = options.index(symbol)
 
+            phrasing = random.choice(WORD_TO_SYMBOL_PHRASINGS)
+
             items.append({
                 "symbol": symbol,
                 "type": "word-to-symbol",
-                "prompt": f"Which IPA symbol represents the target sound in “{word}” ({gloss})?",
+                "prompt": phrasing.format(word=word, gloss=gloss),
                 "options": [f"[{o}]" for o in options],
                 "correctIndex": correct_index,
             })
@@ -338,10 +364,12 @@ def gen_symbol_to_word(symbol, variations_per_word=13):
             random.shuffle(options)
             correct_index = options.index(word)
 
+            phrasing = random.choice(SYMBOL_TO_WORD_PHRASINGS)
+
             items.append({
                 "symbol": symbol,
                 "type": "symbol-to-word",
-                "prompt": f"Which word contains the sound [{symbol}]?",
+                "prompt": phrasing.format(symbol=symbol),
                 "options": options,
                 "correctIndex": correct_index,
             })
@@ -382,10 +410,12 @@ def gen_odd_one_out(symbol, variations=400):
         random.shuffle(options)
         correct_index = options.index(w3[0])
 
+        phrasing = random.choice(ODD_ONE_OUT_PHRASINGS)
+
         items.append({
             "symbol": symbol,
             "type": "odd-one-out",
-            "prompt": f"Which of these words does NOT contain the sound [{symbol}]?",
+            "prompt": phrasing.format(symbol=symbol),
             "options": options,
             "correctIndex": correct_index,
         })

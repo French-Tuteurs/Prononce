@@ -71,6 +71,7 @@
             <a href="dashboard.html" class="active">Dashboard</a>
             <a href="#" data-tooltip="Coming Soon">Practice</a>
             <a href="progress.html">Progress</a>
+            <a href="collect.html" class="hidden" id="nav-recording-link">Recording</a>
         </nav>
 
         <div class="user-menu" id="user-menu">
@@ -89,6 +90,7 @@
             </button>
             <div class="user-menu-dropdown" id="user-menu-dropdown">
                 <a href="settings.html" class="user-menu-item">Account Settings</a>
+                <a href="admin.html" class="user-menu-item hidden" id="user-menu-owner-tools">Owner Tools</a>
                 <button type="button" class="user-menu-item user-menu-logout" id="logout-button">Log Out</button>
             </div>
         </div>
@@ -100,100 +102,6 @@
     <!-- Main Dashboard -->
 
     <main class="dashboard-container">
-
-
-        <!-- Compact toggles for owner/tester-only tools. Each pill is
-             hidden entirely unless the signed-in account qualifies
-             (isOwner / isTester+isOwner); clicking a visible pill
-             expands its panel below, collapsed by default so these
-             don't crowd out the regular dashboard. -->
-
-        <div class="quick-tools" id="quick-tools">
-
-            <button class="quick-tools-pill hidden" id="admin-toggle" type="button">
-                Owner Tools
-                <span class="quick-tools-chevron">&#9662;</span>
-            </button>
-
-            <button class="quick-tools-pill hidden" id="testing-toggle" type="button">
-                Voice Recording
-                <span class="quick-tools-chevron">&#9662;</span>
-            </button>
-
-        </div>
-
-
-        <!-- Owner-only: tester access management -->
-        <!-- Only ever shown when the signed-in account is flagged
-             isOwner in Firestore; a plain client-side hide, not the
-             real security boundary — that's the Firestore rules. -->
-
-        <section class="admin-panel hidden collapsed" id="admin-panel">
-
-            <div class="admin-card">
-
-                <h3>
-                    Manage testing access
-                </h3>
-
-                <p>
-                    Grant an existing Prononce account access to the
-                    voice-recording page. They must have signed up
-                    already &mdash; you can only grant access by email.
-                </p>
-
-                <div class="admin-grant-row">
-
-                    <input
-                        type="email"
-                        id="admin-grant-email"
-                        placeholder="person@example.com"
-                        autocomplete="off"
-                    >
-
-                    <button id="admin-grant-button" type="button">
-                        Grant Access
-                    </button>
-
-                </div>
-
-                <p class="admin-error" id="admin-error" hidden></p>
-
-                <div class="admin-tester-list" id="admin-tester-list"></div>
-
-                <a href="admin.html" class="admin-manage-link">
-                    Manage Accounts &rarr;
-                </a>
-
-            </div>
-
-        </section>
-
-
-        <!-- Tester-only: voice recording access -->
-        <!-- Hidden unless isTester or isOwner is true. -->
-
-        <section class="testing-access hidden collapsed" id="testing-access-section">
-
-            <div class="admin-card">
-
-                <h3>
-                    Voice Recording
-                </h3>
-
-                <p>
-                    Record French pronunciation samples to help train
-                    Prononce's future feedback features. Your consent
-                    only needs to be given once.
-                </p>
-
-                <button id="open-testing-button">
-                    Open Recording Page
-                </button>
-
-            </div>
-
-        </section>
 
 
         <!-- Welcome -->
