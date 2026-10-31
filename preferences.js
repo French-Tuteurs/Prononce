@@ -131,6 +131,33 @@ function applyAllPreferences(profile) {
     applyDisplayTheme(profile.theme);
     applyFontSize(profile.fontSize);
     applyCompactMode(profile.compactMode === true);
+    applyHeaderAccessGating(profile);
+    feedbackProfile = profile;
+
+}
+
+
+// Every page calls applyAllPreferences once it has the signed-in
+// user's profile (dashboard/progress/the IPA Path via script.js;
+// settings, admin, and the recording page via their own scripts) —
+// gating these two shared header items here, instead of once per
+// page script, is what keeps them showing up consistently no matter
+// which page you're on, rather than only where script.js happens to
+// run.
+
+function applyHeaderAccessGating(profile) {
+
+    const recordingNavLink = document.getElementById("nav-recording-link");
+
+    if (recordingNavLink) {
+        recordingNavLink.classList.toggle("hidden", !(profile && profile.isTester === true));
+    }
+
+    const ownerToolsLink = document.getElementById("user-menu-owner-tools");
+
+    if (ownerToolsLink) {
+        ownerToolsLink.classList.toggle("hidden", !(profile && profile.isOwner === true));
+    }
 
 }
 
@@ -260,6 +287,11 @@ function vibrate(pattern) {
 
 let audioContext = null;
 
+// The profile the site-wide tap/hover listener below reads — set by
+// applyAllPreferences, so it stays current no matter which page's
+// script called it.
+let feedbackProfile = null;
+
 function getAudioContext() {
 
     const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -361,6 +393,77 @@ function feedbackHover(profile) {
     }
 
     playHoverSound();
+
+}
+
+
+// Browsers only let an AudioContext start making sound once a real
+// user gesture (a click, a key press, a touch) has happened on the
+// page — a mouseover never counts. Without this, the very first hover
+// of a fresh page load silently produces no sound, since the hover
+// sound is usually the first thing to try to play, before any click
+// has had a chance to unlock audio. Listening for the earliest
+// possible qualifying gesture — anywhere on the page, not just on a
+// tappable element — gets audio unlocked as early as possible so
+// hover sounds actually work for the rest of that page's visit.
+["pointerdown", "keydown", "touchstart"].forEach(function (eventName) {
+    document.addEventListener(eventName, getAudioContext, { passive: true });
+});
+
+
+// ===========================
+// TAP + HOVER FEEDBACK (buttons, site-wide)
+// ===========================
+//
+// A light buzz/click on every button, and a softer blip on hovering
+// one with a real mouse — the kind of constant tactile/audio feedback
+// a native app gives for free. Lives here (rather than in script.js)
+// so it applies the same way on every page, including the ones
+// (settings, admin, the recording page) that load their own script
+// instead of script.js. Quiz answers are excluded from the tap sound
+// (".answer-option") since they already get their own distinct
+// correct/incorrect sound immediately after — adding the generic tap
+// on top would just be a second, redundant blip in the same instant.
+
+const TAP_FEEDBACK_SELECTOR =
+    "button:not(.answer-option), a.lesson-card-button, a.daily-card-link, " +
+    "a.dashboard-link, a.progress-row-link, a.user-menu-item, .main-nav a, " +
+    "a.back-link, a.ipa-path-node, a.practice-button-link, " +
+    ".session-exit-button, .session-exit-cancel, .session-exit-confirm";
+
+document.addEventListener("click", function (event) {
+
+    const tappable = event.target.closest(TAP_FEEDBACK_SELECTOR);
+
+    if (tappable) {
+        feedbackTap(feedbackProfile);
+    }
+
+});
+
+
+// mouseover (not mouseenter) so a single delegated listener on
+// document can catch it; matchMedia guards against touchscreens,
+// which otherwise fire a synthetic mouseover right before their
+// click — without it, every tap on mobile would double up as a
+// hover-then-tap sound instead of just a tap.
+
+if (window.matchMedia && window.matchMedia("(hover: hover)").matches) {
+
+    let lastHovered = null;
+
+    document.addEventListener("mouseover", function (event) {
+
+        const hovered = event.target.closest(TAP_FEEDBACK_SELECTOR);
+
+        if (hovered && hovered !== lastHovered) {
+            lastHovered = hovered;
+            feedbackHover(feedbackProfile);
+        } else if (!hovered) {
+            lastHovered = null;
+        }
+
+    });
 
 }
 
@@ -481,6 +584,171 @@ window.addEventListener("pageshow", function (event) {
 });
 
 
+// ===========================
+// LOADING SCREEN: PAGE LABEL + ROTATING TIP
+// ===========================
+//
+// The full-screen loader (and collect.html's access-check screen,
+// which shares the same .page-loader styling) shows while Firebase
+// resolves sign-in state. It used to be a bare spinner — now it also
+// names the page being loaded (read straight off <title>, which
+// every page already sets to "X | Prononce") and a random "did you
+// know" tip, picked fresh on every page load, so the wait reads as
+// the app doing something rather than a stalled page.
+
+const LOADING_TIPS = [
+    // French language & culture
+    "“Bureau” can mean a desk, an office, or a government department — French leans on context a lot.",
+    "French has no single word for “shallow” — you have to describe it a different way each time.",
+    "“Gentil” usually means kind or nice, but said with the wrong tone it can sound a little condescending.",
+    "French uses the same word, temps, for both “time” and “weather.”",
+    "To say “I’m hungry” in French, you literally say “I have hunger” — j’ai faim.",
+    "The circumflex accent (^) often marks a letter that used to be followed by an s in Old French — hôpital used to be spelled hospital.",
+    "French gave English hundreds of words, from ballet to entrepreneur to déjà vu.",
+    "French keyboards (AZERTY) are laid out completely differently from the QWERTY you’re probably typing on.",
+    "“Librairie” means bookstore, not library — a classic false friend for English speakers.",
+    "There’s no exact French word for “toddler” — you’d usually just say petit enfant, “small child.”",
+    "“Actuellement” doesn’t mean “actually” — it means “currently.” Another sneaky false friend.",
+    "French has grammatical gender for every noun, even inanimate ones — a table (une table) is feminine.",
+    "“Déjà vu” is just ordinary French for “already seen” before English borrowed it for the eerie feeling.",
+    "The French word for “goosebumps” is chair de poule — literally “chicken skin.”",
+    "“Coup de foudre” literally means “lightning strike,” and it’s how French describes love at first sight.",
+    "French doesn’t have a direct word for “to miss someone” the way English does — you say “you are missing from me,” tu me manques.",
+    "“Les quatre-vingt-dix-neuf” (99) is literally “four-twenty-ten-nine” in French counting.",
+    "Numbers above 60 in French (like 70, 80, 90) are built from older base-20 counting — soixante-dix is literally “sixty-ten.”",
+    "French distinguishes tu and vous for “you” — one informal, one formal or plural.",
+    "“Avocat” means both “avocado” and “lawyer” in French — same spelling, very different jobs.",
+    "“Préservatif” doesn’t mean “preservative” — it means condom. A false friend worth knowing.",
+    "The French expression for “raining cats and dogs” is il pleut des cordes — “it’s raining ropes.”",
+    "“Chou” (cabbage) is also a common French term of endearment, like calling someone “sweetie.”",
+    "French verbs change form for almost every subject pronoun — that’s why conjugation tables look so long.",
+    "“Pain” means bread in French, not physical pain — context (and pronunciation) sorts it out fast.",
+    "The French “ç” (c cedilla) softens a hard “c” sound before a, o, or u, as in garçon.",
+    "“Entrée” means the starter course in French, not the main dish — the opposite of how English uses it.",
+    "“Formidable” in French usually means “great” or “terrific,” not scary or intimidating.",
+    "French has two words for “know” — savoir (knowing facts) and connaître (knowing people or places).",
+    "“Jamais” can mean both “never” and, informally, “ever” — the sentence structure tells you which.",
+    "The French phrase for “it’s not my cup of tea” is ce n’est pas ma tasse de thé — borrowed almost word for word.",
+    "“Monnaie” means loose change or currency, not “money” in general — that’s argent.",
+    "French uses “on” informally the way English uses “we” in casual conversation.",
+    "“Blessé” means injured in French, not “blessed” — another classic false friend.",
+    "The baguette became an official protected food item in France, with legal rules about its ingredients.",
+    "French has silent letters at the end of most words — the s in beaucoup is never pronounced.",
+    "“Sensible” in French means sensitive, not sensible — raisonnable is the word you want instead.",
+    "The French word rendez-vous just means “appointment” or “meeting,” nothing mysterious required.",
+    "“Travailler” (to work) comes from an old word for a torture device — work used to sound a lot less pleasant.",
+    "French has more than one word for “you’re welcome” — de rien and je t’en prie both work, with slightly different formality.",
+
+    // Pronunciation & IPA
+    "The IPA symbol [ʁ] represents the throaty French R — very different from the English R sound.",
+    "French has nasal vowels with no real English equivalent, like the on in bon or the in in vin.",
+    "Liaison is when a normally silent final consonant is pronounced because the next word starts with a vowel — like the s in les amis.",
+    "The schwa sound [ə], as in the final e of le, is often dropped entirely in fast, casual speech.",
+    "French doesn’t have the English “th” sound at all — there’s no [θ] or [ð] in the French sound inventory.",
+    "The IPA exists so any language’s sounds can be written the same way, no matter how its spelling works.",
+    "French u, as in tu, uses the IPA symbol [y] — round your lips for “oo” but say “ee.”",
+    "Word stress in French usually falls on the very last syllable of a phrase, unlike English's shifting stress.",
+    "The nasal vowel in vin uses the IPA symbol [ɛ̃] — the little tilde marks the nasal quality.",
+    "French r and English r are different enough that linguists use entirely different IPA symbols for them.",
+    "The “silent h” in French is historical — it hasn’t been pronounced for centuries, but French spelling kept it.",
+    "IPA brackets [ ] show the actual sound, while slashes / / show a more abstract, meaningful sound category.",
+    "French vowels tend to stay pure through the whole sound, while English vowels often glide between two sounds.",
+    "The open o in homme uses [ɔ], while the closed o in mot uses [o] — subtly different mouth shapes.",
+    "French consonants are generally pronounced with less air (aspiration) than their English counterparts.",
+    "The letter combination “oi” in French, as in moi, is pronounced like [wa], not like English “oi.”",
+    "A diphthong is a single vowel sound that glides between two positions — French vowels mostly avoid these.",
+    "In IPA, [j] represents the “y” glide sound, like the start of French yeux.",
+    "French has about 36 distinct sounds (phonemes), compared to roughly 44 in English.",
+    "The IPA was first published in 1888 by the International Phonetic Association to standardize how sounds are written.",
+    "The French u [y] and English “oo” [u] feel similar but use completely different tongue positions.",
+    "Elision drops a vowel before another vowel — le + ami becomes l’ami, smoothing the sound between words.",
+    "The nasal vowel in bon uses [ɔ̃] — try saying “oh” through your nose with your mouth slightly open.",
+    "French doesn’t aspirate its p, t, and k sounds the way English does — no little puff of air.",
+    "The IPA symbol [ø] covers the vowel in French peu — round your lips for “oh” but say “ay.”",
+    "A minimal pair is two words that differ by just one sound, like French du [dy] and doux [du] — great for ear training.",
+    "The final consonant in French words is very often silent, unless liaison or a following e brings it back.",
+    "French e can be pronounced three different ways depending on its accent: é, è, and plain e each sound distinct.",
+    "The uvula (way at the back of your throat) is what actually vibrates for the standard French r sound.",
+    "IPA covers every human language's sounds with one shared alphabet — over 160 symbols in total.",
+
+    // App features
+    "You can switch between five accent colors — gold, rose, teal, plum, and forest — from the Settings page.",
+    "Settings lets you pick light or dark mode, whichever is easier on your eyes.",
+    "Didn’t catch a word? The Listen button animates with a pulsing glow while it’s playing so you always know it’s active.",
+    "Playback speed can be slowed down in Settings if a sound goes by too fast to catch.",
+    "Turn on Autoplay in Settings to have each new card’s audio play automatically as soon as it appears.",
+    "Compact Mode in Settings tightens up spacing across the app if you prefer a denser layout.",
+    "Celebration effects (the little confetti burst) can be turned off in Settings if you’d rather keep things quiet.",
+    "Tap and hover sounds can be turned off entirely from the Haptics & Sound Effects toggle in Settings.",
+    "On Android, Haptics & Sound Effects adds a light vibration to taps too — iPhones don’t support that part.",
+    "You can set a custom avatar emoji and a personal motto from the Settings page.",
+    "The Progress page shows your lesson completion, practice levels, and IPA Path progress all in one place.",
+    "The IPA Path is a full 88-level journey through every French IPA symbol, one sound at a time.",
+    "IPA Practice includes a “Weak Spots” mode that targets the sounds you’ve actually been getting wrong.",
+    "You can choose a specific sound category in IPA Practice instead of drilling everything at once.",
+    "Mid-lesson, tap the X in the corner if you need to step away — it’ll ask you to confirm before exiting.",
+    "Your lesson progress saves automatically, so exiting early never costs you what you’ve already finished.",
+    "The welcome greeting on your dashboard changes with the time of day — Bon Matin, Bonjour, Bonsoir, or Bienvenue.",
+    "Click your account icon in the top right to find Account Settings and, for approved testers, more tools.",
+    "Font size is adjustable in Settings if the default text feels too small or too large.",
+    "Finishing a level on the IPA Path gives you the option to continue straight to the next one or head back to the path.",
+    "Each IPA Path level builds on the last — teach, then check, with reviews and milestones along the way.",
+    "The question bank behind IPA Practice has over a million unique items, so repeats are rare.",
+    "Your personalization — avatar, motto, accent color — shows up right on your dashboard greeting.",
+    "Every page remembers your display preferences automatically once you’ve set them in Settings.",
+    "The app keeps a seasonal Halloween theme every October, just for fun.",
+    "Account Settings lets you update your display name or email without needing to contact anyone.",
+    "You can delete your own account from Settings at any time, except for the single owner account.",
+    "Progress on the IPA Path is tracked separately from the original six lessons, so nothing overlaps.",
+    "Dark mode, accent color, and font size all apply instantly — no page reload needed.",
+    "A short, specific goal — one IPA symbol, one lesson — tends to stick better than trying to cram everything at once."
+];
+
+function pageLoadingLabel() {
+
+    const title = document.title || "Prononce";
+    const separatorIndex = title.indexOf(" | ");
+
+    return separatorIndex === -1 ? title : title.slice(0, separatorIndex);
+
+}
+
+function showLoadingTips() {
+
+    const loaders = document.querySelectorAll(".page-loader");
+
+    if (!loaders.length) {
+        return;
+    }
+
+    const label = pageLoadingLabel();
+    const tip = LOADING_TIPS[Math.floor(Math.random() * LOADING_TIPS.length)];
+
+    loaders.forEach(function (loader) {
+
+        const text = document.createElement("p");
+        text.className = "page-loader-text";
+        text.textContent = "Loading " + label + "…";
+
+        const tipEl = document.createElement("p");
+        tipEl.className = "page-loader-tip";
+
+        const tipLabel = document.createElement("strong");
+        tipLabel.textContent = "Tip:";
+
+        tipEl.appendChild(tipLabel);
+        tipEl.appendChild(document.createTextNode(" " + tip));
+
+        loader.appendChild(text);
+        loader.appendChild(tipEl);
+
+    });
+
+}
+
+showLoadingTips();
+
+
 export {
     ACCENT_THEMES,
     FONT_SIZES,
@@ -496,8 +764,6 @@ export {
     celebrate,
     celebrateIfEnabled,
     feedbackEffectsEnabled,
-    feedbackTap,
-    feedbackHover,
     feedbackCorrect,
     feedbackIncorrect,
     feedbackCelebrate,

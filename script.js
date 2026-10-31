@@ -12,9 +12,7 @@ import {
     celebrateIfEnabled,
     feedbackCorrect,
     feedbackIncorrect,
-    feedbackCelebrate,
-    feedbackTap,
-    feedbackHover
+    feedbackCelebrate
 } from "./preferences.js";
 
 // Not a user preference, so it doesn't wait on sign-in — the
@@ -155,15 +153,11 @@ onAuthStateChanged(auth, async function (user) {
 
         }
 
-        // Independent of isDashboardPage: the Recording nav link and
-        // the Owner Tools dropdown item live in the header, which is
-        // shared by every "hub" page (dashboard, progress, settings,
-        // the IPA Path, plus admin.html/collect.html's own menu) —
-        // not just the dashboard. Both functions already no-op
-        // harmlessly on a page whose header doesn't have these
-        // elements (session pages dropped the header entirely).
-        renderTesterAccessCard();
-        renderOwnerAdminPanel();
+        // The Recording nav link and Owner Tools dropdown item are
+        // gated by applyAllPreferences (above, in preferences.js) —
+        // that runs on every page that has a profile, not just the
+        // dashboard, which is what keeps them showing up consistently
+        // no matter which page you're on.
 
         if (isProgressPage) {
 
@@ -648,63 +642,6 @@ function renderProgressPage() {
                     : "Not Started";
 
         ipaPathStatus.classList.toggle("progress-row-status-done", ipaCompletedCount >= IPA_PATH_TOTAL_LEVELS);
-
-    }
-
-}
-
-
-// ===========================
-// TESTER ACCESS (nav link)
-// ===========================
-
-function renderTesterAccessCard() {
-
-    if (!currentUserProfile) {
-        return;
-    }
-
-    // isTester is its own gate, independent of isOwner — being the
-    // owner does not automatically grant recording access. If an
-    // owner also wants to record, grant their own account isTester
-    // from Owner Tools like any other tester.
-
-    const canAccessTesting =
-        currentUserProfile.isTester === true;
-
-    const recordingNavLink =
-        document.getElementById("nav-recording-link");
-
-    if (recordingNavLink) {
-
-        recordingNavLink.classList.toggle("hidden", !canAccessTesting);
-
-    }
-
-}
-
-
-// ===========================
-// OWNER TOOLS (dropdown item)
-// ===========================
-//
-// Only ever shown when currentUserProfile.isOwner is true — and
-// even then, every action on admin.html still has to pass the
-// Firestore rules, so a tampered client can't grant access on its
-// own.
-
-function renderOwnerAdminPanel() {
-
-    if (!currentUserProfile || currentUserProfile.isOwner !== true) {
-        return;
-    }
-
-    const ownerToolsLink =
-        document.getElementById("user-menu-owner-tools");
-
-    if (ownerToolsLink) {
-
-        ownerToolsLink.classList.remove("hidden");
 
     }
 
@@ -2289,58 +2226,9 @@ async function recordAndAnalyze(button, feedbackEl) {
 }
 
 
-// ===========================
-// TAP + HOVER FEEDBACK (buttons, site-wide)
-// ===========================
-//
-// A light buzz/click on every button, and a softer blip on hovering
-// one with a real mouse — the kind of constant tactile/audio feedback
-// a native app gives for free. Quiz answers are excluded from the tap
-// sound (".answer-option") since they already get their own distinct
-// correct/incorrect sound immediately after — adding the generic tap
-// on top would just be a second, redundant blip in the same instant.
-
-const TAP_FEEDBACK_SELECTOR =
-    "button:not(.answer-option), a.lesson-card-button, a.daily-card-link, " +
-    "a.dashboard-link, a.progress-row-link, a.user-menu-item, .main-nav a, " +
-    "a.back-link, a.ipa-path-node, a.practice-button-link, " +
-    ".session-exit-button, .session-exit-cancel, .session-exit-confirm";
-
-document.addEventListener("click", function (event) {
-
-    const tappable = event.target.closest(TAP_FEEDBACK_SELECTOR);
-
-    if (tappable) {
-        feedbackTap(currentUserProfile);
-    }
-
-});
-
-
-// mouseover (not mouseenter) so a single delegated listener on
-// document can catch it; matchMedia guards against touchscreens,
-// which otherwise fire a synthetic mouseover right before their
-// click — without it, every tap on mobile would double up as a
-// hover-then-tap sound instead of just a tap.
-
-if (window.matchMedia && window.matchMedia("(hover: hover)").matches) {
-
-    let lastHovered = null;
-
-    document.addEventListener("mouseover", function (event) {
-
-        const hovered = event.target.closest(TAP_FEEDBACK_SELECTOR);
-
-        if (hovered && hovered !== lastHovered) {
-            lastHovered = hovered;
-            feedbackHover(currentUserProfile);
-        } else if (!hovered) {
-            lastHovered = null;
-        }
-
-    });
-
-}
+// Tap/hover sound feedback for buttons site-wide now lives in
+// preferences.js (see TAP_FEEDBACK_SELECTOR there) so it applies the
+// same way on every page, not just the ones that load this file.
 
 
 const recordButtons =
