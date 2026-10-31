@@ -153,7 +153,6 @@ onAuthStateChanged(auth, async function (user) {
             renderPracticeProgress();
             renderTesterAccessCard();
             renderOwnerAdminPanel();
-            renderIpaSection();
 
         }
 
@@ -576,6 +575,37 @@ function renderProgressPage() {
         summaryLevels.textContent = levelsCleared + " / 60";
     }
 
+    // IPA Path progress lives in its own top-level field (set by
+    // ipa-path-level.js), not inside the regular lesson/practice
+    // progress map above — a single summary row rather than one row
+    // per level (88 of them would overwhelm this page).
+
+    const IPA_PATH_TOTAL_LEVELS = 88;
+    const ipaPath = currentUserProfile.ipaPath || {};
+    const ipaCompletedCount = Object.keys(ipaPath.completed || {}).length;
+    const ipaUnlockedLevel = ipaPath.unlockedLevel || 1;
+
+    const summaryIpaPath = document.getElementById("summary-ipa-path");
+
+    if (summaryIpaPath) {
+        summaryIpaPath.textContent = ipaCompletedCount + " / " + IPA_PATH_TOTAL_LEVELS;
+    }
+
+    const ipaPathStatus = document.getElementById("ipa-path-progress-status");
+
+    if (ipaPathStatus) {
+
+        ipaPathStatus.textContent =
+            ipaCompletedCount >= IPA_PATH_TOTAL_LEVELS
+                ? "All " + IPA_PATH_TOTAL_LEVELS + " Levels Complete"
+                : ipaCompletedCount > 0
+                    ? "Level " + ipaUnlockedLevel + " of " + IPA_PATH_TOTAL_LEVELS
+                    : "Not Started";
+
+        ipaPathStatus.classList.toggle("progress-row-status-done", ipaCompletedCount >= IPA_PATH_TOTAL_LEVELS);
+
+    }
+
 }
 
 
@@ -680,29 +710,6 @@ function renderOwnerAdminPanel() {
 
         toggle.classList.remove("hidden");
 
-    }
-
-}
-
-
-// The IPA track is a separate, owner-only content set (see
-// lessons/ipa-*.html) — not ready for every visitor yet, so its
-// dashboard section stays hidden unless the signed-in account is the
-// owner. Progress on these lessons still uses the exact same
-// .lesson-card[data-lesson-id] machinery as the regular lessons
-// (renderDashboardLessonProgress, markLessonComplete), so nothing
-// else needs to change when it's time to make this public.
-
-function renderIpaSection() {
-
-    if (!currentUserProfile || currentUserProfile.isOwner !== true) {
-        return;
-    }
-
-    const section = document.getElementById("ipa-section");
-
-    if (section) {
-        section.classList.remove("hidden");
     }
 
 }

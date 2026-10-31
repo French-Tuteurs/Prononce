@@ -1,9 +1,9 @@
 // ===========================
-// IPA Practice (owner-only)
+// IPA Practice
 // ===========================
 //
 // Standalone quiz controller for ipa-practice.html, drawing from the
-// sharded 110,000-question bank (ipa-practice/questions/, see
+// sharded 1.11-million-question bank (ipa-practice/questions/, see
 // ipa-practice/generate.py) via ipa-question-bank.js, scored and
 // stepped by the shared ipa-quiz-runner.js, with per-symbol accuracy
 // tracked and used to weight the "Weak Spots" mode via ipa-skills.js.
@@ -17,7 +17,7 @@
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import { loadIndex, loadShards } from "./ipa-question-bank.js";
-import { loadSkillStats, recordSkillAttempts, drawWeightedQuestions, drawRandomQuestions } from "./ipa-skills.js";
+import { loadSkillStats, recordSkillAttempts, drawWeightedQuestions, drawRandomQuestions, shuffled } from "./ipa-skills.js";
 import { createQuizRunner } from "./ipa-quiz-runner.js";
 
 let currentUid = null;
@@ -94,7 +94,18 @@ async function startSession() {
         return;
     }
 
-    const candidatesBySymbol = await loadShards(symbols);
+    // Each shard holds tens of thousands of questions now, so fetching
+    // every symbol in a wide category (all 37, or 18 consonants) would
+    // mean downloading far more than any single session could ever
+    // use. A random subset of symbols still gives a session plenty of
+    // variety — and a different subset next time — without pulling the
+    // whole bank over the wire every visit.
+    const SHARD_FETCH_CAP = 10;
+    const fetchSymbols = symbols.length > SHARD_FETCH_CAP
+        ? shuffled(symbols).slice(0, SHARD_FETCH_CAP)
+        : symbols;
+
+    const candidatesBySymbol = await loadShards(fetchSymbols);
 
     const questions = category === "weak"
         ? drawWeightedQuestions(candidatesBySymbol, skillStats, length)

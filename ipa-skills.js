@@ -104,7 +104,7 @@ function weightFor(stats, symbol) {
 }
 
 
-function shuffled(array) {
+export function shuffled(array) {
 
     const copy = array.slice();
 
