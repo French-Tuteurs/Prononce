@@ -59,14 +59,14 @@ def main():
                 "symbol": symbol,
                 "title": f"Learn {symbol}",
                 "teach": TEACH_CONTENT[symbol],
-                "checkCount": 2,
+                "checkCount": 4,
                 "symbols": [symbol],
             })
             levels.append({
                 "type": "drill",
                 "symbol": symbol,
                 "title": f"Practice {symbol}",
-                "count": 6,
+                "count": 10,
                 "symbols": [symbol],
             })
 
@@ -84,7 +84,7 @@ def main():
                 levels.append({
                     "type": "milestone",
                     "title": f"{CATEGORY_LABELS[cat_key]} Mastery",
-                    "count": 12,
+                    "count": 16,
                     "symbols": recent + sprinkle,
                 })
                 since_review = 0
@@ -93,7 +93,7 @@ def main():
                 levels.append({
                     "type": "review",
                     "title": "Review",
-                    "count": 8,
+                    "count": 12,
                     "symbols": recent,
                 })
                 since_review = 0
@@ -101,13 +101,13 @@ def main():
     levels.append({
         "type": "final",
         "title": "Final Review I",
-        "count": 15,
+        "count": 20,
         "symbols": list(taught),
     })
     levels.append({
         "type": "final",
         "title": "Final Review II",
-        "count": 15,
+        "count": 20,
         "symbols": list(taught),
     })
 

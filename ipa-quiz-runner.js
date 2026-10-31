@@ -16,6 +16,16 @@ export function createQuizRunner({ holderEl, nextButton, currentEl, totalEl, sco
     let correctCount = 0;
     let answered = false;
 
+    // completedSteps/totalSteps let a caller place this quiz as part
+    // of a bigger whole (e.g. a teach level's "reading" step plus its
+    // follow-up check quiz) instead of always treating the quiz alone
+    // as 100% of the bar — without this, a progress bar that was
+    // already partway full from an earlier step would visibly jump
+    // backward the moment the quiz starts, since index/questions.length
+    // starts over at 0 regardless of what came before it.
+    let completedSteps = 0;
+    let totalSteps = 1;
+
     function renderQuestion() {
 
         const item = questions[index];
@@ -23,7 +33,7 @@ export function createQuizRunner({ holderEl, nextButton, currentEl, totalEl, sco
         if (currentEl) currentEl.textContent = String(index + 1);
         if (totalEl) totalEl.textContent = String(questions.length);
         if (scoreLiveEl) scoreLiveEl.textContent = correctCount + " correct";
-        if (progressFillEl) progressFillEl.style.width = Math.round((index / questions.length) * 100) + "%";
+        if (progressFillEl) progressFillEl.style.width = Math.round(((completedSteps + index) / totalSteps) * 100) + "%";
 
         answered = false;
         nextButton.disabled = true;
@@ -114,11 +124,13 @@ export function createQuizRunner({ holderEl, nextButton, currentEl, totalEl, sco
 
     nextButton.addEventListener("click", handleNext);
 
-    function start(newQuestions) {
+    function start(newQuestions, stepInfo) {
 
         questions = newQuestions;
         index = 0;
         correctCount = 0;
+        completedSteps = (stepInfo && stepInfo.completedSteps) || 0;
+        totalSteps = (stepInfo && stepInfo.totalSteps) || questions.length || 1;
 
         renderQuestion();
 
