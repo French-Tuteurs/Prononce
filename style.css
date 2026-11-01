@@ -7065,3 +7065,99 @@ html[data-season="halloween"] .eyebrow::after {
     color: var(--navy);
 
 }
+
+
+/* ===========================
+   APP-LIKE / MOBILE POLISH
+=========================== */
+
+/* Global touch-interaction behavior — removes the default gray/blue
+   tap-highlight box most mobile browsers flash on every tap (reads as
+   "website", not "app"), kills the double-tap-to-zoom ambiguity on
+   anything meant to be pressed once, and gives a real pressed-down
+   state in its place so taps still feel acknowledged immediately,
+   the same moment the tap sound (see preferences.js) fires. */
+
+html {
+
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+
+body {
+
+    -webkit-font-smoothing: antialiased;
+
+    -moz-osx-font-smoothing: grayscale;
+
+    overscroll-behavior-y: contain;
+
+}
+
+
+button,
+a.lesson-card-button,
+a.daily-card-link,
+a.dashboard-link,
+a.progress-row-link,
+a.user-menu-item,
+.main-nav a,
+a.back-link,
+a.ipa-path-node,
+a.practice-button-link,
+.answer-option,
+.session-exit-button,
+.session-exit-cancel,
+.session-exit-confirm {
+
+    touch-action: manipulation;
+
+}
+
+
+button:active,
+a.lesson-card-button:active,
+a.daily-card-link:active,
+a.dashboard-link:active,
+.answer-option:not(:disabled):active {
+
+    transform: scale(0.97);
+
+    transition: transform 0.1s ease;
+
+}
+
+
+.ipa-path-node:active {
+
+    transform: scale(0.95);
+
+}
+
+
+.session-exit-button:active {
+
+    transform: scale(0.93);
+
+}
+
+
+/* iOS Safari auto-zooms the whole page when focusing a form field
+   whose computed font-size is under 16px — jarring on a site that
+   otherwise never zooms on its own. A handful of compact inputs
+   (admin tools, mostly) sit a size or two below that; this keeps
+   them visually unchanged everywhere except overriding just enough
+   on narrow/touch viewports to stay at or above that threshold. */
+
+@media (max-width: 700px) {
+
+    input,
+    textarea,
+    select {
+
+        font-size: 16px;
+
+    }
+
+}
