@@ -2624,6 +2624,58 @@ button:hover {
 }
 
 
+.ipa-level-save-error {
+
+    max-width: 420px;
+
+    margin: 24px auto 0;
+
+    padding: 18px 20px;
+
+    border: 1px solid rgba(168, 87, 74, 0.3);
+
+    border-radius: var(--radius-large);
+
+    background-color: rgba(168, 87, 74, 0.08);
+
+}
+
+
+.ipa-level-save-error p {
+
+    margin: 0 0 14px;
+
+    font-size: 0.875rem;
+
+    line-height: 1.5;
+
+    color: #a8574a;
+
+}
+
+
+.ipa-level-save-error #ipa-level-retry-save {
+
+    padding: 10px 24px;
+
+    font-size: 0.875rem;
+
+    background-color: #a8574a;
+
+    border-color: #a8574a;
+
+}
+
+
+.ipa-level-save-error #ipa-level-retry-save:hover {
+
+    background-color: transparent;
+
+    color: #a8574a;
+
+}
+
+
 .completion-stats {
 
     display: flex;

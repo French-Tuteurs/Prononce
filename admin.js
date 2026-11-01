@@ -10,7 +10,7 @@
 // account can update another user's document at all.
 
 import { auth, db } from "./firebase.js";
-import { applyAllPreferences, applyAccentTheme, applySeasonalTheme } from "./preferences.js";
+import { applyAllPreferences, applyAccentTheme, applySeasonalTheme, waitForMinLoaderDuration } from "./preferences.js";
 
 applySeasonalTheme();
 applyAccentTheme();
@@ -53,11 +53,12 @@ const PRACTICES = [
 const PRACTICE_TOTAL_LEVELS = 10;
 
 
-function hidePageLoader() {
+async function hidePageLoader() {
 
     const loader = document.getElementById("page-loader");
 
     if (loader) {
+        await waitForMinLoaderDuration();
         loader.classList.add("page-loader-hidden");
     }
 

@@ -35,18 +35,20 @@ import {
     applyCompactMode,
     celebrate,
     feedbackCorrect,
-    applySeasonalTheme
+    applySeasonalTheme,
+    waitForMinLoaderDuration
 } from "./preferences.js";
 
 applySeasonalTheme();
 applyAccentTheme();
 
 
-function hidePageLoader() {
+async function hidePageLoader() {
 
     const loader = document.getElementById("page-loader");
 
     if (loader) {
+        await waitForMinLoaderDuration();
         loader.classList.add("page-loader-hidden");
     }
 

@@ -12,7 +12,8 @@ import {
     celebrateIfEnabled,
     feedbackCorrect,
     feedbackIncorrect,
-    feedbackCelebrate
+    feedbackCelebrate,
+    waitForMinLoaderDuration
 } from "./preferences.js";
 
 // Not a user preference, so it doesn't wait on sign-in — the
@@ -81,11 +82,12 @@ const PRACTICE_ENABLED = false;
 // page — never removed on a page that's about to redirect, since
 // the destination page shows its own loader instead.
 
-function hidePageLoader() {
+async function hidePageLoader() {
 
     const loader = document.getElementById("page-loader");
 
     if (loader) {
+        await waitForMinLoaderDuration();
         loader.classList.add("page-loader-hidden");
     }
 
