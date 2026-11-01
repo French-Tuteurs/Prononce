@@ -43,6 +43,8 @@ const quizView = document.getElementById("ipa-level-quiz-view");
 const summaryView = document.getElementById("ipa-level-summary-view");
 const summaryText = document.getElementById("ipa-level-summary-text");
 const nextLevelLink = document.getElementById("ipa-level-next-level");
+const saveErrorEl = document.getElementById("ipa-level-save-error");
+const retrySaveButton = document.getElementById("ipa-level-retry-save");
 
 let currentUid = null;
 let currentUserProfile = {};
@@ -52,6 +54,7 @@ let level = null;
 let unlockedLevel = 1;
 let completed = {};
 let sessionAttempts = [];
+let pendingUnlockedLevel = null;
 
 const runner = createQuizRunner({
     holderEl: document.getElementById("ipa-level-question-holder"),
@@ -222,11 +225,113 @@ teachContinue.addEventListener("click", async function () {
 });
 
 
+// Retries a few times before giving up — a single transient failure
+// (a brief network drop, a mobile connection hiccup) shouldn't cost
+// someone their progress on a level they just correctly finished.
+
+async function attemptSaveProgress(newUnlockedLevel) {
+
+    const maxAttempts = 3;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+
+        try {
+
+            await setDoc(doc(db, "users", currentUid), {
+                ipaPath: { unlockedLevel: newUnlockedLevel, completed: completed }
+            }, { merge: true });
+
+            return true;
+
+        } catch (error) {
+
+            console.error("Couldn't save IPA Path progress (attempt " + attempt + " of " + maxAttempts + "):", error);
+
+            if (attempt < maxAttempts) {
+                await new Promise(function (resolve) { setTimeout(resolve, 500 * attempt); });
+            }
+
+        }
+
+    }
+
+    return false;
+
+}
+
+
+// Previously, a failed save was only logged to the console — the
+// summary screen still said "complete" and the Continue button still
+// pointed at the next level, so clicking it sent you straight back to
+// the path overview with zero explanation the moment that level's own
+// page re-checked your (never actually saved) unlock status. Now a
+// failure stays visibly unresolved — Continue/Return to Path aren't
+// repointed at the next level until the save genuinely succeeds — and
+// the learner gets a clear "Retry Save" instead of a silent dead end.
+
+async function saveProgressAndUpdateUI(newUnlockedLevel) {
+
+    const saved = currentUid ? await attemptSaveProgress(newUnlockedLevel) : true;
+
+    if (!saved) {
+
+        pendingUnlockedLevel = newUnlockedLevel;
+        saveErrorEl.classList.remove("hidden");
+        return;
+
+    }
+
+    saveErrorEl.classList.add("hidden");
+    unlockedLevel = newUnlockedLevel;
+
+    // A same-tab safety net: if the very next page's read of this
+    // same document ever comes back stale (a brief read-after-write
+    // lag), it can trust this instead of bouncing the learner back to
+    // the path overview for a level they just legitimately finished.
+    try {
+
+        sessionStorage.setItem("ipaPathLocalProgress", JSON.stringify({
+            unlockedLevel: unlockedLevel,
+            completed: completed
+        }));
+
+    } catch (error) {
+        // Private browsing / storage disabled — the write above
+        // already succeeded, so this is a pure nice-to-have.
+    }
+
+    const nextLevel = curriculum.levels.find(function (l) { return l.id === level.id + 1; });
+
+    if (nextLevel) {
+        nextLevelLink.href = "ipa-path-level.html?level=" + nextLevel.id;
+        nextLevelLink.textContent = "Next: " + nextLevel.title;
+    } else {
+        nextLevelLink.href = "ipa-path.html";
+        nextLevelLink.textContent = "Back to Path";
+    }
+
+}
+
+
+retrySaveButton.addEventListener("click", async function () {
+
+    retrySaveButton.disabled = true;
+    retrySaveButton.textContent = "Retrying…";
+
+    await saveProgressAndUpdateUI(pendingUnlockedLevel);
+
+    retrySaveButton.disabled = false;
+    retrySaveButton.textContent = "Retry Save";
+
+});
+
+
 async function finishLevel(correctCount, total) {
 
     showView(summaryView);
     progressTextEl.textContent = "Complete";
     progressFillEl.style.width = "100%";
+    saveErrorEl.classList.add("hidden");
 
     if (total > 0) {
         summaryText.textContent = "You answered " + correctCount + " of " + total + " correctly.";
@@ -248,29 +353,7 @@ async function finishLevel(correctCount, total) {
         newUnlockedLevel = level.id + 1;
     }
 
-    if (currentUid) {
-
-        try {
-            await setDoc(doc(db, "users", currentUid), {
-                ipaPath: { unlockedLevel: newUnlockedLevel, completed: completed }
-            }, { merge: true });
-        } catch (error) {
-            console.error("Couldn't save IPA Path progress:", error);
-        }
-
-    }
-
-    unlockedLevel = newUnlockedLevel;
-
-    const nextLevel = curriculum.levels.find(function (l) { return l.id === level.id + 1; });
-
-    if (nextLevel) {
-        nextLevelLink.href = "ipa-path-level.html?level=" + nextLevel.id;
-        nextLevelLink.textContent = "Next: " + nextLevel.title;
-    } else {
-        nextLevelLink.href = "ipa-path.html";
-        nextLevelLink.textContent = "Back to Path";
-    }
+    await saveProgressAndUpdateUI(newUnlockedLevel);
 
 }
 
@@ -300,6 +383,24 @@ async function init() {
         if (currentUserProfile.ipaPath) {
             unlockedLevel = currentUserProfile.ipaPath.unlockedLevel || 1;
             completed = currentUserProfile.ipaPath.completed || {};
+        }
+
+        // Guards against a brief read-after-write lag right after
+        // finishing a level on the page before this one: trust
+        // whichever is further along, the server's data or this same
+        // tab's own just-saved local copy, instead of bouncing someone
+        // back to the path overview for a level they just finished.
+        try {
+
+            const local = JSON.parse(sessionStorage.getItem("ipaPathLocalProgress") || "null");
+
+            if (local && local.unlockedLevel > unlockedLevel) {
+                unlockedLevel = local.unlockedLevel;
+                completed = Object.assign({}, completed, local.completed);
+            }
+
+        } catch (error) {
+            // ignore — server data above is still authoritative
         }
 
         const alreadyCompleted = completed[String(level.id)] === true;

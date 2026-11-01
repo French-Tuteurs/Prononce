@@ -17,7 +17,7 @@
 // recordings can be matched to a speaker later.
 
 import { auth, db } from "./firebase.js";
-import { applyAllPreferences, applyAccentTheme, applySeasonalTheme } from "./preferences.js";
+import { applyAllPreferences, applyAccentTheme, applySeasonalTheme, waitForMinLoaderDuration } from "./preferences.js";
 
 applySeasonalTheme();
 applyAccentTheme();
@@ -443,7 +443,7 @@ onAuthStateChanged(auth, async function (user) {
         applyAllPreferences(profile);
 
         // isTester is its own gate, independent of isOwner — see the
-        // matching note in script.js's renderTesterAccessCard.
+        // matching note in preferences.js's applyHeaderAccessGating.
 
         if (profile.isTester !== true) {
 
@@ -453,6 +453,7 @@ onAuthStateChanged(auth, async function (user) {
 
         }
 
+        await waitForMinLoaderDuration();
         accessCheckStep.classList.add("hidden");
 
         if (profile.consent) {

@@ -102,9 +102,51 @@ function resolvedTheme(themeKey) {
 }
 
 
+const THEME_CACHE_KEY = "prononce-last-theme";
+
 function applyDisplayTheme(themeKey) {
-    document.documentElement.dataset.theme = resolvedTheme(themeKey || "light");
+
+    const resolved = resolvedTheme(themeKey || "light");
+    document.documentElement.dataset.theme = resolved;
+
+    try {
+        localStorage.setItem(THEME_CACHE_KEY, resolved);
+    } catch (error) {
+        // Private browsing / storage disabled — nothing to cache for
+        // next time, but the theme above is still applied correctly
+        // for this page.
+    }
+
 }
+
+
+// Applies whatever theme this device last resolved to, synchronously
+// and immediately on module load — well before Firebase has even
+// started resolving who's signed in. Without this, the page (loading
+// screen included) always rendered in light mode until the real
+// profile loaded and applyDisplayTheme ran above, so a dark-mode user
+// would see a flash of light mode on every single page, for however
+// long the loader was up. applyAllPreferences -> applyDisplayTheme
+// still runs once the real profile loads, confirming or correcting
+// this in case the preference changed on another device.
+
+function applyCachedDisplayTheme() {
+
+    try {
+
+        const cached = localStorage.getItem(THEME_CACHE_KEY);
+
+        if (cached === "dark" || cached === "light") {
+            document.documentElement.dataset.theme = cached;
+        }
+
+    } catch (error) {
+        // ignore — applyDisplayTheme will set the real theme shortly
+    }
+
+}
+
+applyCachedDisplayTheme();
 
 
 function applyFontSize(sizeKey) {
@@ -304,22 +346,12 @@ function getAudioContext() {
         audioContext = new Ctx();
     }
 
-    if (audioContext.state === "suspended") {
-        audioContext.resume();
-    }
-
     return audioContext;
 
 }
 
 
-function playTone(frequency, startOffset, duration, waveform, peakVolume) {
-
-    const ctx = getAudioContext();
-
-    if (!ctx) {
-        return;
-    }
+function scheduleTone(ctx, frequency, startOffset, duration, waveform, peakVolume) {
 
     const oscillator = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -340,6 +372,44 @@ function playTone(frequency, startOffset, duration, waveform, peakVolume) {
 
     oscillator.start(startTime);
     oscillator.stop(startTime + duration + 0.02);
+
+}
+
+
+function playTone(frequency, startOffset, duration, waveform, peakVolume) {
+
+    const ctx = getAudioContext();
+
+    if (!ctx) {
+        return;
+    }
+
+    // Scheduling a node on a context that's still "suspended" — the
+    // state every context starts in until a real user gesture
+    // unlocks it — silently produces no sound on several mobile
+    // browsers (notably iOS Safari), even though resume() was called
+    // moments earlier on an *different* gesture (a touchstart, say).
+    // Waiting for THIS resume() to actually settle before scheduling
+    // anything is what makes tap/hover/correct/incorrect sounds
+    // reliable on mobile instead of silently dropping the very tones
+    // meant to confirm the tap that triggered them. Once the context
+    // is already running (true for every call after the first on a
+    // given page), this resolves immediately and schedules the tone
+    // exactly as before — no added delay.
+    if (ctx.state === "suspended") {
+
+        ctx.resume().then(function () {
+            scheduleTone(ctx, frequency, startOffset, duration, waveform, peakVolume);
+        }).catch(function () {
+            // Resume was blocked (not inside a user gesture this
+            // time) — nothing to play until the next real tap.
+        });
+
+        return;
+
+    }
+
+    scheduleTone(ctx, frequency, startOffset, duration, waveform, peakVolume);
 
 }
 
@@ -404,10 +474,23 @@ function feedbackHover(profile) {
 // sound is usually the first thing to try to play, before any click
 // has had a chance to unlock audio. Listening for the earliest
 // possible qualifying gesture — anywhere on the page, not just on a
-// tappable element — gets audio unlocked as early as possible so
+// tappable element, and touchstart specifically (not just the
+// pointerdown/click that follow it) so a tap's own sound has the
+// longest possible head start to finish unlocking before playTone
+// schedules it — gets audio unlocked as early as possible so tap and
 // hover sounds actually work for the rest of that page's visit.
+function unlockAudioContext() {
+
+    const ctx = getAudioContext();
+
+    if (ctx && ctx.state === "suspended") {
+        ctx.resume().catch(function () {});
+    }
+
+}
+
 ["pointerdown", "keydown", "touchstart"].forEach(function (eventName) {
-    document.addEventListener(eventName, getAudioContext, { passive: true });
+    document.addEventListener(eventName, unlockAudioContext, { passive: true });
 });
 
 
@@ -713,6 +796,13 @@ function pageLoadingLabel() {
 
 }
 
+// How long the loader has to have been up before hidePageLoader()
+// below will actually remove it — otherwise, on a fast connection
+// (or with everything mocked/cached), it can flash past in well
+// under a second, long before anyone's had a chance to read the tip.
+const MIN_LOADER_VISIBLE_MS = 1400;
+let pageLoaderShownAt = 0;
+
 function showLoadingTips() {
 
     const loaders = document.querySelectorAll(".page-loader");
@@ -720,6 +810,8 @@ function showLoadingTips() {
     if (!loaders.length) {
         return;
     }
+
+    pageLoaderShownAt = Date.now();
 
     const label = pageLoadingLabel();
     const tip = LOADING_TIPS[Math.floor(Math.random() * LOADING_TIPS.length)];
@@ -749,6 +841,26 @@ function showLoadingTips() {
 showLoadingTips();
 
 
+// Every page's own script calls this right before it would otherwise
+// hide the loader — it just adds whatever wait is still needed to
+// reach MIN_LOADER_VISIBLE_MS, or resolves immediately once that's
+// already elapsed.
+function waitForMinLoaderDuration() {
+
+    const elapsed = Date.now() - (pageLoaderShownAt || Date.now());
+    const remaining = MIN_LOADER_VISIBLE_MS - elapsed;
+
+    if (remaining <= 0) {
+        return Promise.resolve();
+    }
+
+    return new Promise(function (resolve) {
+        setTimeout(resolve, remaining);
+    });
+
+}
+
+
 export {
     ACCENT_THEMES,
     FONT_SIZES,
@@ -768,5 +880,6 @@ export {
     feedbackIncorrect,
     feedbackCelebrate,
     isHalloweenSeason,
-    applySeasonalTheme
+    applySeasonalTheme,
+    waitForMinLoaderDuration
 };
