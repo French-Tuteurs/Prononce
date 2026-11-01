@@ -39,8 +39,7 @@ rules_version = '2';
 //   - siteConfig/{docId}       — small owner-controlled settings
 //                                (siteConfig/recording.activePageId)
 //   - recordings/{recordingId} — one doc per submitted audio take
-//   - mail/{mailId}            — outgoing email queue for the
-//                                Firebase "Trigger Email" extension
+//   - messages/{messageId}     — owner-to-user broadcast messages
 
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -139,17 +138,25 @@ service cloud.firestore {
     }
 
 
-    // mail/{mailId} — the outgoing-email queue the Firebase "Trigger
-    // Email" extension watches (see admin-email.js). The owner can
-    // queue new messages; nothing reads, edits, or deletes a queued
-    // message from the client afterward — the extension's own Cloud
-    // Function processes these with admin privileges, which bypass
-    // these rules entirely, so this only ever needs to cover the
-    // owner's initial write.
-    match /mail/{mailId} {
+    // messages/{messageId} — owner-authored broadcast messages, sent
+    // to all users, testers only, or specific people (see
+    // admin-messages.js). Delivered entirely in-app (no email, no
+    // paid infrastructure) — recipientUids is resolved once at send
+    // time, and each recipient's own Messages page queries for
+    // messages where their uid appears in it. A recipient can only
+    // read messages addressed to them; only the owner can send one
+    // or delete it later.
+    match /messages/{messageId} {
+
+      // A recipient can read messages addressed to them; the owner
+      // can also read everything they've sent, even a "testers only"
+      // message if the owner's own account isn't itself a tester.
+      allow get, list: if isSignedIn()
+        && (request.auth.uid in resource.data.recipientUids || isOwnerAccount());
 
       allow create: if isOwnerAccount();
-      allow get, list, update, delete: if false;
+
+      allow update, delete: if isOwnerAccount();
 
     }
 

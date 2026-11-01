@@ -1,14 +1,12 @@
 // ===========================
-// Prononce Admin — Send Email
+// Prononce Admin — Send Message
 // ===========================
 //
-// Owner-only. Queues outgoing messages in the "mail" collection for
-// the Firebase "Trigger Email" extension to actually deliver — this
-// app has no backend of its own to send email directly, so nothing
-// here sends anything itself. One doc per recipient (rather than one
-// doc with everyone in the "to" field) so nobody sees anyone else's
-// address in their inbox. See the README for the one-time extension
-// + Resend setup this depends on.
+// Owner-only. Delivers entirely in-app (no email, no paid
+// infrastructure): one messages doc per broadcast, with the
+// recipients resolved to a concrete list of uids at send time so
+// each recipient's own Messages page (messages.js) can just query
+// for "documents where my uid is in recipientUids."
 
 import { auth, db } from "./firebase.js";
 import { applyAllPreferences, applyAccentTheme, applySeasonalTheme, waitForMinLoaderDuration } from "./preferences.js";
@@ -28,7 +26,9 @@ import {
     getDocs,
     query,
     where,
-    addDoc
+    orderBy,
+    addDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
@@ -57,6 +57,10 @@ if (logoutButton) {
 }
 
 
+let currentUserId = null;
+let currentUserName = null;
+
+
 onAuthStateChanged(auth, async function (user) {
 
     if (!user) {
@@ -76,8 +80,12 @@ onAuthStateChanged(auth, async function (user) {
 
         }
 
+        currentUserId = user.uid;
+        currentUserName = user.displayName || selfSnapshot.data().email || "Owner";
+
         applyAllPreferences(selfSnapshot.data());
         hidePageLoader();
+        await loadSentMessages();
 
     } catch (error) {
 
@@ -95,7 +103,7 @@ onAuthStateChanged(auth, async function (user) {
 
 const specificRow = document.getElementById("specific-recipients-row");
 
-document.querySelectorAll('input[name="email-scope"]').forEach(function (radio) {
+document.querySelectorAll('input[name="message-scope"]').forEach(function (radio) {
 
     radio.addEventListener("change", function () {
         specificRow.classList.toggle("hidden", radio.value !== "specific" || !radio.checked);
@@ -107,7 +115,7 @@ document.querySelectorAll('input[name="email-scope"]').forEach(function (radio) 
 
 function currentScope() {
 
-    const checked = document.querySelector('input[name="email-scope"]:checked');
+    const checked = document.querySelector('input[name="message-scope"]:checked');
     return checked ? checked.value : "all";
 
 }
@@ -138,7 +146,7 @@ async function resolveRecipients() {
 
             const data = docSnap.data();
 
-            if (data.disabled === true || !data.email) {
+            if (data.disabled === true) {
                 return;
             }
 
@@ -146,7 +154,7 @@ async function resolveRecipients() {
                 return;
             }
 
-            recipients.push({ email: data.email, name: data.motto ? data.email : data.email });
+            recipients.push({ uid: docSnap.id, email: data.email || docSnap.id });
 
         });
 
@@ -155,7 +163,7 @@ async function resolveRecipients() {
     }
 
     // Specific people — look each typed email up so we only ever
-    // queue messages for real, existing accounts.
+    // address real, existing accounts.
 
     const raw = document.getElementById("specific-recipients-input").value;
     const typedEmails = raw.split(/[\n,]/).map(function (s) { return s.trim(); }).filter(Boolean);
@@ -172,13 +180,14 @@ async function resolveRecipients() {
             continue;
         }
 
-        const data = snapshot.docs[0].data();
+        const docSnap = snapshot.docs[0];
+        const data = docSnap.data();
 
         if (data.disabled === true) {
             continue;
         }
 
-        recipients.push({ email: data.email });
+        recipients.push({ uid: docSnap.id, email: data.email || docSnap.id });
 
     }
 
@@ -199,8 +208,8 @@ let previewedRecipients = [];
 
 document.getElementById("preview-button").addEventListener("click", async function () {
 
-    const subject = document.getElementById("email-subject-input").value.trim();
-    const body = document.getElementById("email-body-input").value.trim();
+    const subject = document.getElementById("message-subject-input").value.trim();
+    const body = document.getElementById("message-body-input").value.trim();
 
     if (!subject || !body) {
         document.getElementById("preview-status").textContent = "Write a subject and a message first.";
@@ -255,9 +264,7 @@ document.getElementById("preview-button").addEventListener("click", async functi
 });
 
 
-// Editing anything after a preview invalidates it, so nobody sends a
-// stale recipient list for a message they then kept editing.
-["email-subject-input", "email-body-input", "specific-recipients-input"].forEach(function (id) {
+["message-subject-input", "message-body-input", "specific-recipients-input"].forEach(function (id) {
     document.getElementById(id).addEventListener("input", resetPreview);
 });
 
@@ -266,19 +273,6 @@ document.getElementById("preview-button").addEventListener("click", async functi
 // SEND
 // ===========================
 
-function textToHtml(text) {
-
-    const escaped = text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-
-    return escaped.split(/\n{2,}/).map(function (paragraph) {
-        return "<p>" + paragraph.replace(/\n/g, "<br>") + "</p>";
-    }).join("");
-
-}
-
 document.getElementById("send-button").addEventListener("click", async function () {
 
     if (!previewedRecipients.length) {
@@ -286,17 +280,17 @@ document.getElementById("send-button").addEventListener("click", async function 
     }
 
     const confirmed = window.confirm(
-        "Send this email to " + previewedRecipients.length +
-        (previewedRecipients.length === 1 ? " person" : " people") + "? This can't be undone."
+        "Send this message to " + previewedRecipients.length +
+        (previewedRecipients.length === 1 ? " person" : " people") + "?"
     );
 
     if (!confirmed) {
         return;
     }
 
-    const subject = document.getElementById("email-subject-input").value.trim();
-    const body = document.getElementById("email-body-input").value.trim();
-    const html = textToHtml(body);
+    const subject = document.getElementById("message-subject-input").value.trim();
+    const body = document.getElementById("message-body-input").value.trim();
+    const scope = currentScope();
 
     const sendButton = document.getElementById("send-button");
     const sendError = document.getElementById("send-error");
@@ -305,50 +299,117 @@ document.getElementById("send-button").addEventListener("click", async function 
     sendButton.disabled = true;
     sendError.hidden = true;
     sendStatus.hidden = false;
-    sendStatus.textContent = "Sending 0 of " + previewedRecipients.length + "…";
+    sendStatus.textContent = "Sending…";
 
-    let sentCount = 0;
-    const failed = [];
+    // The owner can always see what they sent, even a "testers only"
+    // message if their own account isn't itself a tester.
+    const recipientUids = previewedRecipients.map(function (r) { return r.uid; });
 
-    for (const recipient of previewedRecipients) {
-
-        try {
-
-            await addDoc(collection(db, "mail"), {
-                to: [recipient.email],
-                message: { subject: subject, text: body, html: html }
-            });
-
-            sentCount++;
-
-        } catch (error) {
-
-            console.error("Couldn't queue email for " + recipient.email + ":", error);
-            failed.push(recipient.email);
-
-        }
-
-        sendStatus.textContent = "Sending " + sentCount + " of " + previewedRecipients.length + "…";
-
+    if (recipientUids.indexOf(currentUserId) === -1) {
+        recipientUids.push(currentUserId);
     }
 
-    if (failed.length) {
+    try {
 
-        sendError.textContent = "Couldn't queue a message for: " + failed.join(", ") + ". The rest sent fine.";
+        await addDoc(collection(db, "messages"), {
+            fromUid: currentUserId,
+            fromName: currentUserName,
+            subject: subject,
+            body: body,
+            scope: scope,
+            recipientUids: recipientUids,
+            recipientCount: previewedRecipients.length,
+            createdAt: serverTimestamp()
+        });
+
+        sendStatus.textContent = "Sent to " + previewedRecipients.length +
+            (previewedRecipients.length === 1 ? " person" : " people") +
+            ". They'll see it on their Messages page.";
+
+        previewedRecipients = [];
+        document.getElementById("message-subject-input").value = "";
+        document.getElementById("message-body-input").value = "";
+        await loadSentMessages();
+
+    } catch (error) {
+
+        console.error(error);
+        sendError.textContent = "Couldn't send that message. Please try again.";
         sendError.hidden = false;
+        sendStatus.hidden = true;
+        sendButton.disabled = false;
 
     }
-
-    const totalAttempted = previewedRecipients.length;
-
-    sendStatus.textContent = "Queued " + sentCount + " of " + totalAttempted +
-        " message" + (totalAttempted === 1 ? "" : "s") +
-        ". Delivery happens via the Trigger Email extension, usually within a minute or two.";
-
-    // Done, not re-sendable — clearing the list disables another
-    // click of Send without a fresh preview, while leaving the
-    // status message above (inside the same container) visible.
-    previewedRecipients = [];
-    sendButton.disabled = true;
 
 });
+
+
+// ===========================
+// PREVIOUSLY SENT
+// ===========================
+
+function formatDate(timestamp) {
+
+    if (!timestamp) {
+        return "unknown date";
+    }
+
+    const date = typeof timestamp.toDate === "function" ? timestamp.toDate() : new Date(timestamp);
+    return date.toLocaleString();
+
+}
+
+
+async function loadSentMessages() {
+
+    const listEl = document.getElementById("sent-messages-list");
+
+    try {
+
+        const snapshot = await getDocs(query(collection(db, "messages"), orderBy("createdAt", "desc")));
+
+        const sent = [];
+        snapshot.forEach(function (docSnap) {
+            const data = docSnap.data();
+            if (data.fromUid === currentUserId) {
+                sent.push(data);
+            }
+        });
+
+        if (!sent.length) {
+            listEl.innerHTML = '<p class="admin-empty">Nothing sent yet.</p>';
+            return;
+        }
+
+        listEl.innerHTML = "";
+
+        sent.forEach(function (message) {
+
+            const row = document.createElement("div");
+            row.className = "admin-recording-row";
+
+            const info = document.createElement("div");
+            info.className = "admin-recording-info";
+
+            const title = document.createElement("h3");
+            title.textContent = message.subject || "(no subject)";
+            info.appendChild(title);
+
+            const meta = document.createElement("p");
+            const scopeLabel = message.scope === "all" ? "All users" : message.scope === "testers" ? "Testers only" : "Specific people";
+            meta.textContent = scopeLabel + " · " + (message.recipientCount || 0) + " recipients · " + formatDate(message.createdAt);
+            info.appendChild(meta);
+
+            row.appendChild(info);
+            listEl.appendChild(row);
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+        listEl.innerHTML = '<p class="admin-empty">Couldn\'t load sent messages.</p>';
+
+    }
+
+}

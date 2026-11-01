@@ -5408,6 +5408,77 @@ button:hover {
 }
 
 
+.messages-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+
+    max-width: 640px;
+
+    text-align: left;
+
+}
+
+
+.message-card {
+
+    padding: 24px 28px;
+
+    background-color: var(--surface);
+
+    border-top: 4px solid var(--gold);
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--soft-shadow);
+
+}
+
+
+.message-card-meta {
+
+    margin: 0 0 8px;
+
+    font-size: 0.75rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+    color: var(--text-muted);
+
+}
+
+
+.message-card h2 {
+
+    margin: 0 0 10px;
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 1.375rem;
+
+    color: var(--heading);
+
+}
+
+
+.message-card-body {
+
+    margin: 0;
+
+    color: var(--text-dark);
+
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+
+}
+
+
 .progress-summary {
 
     display: flex;

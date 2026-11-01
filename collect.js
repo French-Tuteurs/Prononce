@@ -633,6 +633,7 @@ function buildItemCard(item, container, topicId) {
 
         const maxAttempts = 3;
         let uploaded = false;
+        let lastError = null;
 
         for (let attempt = 1; attempt <= maxAttempts && !uploaded; attempt++) {
 
@@ -643,6 +644,7 @@ function buildItemCard(item, container, topicId) {
 
             } catch (error) {
 
+                lastError = error;
                 console.error("Couldn't upload take (attempt " + attempt + " of " + maxAttempts + "):", error);
 
                 if (attempt < maxAttempts) {
@@ -658,7 +660,24 @@ function buildItemCard(item, container, topicId) {
         if (!uploaded) {
 
             saveButton.disabled = false;
-            setStatus("Upload failed — check your connection and try Save again. Your recording is still here, nothing's lost.");
+
+            // Surfaces the real Firebase error (e.g. "storage/unauthorized",
+            // "storage/unknown") instead of a generic message — the two
+            // most common real causes are the owner's storage.rules/
+            // firestore.rules not having been deployed to the live
+            // project yet, or Storage never having been turned on for
+            // this project in the Firebase console at all. Either way,
+            // a vague "check your connection" would send someone
+            // troubleshooting their wifi instead of the actual problem.
+            const detail = lastError ? (lastError.code || lastError.message || String(lastError)) : "unknown error";
+
+            setStatus(
+                "Upload failed (" + detail + ") after 3 tries. This usually means Storage " +
+                "isn't turned on yet for the Firebase project, or the security rules haven't " +
+                "been deployed — not a connection problem. Your recording is still here; " +
+                "Save will try again once that's fixed."
+            );
+
             return;
 
         }
