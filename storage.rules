@@ -1,0 +1,41 @@
+rules_version = '2';
+
+// ===========================
+// PRONONCE — STORAGE SECURITY RULES
+// ===========================
+//
+// One folder per submitting account: recordings/{uid}/{filename} —
+// the raw audio takes uploaded by collect.js. Mirrors the equivalent
+// Firestore rule on recordings/{recordingId}: a signed-in user can
+// upload their own takes (and never anyone else's) but can't read,
+// overwrite, or delete anything once it's there — that's the owner's
+// job alone, from Owner Tools.
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwnerAccount() {
+      return isSignedIn()
+        && firestore.exists(/databases/(default)/documents/users/$(request.auth.uid))
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.isOwner == true;
+    }
+
+    match /recordings/{uid}/{fileName} {
+
+      allow read: if isSignedIn() && (request.auth.uid == uid || isOwnerAccount());
+
+      allow write: if isSignedIn()
+        && request.auth.uid == uid
+        && request.resource.size < 15 * 1024 * 1024
+        && request.resource.contentType.matches('audio/.*');
+
+      allow delete: if isOwnerAccount();
+
+    }
+
+  }
+}

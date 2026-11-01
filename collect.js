@@ -9,14 +9,18 @@
 // way past this check for anyone else's account.
 //
 // Consent is asked once per account: the first time, it's written
-// to that user's Firestore document (users/{uid}.consent) and
-// never asked again on later visits. The recordings themselves are
-// NOT uploaded anywhere — takes are held in memory as the volunteer
-// records them, then bundled into a single .zip (built client-side,
-// no library) so they only have to send one file back, named so
-// recordings can be matched to a speaker later.
+// to that user's Firestore document (users/{uid}.consent) and never
+// asked again on later visits. Each saved take uploads straight to
+// Firebase Storage (recordings/{uid}/...) the moment you click Save,
+// with a matching metadata doc in the recordings collection — no zip
+// to download, no file to email anyone afterward.
+//
+// Which prompts a tester sees (TOPICS) isn't hardcoded here anymore:
+// it's resolved per-visitor from the owner-managed recordingPages
+// collection — see resolveRecordingPage below — falling back to
+// DEFAULT_TOPICS only if the owner hasn't configured anything yet.
 
-import { auth, db } from "./firebase.js";
+import { auth, db, storage } from "./firebase.js";
 import { applyAllPreferences, applyAccentTheme, applySeasonalTheme, waitForMinLoaderDuration } from "./preferences.js";
 
 applySeasonalTheme();
@@ -31,17 +35,29 @@ import {
     doc,
     getDoc,
     setDoc,
-    updateDoc
+    updateDoc,
+    addDoc,
+    collection,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-storage.js";
 
 // Grouped by lesson topic so the page reads as sections you can open
 // one at a time, instead of one long list of record buttons. Every
 // item's id matches the audio filename that lesson actually expects
-// (see each lesson-*.html's data-audio-src) — a saved take downloads
-// as "<speaker>_<id>_take<N>.<ext>", so it's obvious which file goes
-// where. The same word reused across two lessons (e.g. "rouge" in
-// both the R and Silent Letters lessons) only appears once here.
-const TOPICS = [
+// (see each lesson-*.html's data-audio-src). This is the original,
+// hand-written prompt set — now just the fallback used when the
+// owner hasn't configured any recordingPages documents yet (see
+// resolveRecordingPage below); day to day, which prompt set a tester
+// sees is owner-controlled from Owner Tools > Recording Pages,
+// resolved per-visitor so different testers can even be pointed at
+// different sets.
+const DEFAULT_TOPICS = [
     {
         id: "r",
         title: "R Sound",
@@ -155,9 +171,13 @@ const TOPICS = [
     }
 ];
 
-const TOTAL_ITEMS = TOPICS.reduce(function (sum, topic) {
-    return sum + topic.items.length;
-}, 0);
+// Which prompt set is actually in play for this visitor — resolved
+// once access is confirmed (see resolveRecordingPage) and read by
+// initRecording/buildTopicGroup/etc. below, same shape as
+// DEFAULT_TOPICS: [{ id, title, items: [{ id, label, say? }] }].
+let TOPICS = DEFAULT_TOPICS;
+let ACTIVE_PAGE_ID = null;
+let TOTAL_ITEMS = 0;
 
 const MAX_RECORDING_MS = 15000;
 
@@ -218,162 +238,6 @@ function downloadBlob(blob, filename) {
 
 
 // ===========================
-// MINIMAL ZIP BUILDER
-// ===========================
-//
-// A tiny "store" (uncompressed) ZIP writer, written from scratch so
-// this page doesn't depend on any external library or CDN. Audio
-// takes are already compressed by their codec, so skipping DEFLATE
-// costs nothing in practice and keeps this self-contained.
-
-const CRC_TABLE = (function () {
-
-    const table = new Uint32Array(256);
-
-    for (let n = 0; n < 256; n++) {
-
-        let c = n;
-
-        for (let k = 0; k < 8; k++) {
-            c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-        }
-
-        table[n] = c >>> 0;
-
-    }
-
-    return table;
-
-})();
-
-
-function crc32(bytes) {
-
-    let crc = 0xFFFFFFFF;
-
-    for (let i = 0; i < bytes.length; i++) {
-        crc = CRC_TABLE[(crc ^ bytes[i]) & 0xFF] ^ (crc >>> 8);
-    }
-
-    return (crc ^ 0xFFFFFFFF) >>> 0;
-
-}
-
-
-function dosDateTime(date) {
-
-    const time =
-        ((date.getHours() & 0x1F) << 11) |
-        ((date.getMinutes() & 0x3F) << 5) |
-        ((date.getSeconds() >> 1) & 0x1F);
-
-    const dosDate =
-        (((date.getFullYear() - 1980) & 0x7F) << 9) |
-        (((date.getMonth() + 1) & 0x0F) << 5) |
-        (date.getDate() & 0x1F);
-
-    return { time: time, date: dosDate };
-
-}
-
-
-function writeUint16LE(view, offset, value) {
-    view.setUint16(offset, value, true);
-}
-
-
-function writeUint32LE(view, offset, value) {
-    view.setUint32(offset, value, true);
-}
-
-
-async function createZipBlob(entries) {
-
-    const now = dosDateTime(new Date());
-    const encoder = new TextEncoder();
-
-    const localParts = [];
-    const centralParts = [];
-
-    let offset = 0;
-
-    for (const entry of entries) {
-
-        const nameBytes = encoder.encode(entry.name);
-        const dataBuffer = await entry.blob.arrayBuffer();
-        const dataBytes = new Uint8Array(dataBuffer);
-        const crc = crc32(dataBytes);
-        const size = dataBytes.length;
-
-        const localHeader = new ArrayBuffer(30);
-        const lv = new DataView(localHeader);
-
-        writeUint32LE(lv, 0, 0x04034b50);
-        writeUint16LE(lv, 4, 20);
-        writeUint16LE(lv, 6, 0);
-        writeUint16LE(lv, 8, 0);
-        writeUint16LE(lv, 10, now.time);
-        writeUint16LE(lv, 12, now.date);
-        writeUint32LE(lv, 14, crc);
-        writeUint32LE(lv, 18, size);
-        writeUint32LE(lv, 22, size);
-        writeUint16LE(lv, 26, nameBytes.length);
-        writeUint16LE(lv, 28, 0);
-
-        localParts.push(new Uint8Array(localHeader), nameBytes, dataBytes);
-
-        const centralHeader = new ArrayBuffer(46);
-        const cv = new DataView(centralHeader);
-
-        writeUint32LE(cv, 0, 0x02014b50);
-        writeUint16LE(cv, 4, 20);
-        writeUint16LE(cv, 6, 20);
-        writeUint16LE(cv, 8, 0);
-        writeUint16LE(cv, 10, 0);
-        writeUint16LE(cv, 12, now.time);
-        writeUint16LE(cv, 14, now.date);
-        writeUint32LE(cv, 16, crc);
-        writeUint32LE(cv, 20, size);
-        writeUint32LE(cv, 24, size);
-        writeUint16LE(cv, 28, nameBytes.length);
-        writeUint16LE(cv, 30, 0);
-        writeUint16LE(cv, 32, 0);
-        writeUint16LE(cv, 34, 0);
-        writeUint16LE(cv, 36, 0);
-        writeUint32LE(cv, 38, 0);
-        writeUint32LE(cv, 42, offset);
-
-        centralParts.push(new Uint8Array(centralHeader), nameBytes);
-
-        offset += localHeader.byteLength + nameBytes.length + size;
-
-    }
-
-    const centralSize = centralParts.reduce(function (sum, part) {
-        return sum + part.byteLength;
-    }, 0);
-
-    const endRecord = new ArrayBuffer(22);
-    const ev = new DataView(endRecord);
-
-    writeUint32LE(ev, 0, 0x06054b50);
-    writeUint16LE(ev, 4, 0);
-    writeUint16LE(ev, 6, 0);
-    writeUint16LE(ev, 8, entries.length);
-    writeUint16LE(ev, 10, entries.length);
-    writeUint32LE(ev, 12, centralSize);
-    writeUint32LE(ev, 16, offset);
-    writeUint16LE(ev, 20, 0);
-
-    return new Blob(
-        localParts.concat(centralParts).concat([new Uint8Array(endRecord)]),
-        { type: "application/zip" }
-    );
-
-}
-
-
-// ===========================
 // ACCESS CHECK (Firebase Auth + Firestore)
 // ===========================
 
@@ -389,6 +253,8 @@ const recordingAsName = document.getElementById("recording-as-name");
 const logoutButton = document.getElementById("logout-button");
 
 let speakerSlug = "speaker";
+let speakerEmail = null;
+let speakerDisplayName = null;
 let consentEntry = null;
 let currentUserId = null;
 
@@ -404,6 +270,50 @@ if (logoutButton) {
 }
 
 
+// Which prompt set a given tester sees: their own users/{uid}.
+// recordingPageId if the owner has set one just for them, otherwise
+// the sitewide default at siteConfig/recording.activePageId, falling
+// back to the original hardcoded list if neither resolves (nothing
+// configured yet, or whatever's referenced no longer exists).
+
+async function resolveRecordingPage(profile) {
+
+    try {
+
+        let pageId = profile.recordingPageId || null;
+
+        if (!pageId) {
+
+            const configSnap = await getDoc(doc(db, "siteConfig", "recording"));
+
+            if (configSnap.exists()) {
+                pageId = configSnap.data().activePageId || null;
+            }
+
+        }
+
+        if (pageId) {
+
+            const pageSnap = await getDoc(doc(db, "recordingPages", pageId));
+
+            if (pageSnap.exists() && Array.isArray(pageSnap.data().topics)) {
+                TOPICS = pageSnap.data().topics;
+                ACTIVE_PAGE_ID = pageId;
+                return;
+            }
+
+        }
+
+    } catch (error) {
+        console.error("Couldn't resolve a recording page, using the default:", error);
+    }
+
+    TOPICS = DEFAULT_TOPICS;
+    ACTIVE_PAGE_ID = null;
+
+}
+
+
 onAuthStateChanged(auth, async function (user) {
 
     if (!user) {
@@ -414,6 +324,7 @@ onAuthStateChanged(auth, async function (user) {
     }
 
     currentUserId = user.uid;
+    speakerEmail = user.email;
 
     try {
 
@@ -453,6 +364,8 @@ onAuthStateChanged(auth, async function (user) {
 
         }
 
+        await resolveRecordingPage(profile);
+
         await waitForMinLoaderDuration();
         accessCheckStep.classList.add("hidden");
 
@@ -461,8 +374,9 @@ onAuthStateChanged(auth, async function (user) {
             // Already consented on a previous visit — skip straight to
             // recording instead of asking again.
 
-            speakerSlug = slugify(profile.consent.name || user.email || "speaker");
-            recordingAsName.textContent = profile.consent.name || user.email;
+            speakerDisplayName = profile.consent.name || user.email;
+            speakerSlug = slugify(speakerDisplayName || "speaker");
+            recordingAsName.textContent = speakerDisplayName;
 
             recordingStep.classList.remove("hidden");
             initRecording();
@@ -550,6 +464,7 @@ beginButton.addEventListener("click", async function () {
 
     }
 
+    speakerDisplayName = name;
     recordingAsName.textContent = name;
     consentStep.classList.add("hidden");
     recordingStep.classList.remove("hidden");
@@ -565,115 +480,17 @@ beginButton.addEventListener("click", async function () {
 
 const collectItemsEl = document.getElementById("collect-items");
 const collectProgressEl = document.getElementById("collect-progress");
-const zipButton = document.getElementById("download-zip-button");
-const zipStatus = document.getElementById("zip-status");
-const emailReminder = document.getElementById("email-reminder");
-const emailReminderFilename = document.getElementById("email-reminder-filename");
-const emailReminderMailto = document.getElementById("email-reminder-mailto");
-const emailReminderCopyButton = document.getElementById("email-reminder-copy");
-
-const RECORDINGS_EMAIL = "raushan.athwal.10@gmail.com";
-
-// The browser can't attach a file to an email on its own — mailto:
-// links have no way to include one — so this just gets the tester's
-// email client open with the right address/subject already filled
-// in. They still have to manually attach the zip from their
-// downloads before hitting send.
-
-function showEmailReminder(filename) {
-
-    emailReminderFilename.textContent = filename;
-
-    const subject = encodeURIComponent("Prononce recordings — " + speakerSlug);
-    const body = encodeURIComponent(
-        "Attaching " + filename + " from my downloads.\n\n" +
-        "(Reminder: attach the file before sending — your email app won't do it automatically.)"
-    );
-
-    emailReminderMailto.href =
-        "mailto:" + RECORDINGS_EMAIL + "?subject=" + subject + "&body=" + body;
-
-    emailReminder.classList.remove("hidden");
-
-}
-
-
-if (emailReminderCopyButton) {
-
-    emailReminderCopyButton.addEventListener("click", async function () {
-
-        try {
-
-            await navigator.clipboard.writeText(RECORDINGS_EMAIL);
-            emailReminderCopyButton.textContent = "Copied!";
-
-        } catch (error) {
-
-            emailReminderCopyButton.textContent = RECORDINGS_EMAIL;
-
-        }
-
-        setTimeout(function () {
-            emailReminderCopyButton.textContent = "Copy Address";
-        }, 2000);
-
-    });
-
-}
 
 let sharedStream = null;
 let savedCount = 0;
-const savedFiles = [];
 const topicSavedCounts = {};
 
 function updateProgress() {
 
     collectProgressEl.textContent =
-        savedCount + " of " + TOTAL_ITEMS + " saved";
+        savedCount + " of " + TOTAL_ITEMS + " uploaded";
 
 }
-
-
-zipButton.addEventListener("click", function () {
-
-    if (!savedFiles.length) {
-        return;
-    }
-
-    zipButton.disabled = true;
-    zipStatus.hidden = false;
-    zipStatus.textContent = "Building your zip file…";
-
-    const entries = consentEntry ? savedFiles.concat([consentEntry]) : savedFiles.slice();
-
-    createZipBlob(entries)
-        .then(function (zipBlob) {
-
-            const zipFilename = speakerSlug + "_prononce-recordings.zip";
-
-            downloadBlob(zipBlob, zipFilename);
-
-            zipStatus.textContent =
-                "Downloaded " + zipFilename + ". You can keep recording " +
-                "and download again any time to include more.";
-
-            showEmailReminder(zipFilename);
-
-            zipButton.disabled = false;
-
-        })
-        .catch(function (error) {
-
-            console.error(error);
-
-            zipStatus.textContent =
-                "Something went wrong building the zip. Please try again.";
-
-            zipButton.disabled = false;
-
-        });
-
-});
 
 
 function buildItemCard(item, container, topicId) {
@@ -774,7 +591,30 @@ function buildItemCard(item, container, topicId) {
 
     });
 
-    saveButton.addEventListener("click", function () {
+    async function uploadTake(blobToUpload, filename, attempt) {
+
+        const storageRef = ref(storage, "recordings/" + currentUserId + "/" + filename);
+
+        await uploadBytes(storageRef, blobToUpload, { contentType: blobToUpload.type || "audio/webm" });
+        const downloadURL = await getDownloadURL(storageRef);
+
+        await addDoc(collection(db, "recordings"), {
+            uid: currentUserId,
+            email: speakerEmail,
+            speakerName: speakerDisplayName,
+            pageId: ACTIVE_PAGE_ID,
+            topicId: topicId,
+            itemId: item.id,
+            itemLabel: item.label,
+            filename: filename,
+            storagePath: "recordings/" + currentUserId + "/" + filename,
+            downloadURL: downloadURL,
+            createdAt: serverTimestamp()
+        });
+
+    }
+
+    saveButton.addEventListener("click", async function () {
 
         if (!currentBlob) {
             return;
@@ -785,9 +625,43 @@ function buildItemCard(item, container, topicId) {
         const ext = extensionForMimeType(currentBlob.type || "");
         const filename =
             speakerSlug + "_" + item.id + "_take" + takeNumber + "." + ext;
+        const blobToUpload = currentBlob;
 
-        savedFiles.push({ name: filename, blob: currentBlob });
-        zipButton.disabled = false;
+        saveButton.disabled = true;
+        recordButton.disabled = true;
+        setStatus("Uploading…");
+
+        const maxAttempts = 3;
+        let uploaded = false;
+
+        for (let attempt = 1; attempt <= maxAttempts && !uploaded; attempt++) {
+
+            try {
+
+                await uploadTake(blobToUpload, filename, attempt);
+                uploaded = true;
+
+            } catch (error) {
+
+                console.error("Couldn't upload take (attempt " + attempt + " of " + maxAttempts + "):", error);
+
+                if (attempt < maxAttempts) {
+                    await new Promise(function (resolve) { setTimeout(resolve, 600 * attempt); });
+                }
+
+            }
+
+        }
+
+        recordButton.disabled = false;
+
+        if (!uploaded) {
+
+            saveButton.disabled = false;
+            setStatus("Upload failed — check your connection and try Save again. Your recording is still here, nothing's lost.");
+            return;
+
+        }
 
         if (!savedThisItem) {
             savedThisItem = true;
@@ -798,7 +672,8 @@ function buildItemCard(item, container, topicId) {
             card.classList.add("saved");
         }
 
-        setStatus("Saved as " + filename + " — it'll be included when you download your zip. You can record another take if you want a different one.");
+        saveButton.disabled = false;
+        setStatus("Uploaded. You can record another take of this one any time, or move on to the next item.");
 
     });
 
@@ -848,6 +723,10 @@ function buildTopicGroup(topic) {
 
 
 function initRecording() {
+
+    TOTAL_ITEMS = TOPICS.reduce(function (sum, topic) {
+        return sum + topic.items.length;
+    }, 0);
 
     TOPICS.forEach(buildTopicGroup);
     updateProgress();

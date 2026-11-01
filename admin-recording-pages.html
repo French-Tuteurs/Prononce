@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Recording Pages | Prononce</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16.png">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+
+    <meta name="theme-color" content="#14213d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Prononce">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="admin-page">
+
+    <div class="page-loader" id="page-loader">
+
+        <img src="favicon.svg" alt="" class="page-loader-mark">
+
+        <div class="page-loader-spinner"></div>
+
+    </div>
+
+
+    <header class="site-header">
+
+        <a href="dashboard.html" class="logo">Prononce</a>
+
+        <span class="collect-header-note">Recording Pages &middot; Owner Only</span>
+
+        <div class="user-menu" id="user-menu">
+            <button
+                type="button"
+                class="user-menu-trigger"
+                id="user-menu-trigger"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-label="Account menu"
+            >
+                <svg class="user-menu-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"></path>
+                </svg>
+            </button>
+            <div class="user-menu-dropdown" id="user-menu-dropdown">
+                <a href="settings.html" class="user-menu-item">Account Settings</a>
+                <a href="admin.html" class="user-menu-item hidden" id="user-menu-owner-tools">Owner Tools</a>
+                <button type="button" class="user-menu-item user-menu-logout" id="logout-button">Log Out</button>
+            </div>
+        </div>
+
+    </header>
+
+
+    <main class="admin-container">
+
+        <a href="admin.html" class="back-link">&larr; Back to Owner Tools</a>
+
+        <p class="eyebrow">Recording Pages</p>
+        <h1>Manage prompt sets.</h1>
+        <p class="admin-intro">
+            Each recording page is a set of words and sentences
+            testers record on the voice-recording page. Keep several
+            around and rotate which one is live every few weeks to
+            build an extensive, varied database &mdash; set the
+            sitewide default here, or override it for one person at a
+            time from their account page in Owner Tools.
+        </p>
+
+
+        <!-- ===========================
+             CURRENT SITEWIDE DEFAULT
+        =========================== -->
+
+        <section class="admin-lookup-card">
+
+            <h2>Sitewide default</h2>
+
+            <p class="admin-ipa-path-status" id="active-page-status">Loading&hellip;</p>
+
+        </section>
+
+
+        <!-- ===========================
+             CREATE / EDIT A PAGE
+        =========================== -->
+
+        <section class="admin-detail-card" id="page-editor-card">
+
+            <div class="admin-detail-header">
+                <div>
+                    <p class="eyebrow" id="editor-mode-label">New Recording Page</p>
+                </div>
+            </div>
+
+            <div class="admin-detail-section">
+
+                <h3>Name</h3>
+
+                <div class="admin-grant-row">
+                    <input
+                        type="text"
+                        id="page-name-input"
+                        placeholder="e.g. Round 3 &mdash; November"
+                        autocomplete="off"
+                    >
+                </div>
+
+            </div>
+
+            <div class="admin-detail-section">
+
+                <h3>Topics (JSON)</h3>
+
+                <p>
+                    An array of topics, each with an id, a title, and
+                    a list of items (id, label, and an optional
+                    <code>say</code> for the hint text shown above the
+                    record button). Use &ldquo;Load Starter
+                    Template&rdquo; for the exact shape, or
+                    &ldquo;Load Current Default&rdquo; to start from
+                    the built-in word list this page falls back to
+                    when nothing's configured yet.
+                </p>
+
+                <div class="admin-json-actions">
+                    <button type="button" id="load-template-button">Load Starter Template</button>
+                    <button type="button" id="load-default-button">Load Current Default</button>
+                </div>
+
+                <textarea
+                    id="page-topics-input"
+                    class="admin-json-textarea"
+                    spellcheck="false"
+                    rows="16"
+                ></textarea>
+
+                <p class="admin-error" id="editor-error" hidden></p>
+
+            </div>
+
+            <div class="admin-action-row">
+                <p id="editor-status"></p>
+                <div class="admin-json-actions">
+                    <button type="button" id="cancel-edit-button" class="hidden">Cancel</button>
+                    <button type="button" id="save-page-button">Save Page</button>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ===========================
+             ALL RECORDING PAGES
+        =========================== -->
+
+        <section class="admin-all-accounts">
+
+            <div class="admin-all-accounts-header">
+                <h2>All recording pages</h2>
+            </div>
+
+            <div class="admin-account-list" id="recording-pages-list">
+                <p class="admin-empty">Loading&hellip;</p>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script type="module" src="admin-recording-pages.js"></script>
+
+</body>
+
+</html>
