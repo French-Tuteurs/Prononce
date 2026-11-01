@@ -32,6 +32,13 @@ rules_version = '2';
 // isOwner may write isOwner/isTester on ANY document — including
 // listing/querying the whole users collection, needed so the owner
 // can look someone up by email or list current testers.
+//
+// Three more top-level collections support the voice-recording
+// system — see each match block below for details:
+//   - recordingPages/{pageId}  — owner-authored prompt sets
+//   - siteConfig/{docId}       — small owner-controlled settings
+//                                (siteConfig/recording.activePageId)
+//   - recordings/{recordingId} — one doc per submitted audio take
 
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -78,6 +85,54 @@ service cloud.firestore {
       allow delete: if isSignedIn()
         && request.auth.uid == userId
         && resource.data.isOwner != true;
+
+    }
+
+
+    // recordingPages/{pageId} — the owner-authored word/sentence lists
+    // the voice-recording page (collect.html) prompts testers with.
+    // Several can exist at once (rotated every few weeks); which one
+    // is live is resolved per-visitor from siteConfig/recording and
+    // users/{uid}.recordingPageId — see collect.js. Content only, no
+    // access control of its own, so any signed-in user can read it;
+    // only the owner authors it.
+    match /recordingPages/{pageId} {
+
+      allow get, list: if isSignedIn();
+      allow create, update, delete: if isOwnerAccount();
+
+    }
+
+
+    // siteConfig/{docId} — small owner-controlled site settings, e.g.
+    // siteConfig/recording.activePageId (the sitewide-default recording
+    // page). Readable by anyone signed in so every page can resolve it;
+    // only the owner can change it.
+    match /siteConfig/{docId} {
+
+      allow get: if isSignedIn();
+      allow create, update, delete: if isOwnerAccount();
+
+    }
+
+
+    // recordings/{recordingId} — one document per submitted audio take
+    // (see collect.js), pointing at the actual file in Storage. A
+    // tester can only create entries under their own uid and can never
+    // edit or remove one once submitted (that would let someone erase
+    // evidence of a bad take); only the owner can browse, update
+    // (e.g. marking one reviewed) or delete them.
+    match /recordings/{recordingId} {
+
+      allow get: if isSignedIn()
+        && (resource.data.uid == request.auth.uid || isOwnerAccount());
+
+      allow list: if isOwnerAccount();
+
+      allow create: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid;
+
+      allow update, delete: if isOwnerAccount();
 
     }
 

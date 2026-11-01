@@ -99,6 +99,11 @@
             you more room to work than the dashboard's owner panel.
         </p>
 
+        <nav class="admin-tools-nav">
+            <a href="admin-recording-pages.html">Recording Pages &rarr;</a>
+            <a href="admin-recordings.html">Audio Recordings &rarr;</a>
+        </nav>
+
 
         <!-- ===========================
              LOOK UP AN ACCOUNT
@@ -163,6 +168,16 @@
                     <button id="toggle-disabled-button" type="button">—</button>
                 </div>
 
+                <div class="admin-action-row">
+                    <p>
+                        Recording page &mdash; which prompt set this
+                        person sees on the voice-recording page.
+                        Leave on the sitewide default unless they
+                        specifically need a different one.
+                    </p>
+                    <select id="recording-page-select"></select>
+                </div>
+
             </div>
 
 
@@ -200,6 +215,41 @@
                 <h3>Practice levels</h3>
 
                 <div class="admin-practice-grid" id="practice-progress-grid"></div>
+
+            </div>
+
+
+            <div class="admin-detail-section">
+
+                <h3>IPA Path progress</h3>
+
+                <p class="admin-ipa-path-status" id="ipa-path-status">—</p>
+
+                <div class="admin-action-row">
+                    <p>Unlocked through level (1&ndash;88)</p>
+                    <div class="admin-ipa-path-set-row">
+                        <input
+                            type="number"
+                            id="ipa-path-level-input"
+                            min="1"
+                            max="88"
+                            step="1"
+                        >
+                        <button id="ipa-path-set-button" type="button">
+                            Set
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-action-row">
+                    <p>
+                        Clears every completed IPA Path level and sends
+                        them back to level 1.
+                    </p>
+                    <button id="ipa-path-reset-button" type="button" class="admin-danger-button">
+                        Reset IPA Path
+                    </button>
+                </div>
 
             </div>
 

@@ -28,6 +28,7 @@ import {
     collection,
     query,
     where,
+    orderBy,
     getDocs
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
@@ -51,6 +52,7 @@ const PRACTICES = [
 ];
 
 const PRACTICE_TOTAL_LEVELS = 10;
+const IPA_PATH_TOTAL_LEVELS = 88;
 
 
 async function hidePageLoader() {
@@ -85,6 +87,63 @@ if (logoutButton) {
 
 let selectedUid = null;
 let selectedData = null;
+let cachedRecordingPages = [];
+
+
+// Loaded once per page visit (not re-fetched per account) — the list
+// rarely changes mid-session, and each account's detail panel just
+// re-renders the <select> from this cache when it opens.
+
+async function loadRecordingPagesForSelect() {
+
+    try {
+
+        const snapshot = await getDocs(query(collection(db, "recordingPages"), orderBy("name")));
+
+        cachedRecordingPages = [];
+        snapshot.forEach(function (docSnap) {
+            cachedRecordingPages.push({ id: docSnap.id, name: docSnap.data().name || docSnap.id });
+        });
+
+    } catch (error) {
+
+        console.error("Couldn't load recording pages for the override picker:", error);
+        cachedRecordingPages = [];
+
+    }
+
+}
+
+
+function renderRecordingPageSelect(selectEl, currentValue) {
+
+    selectEl.innerHTML = "";
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Use sitewide default";
+    selectEl.appendChild(defaultOption);
+
+    cachedRecordingPages.forEach(function (page) {
+
+        const option = document.createElement("option");
+        option.value = page.id;
+        option.textContent = page.name;
+        selectEl.appendChild(option);
+
+    });
+
+    selectEl.value = currentValue || "";
+
+    // The stored id no longer matches anything loaded (page deleted,
+    // or this ran before the cache loaded) — fall back to showing
+    // the default option rather than silently selecting the wrong row.
+    if (selectEl.value !== (currentValue || "")) {
+        selectEl.value = "";
+    }
+
+}
+
 
 onAuthStateChanged(auth, async function (user) {
 
@@ -111,6 +170,7 @@ onAuthStateChanged(auth, async function (user) {
 
         hidePageLoader();
         loadAllAccounts();
+        loadRecordingPagesForSelect();
 
     } catch (error) {
 
@@ -314,6 +374,41 @@ function renderAccountDetail() {
     }
 
 
+    // Recording page override — populated from the same list the
+    // Recording Pages admin page manages. Reloaded fresh each time
+    // the owner opens an account's detail panel, so it reflects any
+    // pages created/renamed/deleted since this page loaded.
+
+    const recordingPageSelect = document.getElementById("recording-page-select");
+
+    renderRecordingPageSelect(recordingPageSelect, selectedData.recordingPageId || "");
+
+    recordingPageSelect.onchange = async function () {
+
+        const nextValue = recordingPageSelect.value || null;
+
+        recordingPageSelect.disabled = true;
+
+        try {
+
+            await updateDoc(doc(db, "users", selectedUid), { recordingPageId: nextValue });
+            selectedData.recordingPageId = nextValue;
+
+        } catch (error) {
+
+            console.error(error);
+            alert("Couldn't update their recording page.");
+            recordingPageSelect.value = selectedData.recordingPageId || "";
+
+        } finally {
+
+            recordingPageSelect.disabled = false;
+
+        }
+
+    };
+
+
     // Password reset
 
     const resetPasswordButton = document.getElementById("reset-password-button");
@@ -482,6 +577,101 @@ function renderAccountDetail() {
     });
 
 
+    // IPA Path progress — 88 levels is too many for a per-level grid
+    // like the six original lessons get, so this is a single "set how
+    // far they've gotten" control instead: choosing a level unlocks it
+    // and marks every level before it complete, the same state the
+    // learner would be in had they actually played through that far
+    // (see ipa-path.js's own isUnlocked/isCompleted logic).
+
+    const ipaPath = selectedData.ipaPath || {};
+    const ipaUnlockedLevel = ipaPath.unlockedLevel || 1;
+    const ipaCompleted = ipaPath.completed || {};
+    const ipaCompletedCount = Object.keys(ipaCompleted).filter(function (key) {
+        return ipaCompleted[key] === true;
+    }).length;
+
+    const ipaPathStatusEl = document.getElementById("ipa-path-status");
+
+    ipaPathStatusEl.textContent =
+        ipaCompletedCount + " of " + IPA_PATH_TOTAL_LEVELS + " levels complete " +
+        "· currently unlocked through level " + ipaUnlockedLevel;
+
+    const ipaPathLevelInput = document.getElementById("ipa-path-level-input");
+    ipaPathLevelInput.value = String(ipaUnlockedLevel);
+
+    const ipaPathSetButton = document.getElementById("ipa-path-set-button");
+
+    ipaPathSetButton.onclick = async function () {
+
+        const target = Math.round(Number(ipaPathLevelInput.value));
+
+        if (!target || target < 1 || target > IPA_PATH_TOTAL_LEVELS) {
+            alert("Enter a level between 1 and " + IPA_PATH_TOTAL_LEVELS + ".");
+            return;
+        }
+
+        const newCompleted = {};
+
+        for (let i = 1; i < target; i++) {
+            newCompleted[String(i)] = true;
+        }
+
+        ipaPathSetButton.disabled = true;
+
+        try {
+
+            await updateDoc(doc(db, "users", selectedUid), {
+                ipaPath: { unlockedLevel: target, completed: newCompleted }
+            });
+
+            selectedData.ipaPath = { unlockedLevel: target, completed: newCompleted };
+            renderAccountDetail();
+
+        } catch (error) {
+
+            console.error(error);
+            alert("Couldn't update their IPA Path progress.");
+            ipaPathSetButton.disabled = false;
+
+        }
+
+    };
+
+    document.getElementById("ipa-path-reset-button").onclick = async function () {
+
+        const confirmed = window.confirm(
+            "Reset the entire IPA Path for " + (selectedData.email || selectedUid) +
+            "? They'll start over from level 1."
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        const resetButton = document.getElementById("ipa-path-reset-button");
+        resetButton.disabled = true;
+
+        try {
+
+            await updateDoc(doc(db, "users", selectedUid), {
+                ipaPath: { unlockedLevel: 1, completed: {} }
+            });
+
+            selectedData.ipaPath = { unlockedLevel: 1, completed: {} };
+            renderAccountDetail();
+
+        } catch (error) {
+
+            console.error(error);
+            alert("Couldn't reset their IPA Path.");
+            resetButton.disabled = false;
+
+        }
+
+    };
+
+
     // Consent
 
     const consentStatus = document.getElementById("consent-status");
@@ -526,8 +716,8 @@ function renderAccountDetail() {
     document.getElementById("reset-all-button").onclick = async function () {
 
         const confirmed = window.confirm(
-            "Reset every lesson, every practice level, and recording consent for " +
-            (selectedData.email || selectedUid) +
+            "Reset every lesson, every practice level, the IPA Path, and " +
+            "recording consent for " + (selectedData.email || selectedUid) +
             "? This can't be undone."
         );
 
@@ -535,7 +725,7 @@ function renderAccountDetail() {
             return;
         }
 
-        const updates = { consent: null };
+        const updates = { consent: null, ipaPath: { unlockedLevel: 1, completed: {} } };
 
         LESSONS.forEach(function (lesson) {
             updates["progress." + lesson.id] = false;
@@ -560,6 +750,7 @@ function renderAccountDetail() {
             });
 
             selectedData.consent = null;
+            selectedData.ipaPath = { unlockedLevel: 1, completed: {} };
 
             renderAccountDetail();
 
