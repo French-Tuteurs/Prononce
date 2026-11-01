@@ -81,18 +81,6 @@ const BUILT_IN_DEFAULT_TOPICS = [
     }
 ];
 
-const STARTER_TEMPLATE = [
-    {
-        id: "example-topic",
-        title: "Example Topic",
-        items: [
-            { id: "example-item-1", label: "An example word", say: "exemple" },
-            { id: "example-item-2", label: "An example sentence" }
-        ]
-    }
-];
-
-
 let currentUserId = null;
 let allPages = [];
 let activePageId = null;
@@ -303,31 +291,165 @@ function renderPagesList() {
 
 
 // ===========================
-// EDITOR (create / edit)
+// EDITOR (create / edit) — a structured form of topic/item cards,
+// no JSON authoring required. editorTopics is the one source of
+// truth; renderTopicsEditor() rebuilds the DOM from it whenever a
+// topic/item is added or removed, while plain text edits write
+// straight into editorTopics via oninput so re-rendering never steals
+// focus mid-keystroke.
 // ===========================
 
 const editorModeLabel = document.getElementById("editor-mode-label");
 const nameInput = document.getElementById("page-name-input");
-const topicsInput = document.getElementById("page-topics-input");
+const topicsEditorEl = document.getElementById("topics-editor");
 const editorError = document.getElementById("editor-error");
 const editorStatus = document.getElementById("editor-status");
 const saveButton = document.getElementById("save-page-button");
 const cancelButton = document.getElementById("cancel-edit-button");
 
-document.getElementById("load-template-button").addEventListener("click", function () {
-    topicsInput.value = JSON.stringify(STARTER_TEMPLATE, null, 2);
-});
+let editorTopics = [];
+
+function genId() {
+    return (window.crypto && window.crypto.randomUUID)
+        ? window.crypto.randomUUID()
+        : "id-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+}
+
+function cloneTopicsForEditor(topics) {
+
+    return (topics || []).map(function (topic) {
+        return {
+            id: topic.id || genId(),
+            title: topic.title || "",
+            items: (topic.items || []).map(function (item) {
+                return { id: item.id || genId(), label: item.label || "", say: item.say || "" };
+            })
+        };
+    });
+
+}
 
 document.getElementById("load-default-button").addEventListener("click", function () {
-    topicsInput.value = JSON.stringify(BUILT_IN_DEFAULT_TOPICS, null, 2);
+
+    if (editorTopics.length && !window.confirm("This replaces everything currently in the editor below. Continue?")) {
+        return;
+    }
+
+    editorTopics = cloneTopicsForEditor(BUILT_IN_DEFAULT_TOPICS);
+    renderTopicsEditor();
+
 });
+
+document.getElementById("add-topic-button").addEventListener("click", function () {
+    editorTopics.push({ id: genId(), title: "", items: [] });
+    renderTopicsEditor();
+});
+
+
+function renderTopicsEditor() {
+
+    topicsEditorEl.innerHTML = "";
+
+    if (!editorTopics.length) {
+        topicsEditorEl.innerHTML = '<p class="admin-empty">No topics yet &mdash; add one below.</p>';
+        return;
+    }
+
+    editorTopics.forEach(function (topic) {
+
+        const card = document.createElement("div");
+        card.className = "admin-topic-card";
+
+        const header = document.createElement("div");
+        header.className = "admin-topic-header";
+
+        const titleInput = document.createElement("input");
+        titleInput.type = "text";
+        titleInput.placeholder = "Topic title, e.g. “R Sound”";
+        titleInput.value = topic.title;
+        titleInput.addEventListener("input", function () { topic.title = titleInput.value; });
+        header.appendChild(titleInput);
+
+        const removeTopicButton = document.createElement("button");
+        removeTopicButton.type = "button";
+        removeTopicButton.className = "admin-danger-button";
+        removeTopicButton.textContent = "Remove Topic";
+        removeTopicButton.addEventListener("click", function () {
+
+            if (topic.items.length && !window.confirm("Remove this topic and its " + topic.items.length + " item(s)?")) {
+                return;
+            }
+
+            editorTopics = editorTopics.filter(function (t) { return t.id !== topic.id; });
+            renderTopicsEditor();
+
+        });
+        header.appendChild(removeTopicButton);
+
+        card.appendChild(header);
+
+        const itemsEl = document.createElement("div");
+        itemsEl.className = "admin-topic-items";
+
+        topic.items.forEach(function (item) {
+
+            const row = document.createElement("div");
+            row.className = "admin-item-row";
+
+            const labelInput = document.createElement("input");
+            labelInput.type = "text";
+            labelInput.placeholder = "Word or sentence to show, e.g. “rouge”";
+            labelInput.value = item.label;
+            labelInput.addEventListener("input", function () { item.label = labelInput.value; });
+            row.appendChild(labelInput);
+
+            const sayInput = document.createElement("input");
+            sayInput.type = "text";
+            sayInput.placeholder = "Hint text (optional)";
+            sayInput.value = item.say;
+            sayInput.addEventListener("input", function () { item.say = sayInput.value; });
+            row.appendChild(sayInput);
+
+            const removeItemButton = document.createElement("button");
+            removeItemButton.type = "button";
+            removeItemButton.className = "admin-danger-button admin-item-remove";
+            removeItemButton.textContent = "Remove";
+            removeItemButton.addEventListener("click", function () {
+                topic.items = topic.items.filter(function (i) { return i.id !== item.id; });
+                renderTopicsEditor();
+            });
+            row.appendChild(removeItemButton);
+
+            itemsEl.appendChild(row);
+
+        });
+
+        card.appendChild(itemsEl);
+
+        const addItemButton = document.createElement("button");
+        addItemButton.type = "button";
+        addItemButton.className = "admin-topic-add-item";
+        addItemButton.textContent = "+ Add Word/Sentence";
+        addItemButton.addEventListener("click", function () {
+            topic.items.push({ id: genId(), label: "", say: "" });
+            renderTopicsEditor();
+        });
+        card.appendChild(addItemButton);
+
+        topicsEditorEl.appendChild(card);
+
+    });
+
+}
+
 
 function openEditor(page) {
 
     editingPageId = page.id;
     editorModeLabel.textContent = "Editing “" + page.name + "”";
     nameInput.value = page.name || "";
-    topicsInput.value = JSON.stringify(page.topics || [], null, 2);
+    editorTopics = cloneTopicsForEditor(page.topics);
+    renderTopicsEditor();
     editorError.hidden = true;
     editorStatus.textContent = "";
     cancelButton.classList.remove("hidden");
@@ -342,7 +464,8 @@ function resetEditor() {
     editingPageId = null;
     editorModeLabel.textContent = "New Recording Page";
     nameInput.value = "";
-    topicsInput.value = "";
+    editorTopics = [];
+    renderTopicsEditor();
     editorError.hidden = true;
     editorStatus.textContent = "";
     cancelButton.classList.add("hidden");
@@ -352,38 +475,59 @@ function resetEditor() {
 
 cancelButton.addEventListener("click", resetEditor);
 
+renderTopicsEditor();
+
 
 // Validates the shape the rest of the app actually relies on
-// (collect.js reads item.id/label/say and topic.id/title/items)
-// rather than just checking it parses as JSON.
+// (collect.js reads item.id/label/say and topic.id/title/items),
+// trims stray whitespace, and drops an empty optional "say" rather
+// than saving it as a blank string.
 
-function validateTopics(topics) {
+function buildTopicsForSave() {
 
-    if (!Array.isArray(topics) || topics.length === 0) {
-        return "Needs to be a non-empty array of topics.";
+    if (!editorTopics.length) {
+        return { error: "Add at least one topic." };
     }
 
-    for (const topic of topics) {
+    const topics = [];
 
-        if (!topic || typeof topic !== "object" || !topic.id || !topic.title || !Array.isArray(topic.items)) {
-            return "Every topic needs an id, a title, and an items array.";
+    for (const topic of editorTopics) {
+
+        const title = (topic.title || "").trim();
+
+        if (!title) {
+            return { error: "Every topic needs a title." };
         }
 
-        if (topic.items.length === 0) {
-            return "Topic “" + topic.title + "” has no items.";
+        if (!topic.items.length) {
+            return { error: "Topic “" + title + "” has no items — add at least one, or remove the topic." };
         }
+
+        const items = [];
 
         for (const item of topic.items) {
 
-            if (!item || typeof item !== "object" || !item.id || !item.label) {
-                return "Every item needs an id and a label (topic “" + topic.title + "”).";
+            const label = (item.label || "").trim();
+
+            if (!label) {
+                return { error: "Every item in “" + title + "” needs a word or sentence." };
             }
+
+            const say = (item.say || "").trim();
+            const cleanItem = { id: item.id, label: label };
+            if (say) {
+                cleanItem.say = say;
+            }
+
+            items.push(cleanItem);
 
         }
 
+        topics.push({ id: topic.id, title: title, items: items });
+
     }
 
-    return null;
+    return { topics: topics };
 
 }
 
@@ -397,23 +541,15 @@ saveButton.addEventListener("click", async function () {
         return;
     }
 
-    let topics;
+    const result = buildTopicsForSave();
 
-    try {
-        topics = JSON.parse(topicsInput.value);
-    } catch (error) {
-        editorError.textContent = "That's not valid JSON: " + error.message;
+    if (result.error) {
+        editorError.textContent = result.error;
         editorError.hidden = false;
         return;
     }
 
-    const validationError = validateTopics(topics);
-
-    if (validationError) {
-        editorError.textContent = validationError;
-        editorError.hidden = false;
-        return;
-    }
+    const topics = result.topics;
 
     editorError.hidden = true;
     saveButton.disabled = true;

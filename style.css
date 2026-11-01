@@ -5104,6 +5104,170 @@ button:hover {
 }
 
 
+.admin-topic-card {
+
+    margin: 0 0 14px;
+
+    padding: 16px;
+
+    background-color: var(--cream);
+
+    border: 1px solid var(--border-soft);
+
+    border-radius: 12px;
+
+}
+
+
+.admin-topic-header {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin: 0 0 12px;
+
+}
+
+
+.admin-topic-header input {
+
+    flex: 1;
+
+    padding: 12px 14px;
+
+    border: 1px solid var(--border-soft);
+
+    border-radius: 10px;
+
+    background: var(--surface);
+
+    font-size: 0.9375rem;
+
+    font-family: "Lato", sans-serif;
+
+    outline: none;
+
+}
+
+
+.admin-topic-header input:focus {
+
+    border-color: var(--gold);
+
+}
+
+
+.admin-topic-header button {
+
+    flex-shrink: 0;
+
+    padding: 12px 18px;
+
+    font-size: 0.8125rem;
+
+}
+
+
+.admin-topic-items {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin: 0 0 12px;
+
+}
+
+
+.admin-item-row {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+
+.admin-item-row input {
+
+    padding: 10px 12px;
+
+    border: 1px solid var(--border-soft);
+
+    border-radius: 10px;
+
+    background: var(--surface);
+
+    font-size: 0.875rem;
+
+    font-family: "Lato", sans-serif;
+
+    outline: none;
+
+}
+
+
+.admin-item-row input:focus {
+
+    border-color: var(--gold);
+
+}
+
+
+.admin-item-row input:first-child {
+
+    flex: 2;
+
+}
+
+
+.admin-item-row input:nth-child(2) {
+
+    flex: 1;
+
+}
+
+
+.admin-item-remove {
+
+    flex-shrink: 0;
+
+    padding: 10px 14px;
+
+    font-size: 0.8125rem;
+
+}
+
+
+.admin-topic-add-item {
+
+    padding: 8px 16px;
+
+    font-size: 0.8125rem;
+
+}
+
+
+@media (max-width: 600px) {
+
+    .admin-topic-header {
+
+        flex-direction: column;
+
+    }
+
+    .admin-item-row {
+
+        flex-direction: column;
+
+    }
+
+}
+
+
 .admin-recordings-list {
 
     display: flex;
