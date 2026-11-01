@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Send Email | Prononce</title>
+    <title>Send Message | Prononce</title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -56,7 +56,7 @@
 
         <a href="dashboard.html" class="logo">Prononce</a>
 
-        <span class="collect-header-note">Send Email &middot; Owner Only</span>
+        <span class="collect-header-note">Send Message &middot; Owner Only</span>
 
         <div class="user-menu" id="user-menu">
             <button
@@ -86,14 +86,12 @@
 
         <a href="admin.html" class="back-link">&larr; Back to Owner Tools</a>
 
-        <p class="eyebrow">Send Email</p>
+        <p class="eyebrow">Send Message</p>
         <h1>Message your users.</h1>
         <p class="admin-intro">
-            Sends through the Firebase &ldquo;Trigger Email&rdquo;
-            extension &mdash; each message is queued here and the
-            extension delivers it. If nothing ever arrives, the
-            extension likely isn't installed/configured yet; see the
-            README for one-time setup.
+            Delivered entirely in-app &mdash; free, no email service
+            involved. Each recipient sees it on their own Messages
+            page next time they're signed in.
         </p>
 
 
@@ -105,15 +103,15 @@
 
                 <div class="admin-email-scope-row">
                     <label>
-                        <input type="radio" name="email-scope" value="all" checked>
+                        <input type="radio" name="message-scope" value="all" checked>
                         All users
                     </label>
                     <label>
-                        <input type="radio" name="email-scope" value="testers">
+                        <input type="radio" name="message-scope" value="testers">
                         Testers only
                     </label>
                     <label>
-                        <input type="radio" name="email-scope" value="specific">
+                        <input type="radio" name="message-scope" value="specific">
                         Specific people
                     </label>
                 </div>
@@ -136,14 +134,14 @@
                 <div class="admin-grant-row">
                     <input
                         type="text"
-                        id="email-subject-input"
+                        id="message-subject-input"
                         placeholder="Subject"
                         autocomplete="off"
                     >
                 </div>
 
                 <textarea
-                    id="email-body-input"
+                    id="message-body-input"
                     class="admin-json-textarea admin-email-body-textarea"
                     rows="10"
                     placeholder="Write your message here&hellip;"
@@ -173,10 +171,23 @@
 
         </section>
 
+
+        <section class="admin-all-accounts">
+
+            <div class="admin-all-accounts-header">
+                <h2>Previously sent</h2>
+            </div>
+
+            <div class="admin-recordings-list" id="sent-messages-list">
+                <p class="admin-empty">Loading&hellip;</p>
+            </div>
+
+        </section>
+
     </main>
 
 
-    <script type="module" src="admin-email.js"></script>
+    <script type="module" src="admin-messages.js"></script>
 
 </body>
 

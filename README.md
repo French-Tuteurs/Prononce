@@ -1,50 +1,27 @@
 # Prononce
 
-## Owner setup: sending email (one-time)
-
-Owner Tools → Send Email queues messages in a Firestore `mail`
-collection; actually delivering them needs Firebase's **Trigger
-Email** extension, connected to **Resend**. Neither is set up by
-default — until you do this once, queued messages will just sit in
-`mail` and never go out.
-
-1. **Upgrade to the Blaze plan.** Firebase console → your project →
-   gear icon → *Usage and billing* → *Modify plan*. Extensions need
-   this; at the volume a small project sends, you'll likely stay
-   within the free monthly allowances Blaze still includes.
-2. **Create a Resend account** at [resend.com](https://resend.com)
-   (free tier is generous for this). Verify a sending domain (or use
-   their test domain while trying things out), then go to
-   *API Keys* → create one, and note the **SMTP** connection details
-   Resend shows you (host `smtp.resend.com`, port `465`, username
-   `resend`, password = your API key).
-3. **Install the extension.** Firebase console → *Extensions* →
-   *Browse all extensions* → search **"Trigger Email"**
-   (`firebase/firestore-send-email`) → Install.
-4. **During setup, set:**
-   - **Collection path:** `mail` (matches what `admin-email.js`
-     writes to — don't change this unless you also update that file).
-   - **SMTP connection URI:**
-     `smtps://resend:YOUR_RESEND_API_KEY@smtp.resend.com:465`
-   - **Default FROM address:** an address on the domain you verified
-     with Resend (e.g. `no-reply@yourdomain.com`).
-   - Leave the other fields at their defaults unless you know you
-     need something different.
-5. **Deploy**, then test: use Owner Tools → Send Email to send
-   yourself a message. It should arrive within a minute or two. If it
-   doesn't, check the extension's Cloud Function logs in the Firebase
-   console for the actual delivery error (most often an unverified
-   Resend domain or a typo in the SMTP URI).
-
-This only needs to be done once per Firebase project.
-
-
 ## Owner setup: deploying security rules
 
 `firestore.rules` and `storage.rules` in this repo are the source of
 truth, but changing either file here does **not** automatically
-update the live project — deploy them the same way you already do
-(Firebase CLI `firebase deploy --only firestore:rules,storage` from a
-checkout of this repo, or paste each file's contents into the
-matching Rules tab in the Firebase console) whenever either file
-changes.
+update the live project — deploy them (Firebase CLI
+`firebase deploy --only firestore:rules,storage` from a checkout of
+this repo, or paste each file's contents into the matching Rules tab
+in the Firebase console) every time either file changes, including
+after pulling this update. **Both files changed in this update** —
+if recordings aren't uploading or the new Messages feature says
+"permission denied," this is almost always why: the rules in the
+console are still the old ones.
+
+Also check, once, that **Storage is actually turned on** for this
+project: Firebase console → *Build* → *Storage* → if it still shows
+a "Get started" button instead of a file browser, click it and
+accept the default settings. A `storageBucket` value already being
+present in the app's config does not mean the Storage product itself
+has been enabled.
+
+Owner Tools → **Send Message** (Owner Tools page) delivers messages
+entirely inside the site — no email, no Resend, no Firebase Blaze
+plan, nothing to pay for or set up. It writes to a Firestore
+`messages` collection and every signed-in user reads their own
+messages on the site's **Messages** page.
