@@ -3,10 +3,12 @@
 // ===========================
 //
 // Owner-only. Lists every submitted take (recordings/{id} in
-// Firestore, pointing at the actual file in Storage under
-// recordings/{uid}/...) — see collect.js for the upload side.
+// Firestore) — the audio itself lives right on each document as a
+// base64 data URL (audioData), not in Cloud Storage, which now
+// requires the paid Blaze plan just to turn on. See collect.js for
+// the saving side.
 
-import { auth, db, storage } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import { applyAllPreferences, applyAccentTheme, applySeasonalTheme, waitForMinLoaderDuration } from "./preferences.js";
 
 applySeasonalTheme();
@@ -26,11 +28,6 @@ import {
     query,
     orderBy
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
-import {
-    ref,
-    deleteObject
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-storage.js";
 
 
 function hidePageLoader() {
@@ -195,11 +192,11 @@ function renderList(recordings) {
 
         row.appendChild(info);
 
-        if (recording.downloadURL) {
+        if (recording.audioData) {
 
             const audio = document.createElement("audio");
             audio.controls = true;
-            audio.src = recording.downloadURL;
+            audio.src = recording.audioData;
             audio.className = "admin-recording-audio";
             row.appendChild(audio);
 
@@ -208,13 +205,12 @@ function renderList(recordings) {
         const actions = document.createElement("div");
         actions.className = "admin-recording-actions";
 
-        if (recording.downloadURL) {
+        if (recording.audioData) {
 
             const downloadLink = document.createElement("a");
-            downloadLink.href = recording.downloadURL;
+            downloadLink.href = recording.audioData;
+            downloadLink.download = recording.filename || "recording";
             downloadLink.textContent = "Download";
-            downloadLink.target = "_blank";
-            downloadLink.rel = "noopener";
             downloadLink.className = "admin-recording-download";
             actions.appendChild(downloadLink);
 
@@ -235,15 +231,6 @@ function renderList(recordings) {
             deleteButton.disabled = true;
 
             try {
-
-                if (recording.storagePath) {
-                    await deleteObject(ref(storage, recording.storagePath)).catch(function (error) {
-                        // The Firestore doc is the record the owner actually
-                        // browses by, so still remove it even if the
-                        // underlying file is already gone from Storage.
-                        console.error("Couldn't delete the audio file:", error);
-                    });
-                }
 
                 await deleteDoc(doc(db, "recordings", recording.id));
 

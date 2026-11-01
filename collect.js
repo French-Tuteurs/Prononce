@@ -10,17 +10,21 @@
 //
 // Consent is asked once per account: the first time, it's written
 // to that user's Firestore document (users/{uid}.consent) and never
-// asked again on later visits. Each saved take uploads straight to
-// Firebase Storage (recordings/{uid}/...) the moment you click Save,
-// with a matching metadata doc in the recordings collection — no zip
-// to download, no file to email anyone afterward.
+// asked again on later visits. Each saved take is written straight
+// to Firestore (recordings/{id}) the moment you click Save — no zip
+// to download, no file to email anyone afterward. The audio itself
+// lives right on that document as a base64 string rather than in
+// Cloud Storage: Firebase now requires the paid Blaze plan just to
+// turn Storage on, even at $0 actual usage, while Firestore stays
+// free on the Spark plan. See blobToDataURL/MAX_AUDIO_DATA_BYTES
+// below for why this is safe for recordings this short.
 //
 // Which prompts a tester sees (TOPICS) isn't hardcoded here anymore:
 // it's resolved per-visitor from the owner-managed recordingPages
 // collection — see resolveRecordingPage below — falling back to
 // DEFAULT_TOPICS only if the owner hasn't configured anything yet.
 
-import { auth, db, storage } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import { applyAllPreferences, applyAccentTheme, applySeasonalTheme, waitForMinLoaderDuration } from "./preferences.js";
 
 applySeasonalTheme();
@@ -40,12 +44,6 @@ import {
     collection,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
-import {
-    ref,
-    uploadBytes,
-    getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-storage.js";
 
 // Grouped by lesson topic so the page reads as sections you can open
 // one at a time, instead of one long list of record buttons. Every
@@ -217,6 +215,29 @@ function extensionForMimeType(mimeType) {
     return "webm";
 
 }
+
+
+// Converts a recorded take to a base64 data URL so it can be saved
+// directly as a Firestore field instead of a Cloud Storage file.
+function blobToDataURL(blob) {
+
+    return new Promise(function (resolve, reject) {
+        const reader = new FileReader();
+        reader.onloadend = function () { resolve(reader.result); };
+        reader.onerror = function () { reject(reader.error); };
+        reader.readAsDataURL(blob);
+    });
+
+}
+
+// Firestore's hard limit is 1 MiB (1,048,576 bytes) per document,
+// counting every field on it. This leaves headroom for the other
+// small fields on a recording doc (email, filename, etc.) and
+// Firestore's own bookkeeping. A single word/sentence take at normal
+// speech bitrates is only tens of KB, so this should never actually
+// trip for prompts this short (MAX_RECORDING_MS above caps how long
+// one take can be) — it's a safety net, not a normal path.
+const MAX_AUDIO_DATA_BYTES = 900 * 1024;
 
 
 function downloadBlob(blob, filename) {
@@ -488,7 +509,7 @@ const topicSavedCounts = {};
 function updateProgress() {
 
     collectProgressEl.textContent =
-        savedCount + " of " + TOTAL_ITEMS + " uploaded";
+        savedCount + " of " + TOTAL_ITEMS + " saved";
 
 }
 
@@ -593,10 +614,17 @@ function buildItemCard(item, container, topicId) {
 
     async function uploadTake(blobToUpload, filename, attempt) {
 
-        const storageRef = ref(storage, "recordings/" + currentUserId + "/" + filename);
+        const audioData = await blobToDataURL(blobToUpload);
 
-        await uploadBytes(storageRef, blobToUpload, { contentType: blobToUpload.type || "audio/webm" });
-        const downloadURL = await getDownloadURL(storageRef);
+        if (audioData.length > MAX_AUDIO_DATA_BYTES) {
+
+            const tooLargeError = new Error(
+                "This take is too long to save (" + Math.round(audioData.length / 1024) + " KB)."
+            );
+            tooLargeError.code = "recording-too-large";
+            throw tooLargeError;
+
+        }
 
         await addDoc(collection(db, "recordings"), {
             uid: currentUserId,
@@ -607,8 +635,8 @@ function buildItemCard(item, container, topicId) {
             itemId: item.id,
             itemLabel: item.label,
             filename: filename,
-            storagePath: "recordings/" + currentUserId + "/" + filename,
-            downloadURL: downloadURL,
+            mimeType: blobToUpload.type || "audio/webm",
+            audioData: audioData,
             createdAt: serverTimestamp()
         });
 
@@ -629,7 +657,7 @@ function buildItemCard(item, container, topicId) {
 
         saveButton.disabled = true;
         recordButton.disabled = true;
-        setStatus("Uploading…");
+        setStatus("Saving…");
 
         const maxAttempts = 3;
         let uploaded = false;
@@ -645,7 +673,13 @@ function buildItemCard(item, container, topicId) {
             } catch (error) {
 
                 lastError = error;
-                console.error("Couldn't upload take (attempt " + attempt + " of " + maxAttempts + "):", error);
+                console.error("Couldn't save take (attempt " + attempt + " of " + maxAttempts + "):", error);
+
+                // Retrying won't make an oversized recording smaller —
+                // fail immediately instead of waiting through 3 tries.
+                if (error.code === "recording-too-large") {
+                    break;
+                }
 
                 if (attempt < maxAttempts) {
                     await new Promise(function (resolve) { setTimeout(resolve, 600 * attempt); });
@@ -661,21 +695,22 @@ function buildItemCard(item, container, topicId) {
 
             saveButton.disabled = false;
 
-            // Surfaces the real Firebase error (e.g. "storage/unauthorized",
-            // "storage/unknown") instead of a generic message — the two
-            // most common real causes are the owner's storage.rules/
-            // firestore.rules not having been deployed to the live
-            // project yet, or Storage never having been turned on for
-            // this project in the Firebase console at all. Either way,
-            // a vague "check your connection" would send someone
-            // troubleshooting their wifi instead of the actual problem.
+            if (lastError && lastError.code === "recording-too-large") {
+                setStatus(lastError.message + " Record a shorter take and try again.");
+                return;
+            }
+
+            // Surfaces the real Firebase error (e.g. "permission-denied")
+            // instead of a generic message — the most common real cause
+            // is the owner's firestore.rules not having been deployed to
+            // the live project yet, not a connection problem.
             const detail = lastError ? (lastError.code || lastError.message || String(lastError)) : "unknown error";
 
             setStatus(
-                "Upload failed (" + detail + ") after 3 tries. This usually means Storage " +
-                "isn't turned on yet for the Firebase project, or the security rules haven't " +
-                "been deployed — not a connection problem. Your recording is still here; " +
-                "Save will try again once that's fixed."
+                "Save failed (" + detail + ") after 3 tries. This usually means the Firestore " +
+                "security rules haven't been deployed to the live project yet — not a " +
+                "connection problem. Your recording is still here; Save will try again once " +
+                "that's fixed."
             );
 
             return;
@@ -692,7 +727,7 @@ function buildItemCard(item, container, topicId) {
         }
 
         saveButton.disabled = false;
-        setStatus("Uploaded. You can record another take of this one any time, or move on to the next item.");
+        setStatus("Saved. You can record another take of this one any time, or move on to the next item.");
 
     });
 

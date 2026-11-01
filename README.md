@@ -2,26 +2,28 @@
 
 ## Owner setup: deploying security rules
 
-`firestore.rules` and `storage.rules` in this repo are the source of
-truth, but changing either file here does **not** automatically
-update the live project — deploy them (Firebase CLI
-`firebase deploy --only firestore:rules,storage` from a checkout of
-this repo, or paste each file's contents into the matching Rules tab
-in the Firebase console) every time either file changes, including
-after pulling this update. **Both files changed in this update** —
-if recordings aren't uploading or the new Messages feature says
-"permission denied," this is almost always why: the rules in the
-console are still the old ones.
+`firestore.rules` in this repo is the source of truth, but changing
+it here does **not** automatically update the live project — deploy
+it (Firebase CLI `firebase deploy --only firestore:rules` from a
+checkout of this repo, or paste its contents into the **Rules** tab
+under *Build → Firestore Database* in the Firebase console) every
+time it changes, including after pulling this update. If recordings
+aren't saving or the Messages feature says "permission denied," this
+is almost always why: the rules in the console are still the old
+ones.
 
-Also check, once, that **Storage is actually turned on** for this
-project: Firebase console → *Build* → *Storage* → if it still shows
-a "Get started" button instead of a file browser, click it and
-accept the default settings. A `storageBucket` value already being
-present in the app's config does not mean the Storage product itself
-has been enabled.
+Everything in this project runs on Firebase's free **Spark** plan —
+no billing, no credit card. That's a deliberate constraint, not an
+oversight: Firebase now requires upgrading to the paid **Blaze** plan
+just to turn on Cloud Storage, even if actual usage stays at $0, so
+this app doesn't use Cloud Storage at all. Audio recordings are
+stored as a base64-encoded string directly on their own Firestore
+document (`recordings/{id}.audioData`) instead of as Storage files —
+each take is only a few tens of KB, far under Firestore's 1 MB
+per-document limit, so this comfortably fits the free tier.
 
-Owner Tools → **Send Message** (Owner Tools page) delivers messages
-entirely inside the site — no email, no Resend, no Firebase Blaze
-plan, nothing to pay for or set up. It writes to a Firestore
-`messages` collection and every signed-in user reads their own
-messages on the site's **Messages** page.
+Owner Tools → **Send Message** (Owner Tools page) is the same story:
+it delivers messages entirely inside the site via Firestore — no
+email, no Resend, no Blaze plan, nothing to pay for or set up. Every
+signed-in user reads their own messages on the site's **Messages**
+page.
