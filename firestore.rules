@@ -118,8 +118,10 @@ service cloud.firestore {
 
 
     // recordings/{recordingId} — one document per submitted audio take
-    // (see collect.js), pointing at the actual file in Storage. A
-    // tester can only create entries under their own uid and can never
+    // (see collect.js); the audio itself is a base64 string right on
+    // the document (not Cloud Storage, which now needs the paid
+    // Blaze plan just to turn on). A tester can only create entries
+    // under their own uid and can never
     // edit or remove one once submitted (that would let someone erase
     // evidence of a bad take); only the owner can browse, update
     // (e.g. marking one reviewed) or delete them.
