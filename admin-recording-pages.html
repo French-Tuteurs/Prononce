@@ -140,30 +140,28 @@
 
             <div class="admin-detail-section">
 
-                <h3>Topics (JSON)</h3>
+                <h3>Topics</h3>
 
                 <p>
-                    An array of topics, each with an id, a title, and
-                    a list of items (id, label, and an optional
-                    <code>say</code> for the hint text shown above the
-                    record button). Use &ldquo;Load Starter
-                    Template&rdquo; for the exact shape, or
-                    &ldquo;Load Current Default&rdquo; to start from
-                    the built-in word list this page falls back to
-                    when nothing's configured yet.
+                    Group related words and sentences under a topic
+                    (e.g. &ldquo;R Sound&rdquo;, &ldquo;Vowels&rdquo;).
+                    Add as many topics and items as you like &mdash;
+                    testers see each item's label and record
+                    themselves saying it. &ldquo;Hint text&rdquo; is
+                    optional and only needed when what's shown on
+                    screen (e.g. a sentence) differs from what you
+                    want read aloud.
                 </p>
 
                 <div class="admin-json-actions">
-                    <button type="button" id="load-template-button">Load Starter Template</button>
-                    <button type="button" id="load-default-button">Load Current Default</button>
+                    <button type="button" id="load-default-button">Start From Current Default</button>
                 </div>
 
-                <textarea
-                    id="page-topics-input"
-                    class="admin-json-textarea"
-                    spellcheck="false"
-                    rows="16"
-                ></textarea>
+                <div id="topics-editor"></div>
+
+                <div class="admin-json-actions">
+                    <button type="button" id="add-topic-button">+ Add Topic</button>
+                </div>
 
                 <p class="admin-error" id="editor-error" hidden></p>
 
