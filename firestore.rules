@@ -33,12 +33,14 @@ rules_version = '2';
 // listing/querying the whole users collection, needed so the owner
 // can look someone up by email or list current testers.
 //
-// Three more top-level collections support the voice-recording
-// system — see each match block below for details:
+// Four more top-level collections — see each match block below for
+// details:
 //   - recordingPages/{pageId}  — owner-authored prompt sets
 //   - siteConfig/{docId}       — small owner-controlled settings
 //                                (siteConfig/recording.activePageId)
 //   - recordings/{recordingId} — one doc per submitted audio take
+//   - mail/{mailId}            — outgoing email queue for the
+//                                Firebase "Trigger Email" extension
 
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -133,6 +135,21 @@ service cloud.firestore {
         && request.resource.data.uid == request.auth.uid;
 
       allow update, delete: if isOwnerAccount();
+
+    }
+
+
+    // mail/{mailId} — the outgoing-email queue the Firebase "Trigger
+    // Email" extension watches (see admin-email.js). The owner can
+    // queue new messages; nothing reads, edits, or deletes a queued
+    // message from the client afterward — the extension's own Cloud
+    // Function processes these with admin privileges, which bypass
+    // these rules entirely, so this only ever needs to cover the
+    // owner's initial write.
+    match /mail/{mailId} {
+
+      allow create: if isOwnerAccount();
+      allow get, list, update, delete: if false;
 
     }
 
