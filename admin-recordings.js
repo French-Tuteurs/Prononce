@@ -9,10 +9,13 @@
 // the saving side.
 
 import { auth, db } from "./firebase.js";
-import { applyAllPreferences, applyAccentTheme, applySeasonalTheme, waitForMinLoaderDuration } from "./preferences.js";
+import { applyAllPreferences, applySeasonalTheme, waitForMinLoaderDuration } from "./preferences.js";
 
+// Accent color isn't applied here on purpose: preferences.js already
+// applies the last-cached accent for this device on its own module
+// load — calling applyAccentTheme() with no argument here would stomp
+// that back to the default gold.
 applySeasonalTheme();
-applyAccentTheme();
 
 import {
     onAuthStateChanged,
@@ -22,11 +25,13 @@ import {
 import {
     doc,
     getDoc,
+    setDoc,
     deleteDoc,
     collection,
     getDocs,
     query,
-    orderBy
+    orderBy,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
@@ -56,6 +61,8 @@ if (logoutButton) {
 
 
 let allRecordings = [];
+let lessonAudioByItemId = {};
+let currentUserId = null;
 
 
 onAuthStateChanged(auth, async function (user) {
@@ -76,6 +83,8 @@ onAuthStateChanged(auth, async function (user) {
             return;
 
         }
+
+        currentUserId = user.uid;
 
         applyAllPreferences(selfSnapshot.data());
 
@@ -103,6 +112,8 @@ async function loadRecordings() {
             allRecordings.push(Object.assign({ id: docSnap.id }, docSnap.data()));
         });
 
+        await loadLessonAudioMap();
+
         renderStats();
         renderList(allRecordings);
 
@@ -111,6 +122,32 @@ async function loadRecordings() {
         console.error(error);
         document.getElementById("recordings-list").innerHTML =
             '<p class="admin-empty">Couldn\'t load recordings.</p>';
+
+    }
+
+}
+
+
+// Which recording (if any) is currently the picked lesson audio for
+// each itemId — read once up front so every row can show the right
+// button label ("Use as Lesson Audio" vs. "✓ Current Lesson Audio")
+// without a Firestore read per row.
+
+async function loadLessonAudioMap() {
+
+    try {
+
+        const snapshot = await getDocs(collection(db, "lessonAudio"));
+
+        lessonAudioByItemId = {};
+        snapshot.forEach(function (docSnap) {
+            lessonAudioByItemId[docSnap.id] = docSnap.data();
+        });
+
+    } catch (error) {
+
+        console.error("Couldn't load current lesson audio picks:", error);
+        lessonAudioByItemId = {};
 
     }
 
@@ -213,6 +250,65 @@ function renderList(recordings) {
             downloadLink.textContent = "Download";
             downloadLink.className = "admin-recording-download";
             actions.appendChild(downloadLink);
+
+        }
+
+        if (recording.audioData && recording.itemId) {
+
+            const currentPick = lessonAudioByItemId[recording.itemId];
+            const isCurrentPick = currentPick && currentPick.recordingId === recording.id;
+
+            const useAsLessonAudioButton = document.createElement("button");
+            useAsLessonAudioButton.type = "button";
+            useAsLessonAudioButton.className = "admin-use-as-lesson-audio-button";
+
+            if (isCurrentPick) {
+                useAsLessonAudioButton.textContent = "✓ Current Lesson Audio";
+                useAsLessonAudioButton.disabled = true;
+            } else {
+                useAsLessonAudioButton.textContent = "Use as Lesson Audio";
+            }
+
+            useAsLessonAudioButton.addEventListener("click", async function () {
+
+                const replacing = Boolean(currentPick);
+                const confirmed = window.confirm(
+                    (replacing
+                        ? "Replace the current lesson audio for \"" + (recording.itemLabel || recording.itemId) + "\" with this take?"
+                        : "Use this take as the lesson audio for \"" + (recording.itemLabel || recording.itemId) + "\"?") +
+                    " Every lesson page that plays this item will use it instead of the built-in text-to-speech voice."
+                );
+
+                if (!confirmed) {
+                    return;
+                }
+
+                useAsLessonAudioButton.disabled = true;
+
+                try {
+
+                    await setDoc(doc(db, "lessonAudio", recording.itemId), {
+                        audioData: recording.audioData,
+                        mimeType: recording.mimeType || "audio/webm",
+                        itemLabel: recording.itemLabel || recording.itemId,
+                        recordingId: recording.id,
+                        setBy: currentUserId,
+                        setAt: serverTimestamp()
+                    });
+
+                    await loadLessonAudioMap();
+                    applyFilter();
+
+                } catch (error) {
+
+                    console.error(error);
+                    alert("Couldn't set that as the lesson audio. Please try again.");
+                    useAsLessonAudioButton.disabled = false;
+
+                }
+
+            });
+            actions.appendChild(useAsLessonAudioButton);
 
         }
 
