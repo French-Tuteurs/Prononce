@@ -1519,7 +1519,23 @@ button:hover {
 
         justify-content: center;
 
-        gap: 25px;
+        /* Wraps onto a second line on the narrowest phones instead of
+           overflowing past the edge of the screen and forcing the
+           whole page to scroll sideways — five links (four text
+           labels plus the Messages icon) don't reliably fit on one
+           row under ~360px wide. */
+        flex-wrap: wrap;
+
+        column-gap: 18px;
+
+        row-gap: 10px;
+
+    }
+
+
+    .main-nav a {
+
+        font-size: 0.875rem;
 
     }
 
@@ -7378,6 +7394,13 @@ html[data-season="halloween"] .eyebrow::after {
 html {
 
     -webkit-tap-highlight-color: transparent;
+
+    /* Belt-and-suspenders against any element (the nav, a long word,
+       a wide table) pushing past the viewport width and making the
+       whole page scroll sideways — overflow-x on body alone isn't
+       enough to stop that, since horizontal scroll is a property of
+       the root element's own overflow, not body's. */
+    overflow-x: hidden;
 
 }
 
