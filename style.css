@@ -727,6 +727,39 @@ button:hover {
 }
 
 
+/* Messages nav link is icon-only (an envelope) rather than a text
+   label — on a small phone screen, five text links in .main-nav
+   wrapped awkwardly; this one reuses the [data-tooltip] mechanism
+   above so hovering still shows "Messages" for mouse users. */
+
+.main-nav-icon-link {
+
+    display: inline-flex;
+
+    align-items: center;
+
+}
+
+
+.main-nav-icon {
+
+    width: 22px;
+
+    height: 22px;
+
+    fill: none;
+
+    stroke: currentColor;
+
+    stroke-width: 2;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
 /* ===========================
    USER MENU (account icon + dropdown)
 =========================== */
