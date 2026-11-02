@@ -5423,6 +5423,35 @@ button:hover {
 }
 
 
+.admin-use-as-lesson-audio-button {
+
+    background-color: var(--surface);
+
+    color: var(--gold);
+
+    border: 2px solid var(--gold);
+
+}
+
+
+.admin-use-as-lesson-audio-button:hover:not(:disabled) {
+
+    background-color: var(--gold);
+
+    color: var(--white);
+
+}
+
+
+.admin-use-as-lesson-audio-button:disabled {
+
+    opacity: 0.7;
+
+    cursor: default;
+
+}
+
+
 .admin-email-scope-row {
 
     display: flex;

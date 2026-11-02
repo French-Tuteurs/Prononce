@@ -40,7 +40,12 @@ import {
 } from "./preferences.js";
 
 applySeasonalTheme();
-applyAccentTheme();
+// Accent color isn't applied here on purpose: preferences.js already
+// applies the last-cached accent for this device on its own module
+// load (see applyCachedAccentTheme) — calling applyAccentTheme() with
+// no argument here would stomp that back to the default gold.
+// applyAccentTheme(colorKey) below is still used live when the owner
+// picks a new color on this page.
 
 
 async function hidePageLoader() {

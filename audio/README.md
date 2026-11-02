@@ -1,13 +1,24 @@
 # audio/
 
-Drop your real recordings here, named EXACTLY as listed below (the
-lesson pages reference these filenames directly via data-audio-src).
-If a file is missing, the Listen button automatically falls back to
-the browser's built-in French text-to-speech voice, so nothing
-breaks while you're still recording — files just get swapped in as
-you upload them.
+**The easiest way to replace a lesson's audio no longer involves this
+folder at all.** Record a take on the site's own recording page
+(collect.html), then in Owner Tools → Audio Recordings click
+**"Use as Lesson Audio"** next to it — every lesson page picks it up
+automatically, nothing to download or commit. The item's id (shown in
+Owner Tools, e.g. "word-rue") needs to match the filename stem listed
+below for this to connect to the right prompt.
 
-75 files total:
+Dropping an actual file in this folder, named EXACTLY as listed below
+(the lesson pages reference these filenames directly via
+data-audio-src), still works too — useful if you already have audio
+files from somewhere else. A "Use as Lesson Audio" pick takes
+priority over a file here if both exist for the same item. If
+neither exists for an item, the Listen button automatically falls
+back to the browser's built-in French text-to-speech voice, so
+nothing breaks while an item is still unrecorded.
+
+75 files total (filenames only matter if you're using this folder
+directly — the item ids above work the same way either path):
 
 - french-r.mp3
 - french-ra.mp3

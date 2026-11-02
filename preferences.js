@@ -30,6 +30,8 @@ function isHalloweenSeason(date) {
     return d.getMonth() === 9;
 }
 
+const ACCENT_CACHE_KEY = "prononce-last-accent";
+
 function applyAccentTheme(colorKey) {
 
     const theme = isHalloweenSeason()
@@ -39,7 +41,45 @@ function applyAccentTheme(colorKey) {
     document.documentElement.style.setProperty("--gold", theme.accent);
     document.documentElement.style.setProperty("--gold-light", theme.accentLight);
 
+    if (colorKey && ACCENT_THEMES[colorKey]) {
+
+        try {
+            localStorage.setItem(ACCENT_CACHE_KEY, colorKey);
+        } catch (error) {
+            // Private browsing / storage disabled — nothing to cache for
+            // next time, but the accent above is still applied correctly
+            // for this page.
+        }
+
+    }
+
 }
+
+
+// Same reasoning as applyCachedDisplayTheme below: applied
+// synchronously on module load, before Firebase has resolved who's
+// signed in, so a visitor with a non-default accent color doesn't see
+// a flash of the default gold first. applyAllPreferences ->
+// applyAccentTheme still runs once the real profile loads, confirming
+// or correcting this in case the preference changed on another device.
+
+function applyCachedAccentTheme() {
+
+    try {
+
+        const cached = localStorage.getItem(ACCENT_CACHE_KEY);
+
+        if (cached && ACCENT_THEMES[cached]) {
+            applyAccentTheme(cached);
+        }
+
+    } catch (error) {
+        // ignore — applyAccentTheme will set the real accent shortly
+    }
+
+}
+
+applyCachedAccentTheme();
 
 
 function applySeasonalTheme() {
@@ -104,10 +144,45 @@ function resolvedTheme(themeKey) {
 
 const THEME_CACHE_KEY = "prononce-last-theme";
 
+// The page's own background in each mode (same hex as --cream in
+// style.css) — mirrored into <meta name="theme-color"> so a mobile
+// browser's own chrome (status bar / address bar / the notch area
+// when installed to the home screen) matches instead of defaulting to
+// whatever was hardcoded in the HTML. <meta name="color-scheme"> is
+// the newer, more direct signal for the same thing, and also tells
+// the browser to theme scrollbars/form controls to match. Neither
+// meta tag has any effect on a page viewed in an ordinary browser tab
+// that was never installed as a home-screen app — that strip is the
+// OS's own status bar, which only ever follows the phone's own
+// system-wide dark/light setting, not anything a website can signal.
+const THEME_COLOR_BY_MODE = { light: "#faf7f2", dark: "#1b1e25" };
+
+function syncThemeColorMeta(resolved) {
+
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+    if (themeColorMeta) {
+        themeColorMeta.setAttribute("content", THEME_COLOR_BY_MODE[resolved]);
+    }
+
+    let colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+
+    if (!colorSchemeMeta) {
+        colorSchemeMeta = document.createElement("meta");
+        colorSchemeMeta.setAttribute("name", "color-scheme");
+        document.head.appendChild(colorSchemeMeta);
+    }
+
+    colorSchemeMeta.setAttribute("content", resolved);
+
+}
+
+
 function applyDisplayTheme(themeKey) {
 
     const resolved = resolvedTheme(themeKey || "light");
     document.documentElement.dataset.theme = resolved;
+    syncThemeColorMeta(resolved);
 
     try {
         localStorage.setItem(THEME_CACHE_KEY, resolved);
@@ -138,6 +213,7 @@ function applyCachedDisplayTheme() {
 
         if (cached === "dark" || cached === "light") {
             document.documentElement.dataset.theme = cached;
+            syncThemeColorMeta(cached);
         }
 
     } catch (error) {

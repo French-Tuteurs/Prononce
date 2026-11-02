@@ -5,7 +5,6 @@
 import { auth, db } from "./firebase.js";
 import {
     applyAllPreferences,
-    applyAccentTheme,
     applySeasonalTheme,
     getPlaybackRate,
     shouldAutoplay,
@@ -17,10 +16,13 @@ import {
 } from "./preferences.js";
 
 // Not a user preference, so it doesn't wait on sign-in — the
-// seasonal banner/colors should show for every visitor, even on the
-// signed-out welcome page.
+// seasonal banner should show for every visitor, even on the
+// signed-out welcome page. Accent color isn't applied here on
+// purpose: preferences.js already applies the last-cached accent for
+// this device on its own module load (see applyCachedAccentTheme),
+// and calling applyAccentTheme() again here with no argument would
+// stomp that cached color back to the default gold.
 applySeasonalTheme();
-applyAccentTheme();
 
 import {
     createUserWithEmailAndPassword,
@@ -34,7 +36,12 @@ import {
     doc,
     getDoc,
     setDoc,
-    updateDoc
+    updateDoc,
+    collection,
+    getDocs,
+    query,
+    where,
+    documentId
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
@@ -168,6 +175,8 @@ onAuthStateChanged(auth, async function (user) {
         }
 
         enforcePracticeLevelAccess();
+
+        await applyLessonAudioOverrides();
 
         // The first question/section on a lesson or practice page is
         // already shown by the time this callback resolves (that
@@ -1921,6 +1930,80 @@ function playListenButton(button) {
 listenButtons.forEach(function (button) {
     button.addEventListener("click", function () { playListenButton(button); });
 });
+
+
+// ===========================
+// LESSON AUDIO OVERRIDES (owner's real recordings)
+// ===========================
+//
+// Every .listen-button's data-audio-src still points at a static file
+// under audio/ (see audio/README.md) that may or may not actually
+// exist in the repo — when it's missing, playListenButton above falls
+// back to the browser's text-to-speech voice. This swaps in the
+// owner's own recorded take instead wherever one has been picked as
+// the lesson audio for that item (Owner Tools > Audio Recordings >
+// "Use as Lesson Audio") — stored in Firestore (lessonAudio/{itemId})
+// as a base64 clip, same as every submitted recording, so nothing
+// needs to be committed to the repo as an actual file. Buttons with no
+// pick made yet are left untouched, so the existing fallback-to-speech
+// behavior still covers them exactly as before.
+
+function audioItemIdFromSrc(src) {
+    const filename = (src || "").split("/").pop() || "";
+    return filename.replace(/\.[^.]+$/, "");
+}
+
+async function applyLessonAudioOverrides() {
+
+    const buttonsByItemId = {};
+
+    listenButtons.forEach(function (button) {
+
+        const itemId = audioItemIdFromSrc(button.dataset.audioSrc);
+
+        if (itemId) {
+            (buttonsByItemId[itemId] = buttonsByItemId[itemId] || []).push(button);
+        }
+
+    });
+
+    const ids = Object.keys(buttonsByItemId);
+
+    if (!ids.length) {
+        return;
+    }
+
+    // Firestore's "in" operator accepts at most 10 values per query.
+    const chunks = [];
+    for (let i = 0; i < ids.length; i += 10) {
+        chunks.push(ids.slice(i, i + 10));
+    }
+
+    try {
+
+        const snapshots = await Promise.all(chunks.map(function (chunk) {
+            return getDocs(query(collection(db, "lessonAudio"), where(documentId(), "in", chunk)));
+        }));
+
+        snapshots.forEach(function (snapshot) {
+            snapshot.forEach(function (docSnap) {
+
+                const audioData = docSnap.data().audioData;
+
+                (buttonsByItemId[docSnap.id] || []).forEach(function (button) {
+                    button.dataset.audioSrc = audioData;
+                });
+
+            });
+        });
+
+    } catch (error) {
+        // Leave the static (possibly-missing) paths in place — the
+        // existing fallback to text-to-speech still covers this.
+        console.error("Couldn't load lesson audio overrides:", error);
+    }
+
+}
 
 
 // Autoplay: when enabled, automatically plays the Listen button

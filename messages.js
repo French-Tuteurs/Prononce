@@ -7,10 +7,13 @@
 // this account's uid appears in recipientUids, newest first.
 
 import { auth, db } from "./firebase.js";
-import { applyAllPreferences, applyAccentTheme, applySeasonalTheme, waitForMinLoaderDuration } from "./preferences.js";
+import { applyAllPreferences, applySeasonalTheme, waitForMinLoaderDuration } from "./preferences.js";
 
+// Accent color isn't applied here on purpose: preferences.js already
+// applies the last-cached accent for this device on its own module
+// load — calling applyAccentTheme() with no argument here would stomp
+// that back to the default gold.
 applySeasonalTheme();
-applyAccentTheme();
 
 import {
     onAuthStateChanged,
