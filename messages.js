@@ -23,8 +23,7 @@ import {
     collection,
     getDocs,
     query,
-    where,
-    orderBy
+    where
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
@@ -122,15 +121,25 @@ onAuthStateChanged(auth, async function (user) {
 
         applyAllPreferences(profile);
 
+        // where(array-contains) + orderBy(another field) needs a
+        // composite index in real Firestore (nothing creates that
+        // automatically, and the free Spark plan has no console step
+        // that sets one up for you) — sort client-side after a plain
+        // array-contains query instead, so this needs no index at all.
         const snapshot = await getDocs(query(
             collection(db, "messages"),
-            where("recipientUids", "array-contains", user.uid),
-            orderBy("createdAt", "desc")
+            where("recipientUids", "array-contains", user.uid)
         ));
 
         const messages = [];
         snapshot.forEach(function (docSnap) {
             messages.push(docSnap.data());
+        });
+
+        messages.sort(function (a, b) {
+            const aTime = a.createdAt && typeof a.createdAt.toDate === "function" ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+            const bTime = b.createdAt && typeof b.createdAt.toDate === "function" ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+            return bTime - aTime;
         });
 
         renderMessages(messages);
